@@ -91,7 +91,7 @@ export default function Navbar() {
                 {item.label}
               </Link>
             ))}
-            <Link href="/start-a-conversation" className="btn-primary mt-2 w-fit">
+            <Link href="/start-a-conversation" className="btn-primary mt-4 w-full">
               Start a Conversation <FaArrowRight size={12} />
             </Link>
           </nav>

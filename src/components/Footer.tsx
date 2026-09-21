@@ -75,7 +75,7 @@ export default function Footer() {
 
       {/* Clearance that leaves room for the top half of the oversized logo below */}
       <div className="container-site relative z-10">
-        <div aria-hidden="true" className="h-32 sm:h-48 md:h-56 lg:h-72" />
+        <div aria-hidden="true" className="h-36 sm:h-48 md:h-56 lg:h-72" />
       </div>
 
       {/* Giant logo — full width, natural colours, clipped in half by the footer edge */}
@@ -84,8 +84,7 @@ export default function Footer() {
           src="/ACEGLOBALNEXUS_ICON_with_name.png"
           alt=""
           draggable={false}
-          className="w-[min(1500px,150vw)] max-w-none opacity-90"
-          style={{ transform: "translateY(30%)" }}
+          className="w-[min(1500px,150vw)] max-w-none opacity-90 [transform:translateY(20%)] sm:[transform:translateY(30%)]"
         />
       </div>
 

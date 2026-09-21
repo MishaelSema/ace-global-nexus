@@ -92,8 +92,7 @@ export default function AboutPage() {
                   <img
                     src="/ACEGLOBALNEXUS_ICON.png"
                     alt="ACE Global Nexus mark"
-                    className="mx-auto h-16 w-16 rounded-2xl object-contain"
-                    style={{ filter: "brightness(0) invert(1)" }}
+                    className="mx-auto h-16 w-16 rounded-2xl bg-cream p-2.5 object-contain"
                   />
                   <p className="mt-4 font-serif text-2xl font-bold">Christopher A. Ekom</p>
                   <p className="mt-1 text-sm text-gold-light">{FOUNDER.title}</p>

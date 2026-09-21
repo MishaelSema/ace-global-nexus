@@ -8,9 +8,9 @@ import { CONTACT_TOPICS, SERVICES } from "@/lib/content";
 const STEP_LABELS = ["About you", "Your objective", "Review & send"];
 
 const inputCls =
-  "w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-primary placeholder:text-gray-400 focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 transition-colors";
+  "w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-primary placeholder:text-gray-400 focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 transition-colors sm:py-3";
 
-const labelCls = "mb-2 block text-xs font-semibold uppercase tracking-wide text-primary/60";
+const labelCls = "mb-1.5 block text-xs font-semibold uppercase tracking-wide text-primary/60 sm:mb-2";
 
 const emailOk = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
 
@@ -97,11 +97,11 @@ export default function ConversationWizard() {
   ];
 
   return (
-    <section className="bg-white py-24 sm:py-32">
+    <section className="bg-white py-8 sm:py-24 lg:py-32">
       <div className="container-site">
         <div className="mx-auto max-w-3xl">
           {done ? (
-            <div className="rounded-3xl border border-gray-100 bg-cream p-10 text-center sm:p-14">
+            <div className="rounded-3xl border border-gray-100 bg-cream p-6 text-center sm:p-14">
               <span className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-gold/15 text-gold-dark">
                 <FaCheck size={22} aria-hidden="true" />
               </span>
@@ -125,7 +125,7 @@ export default function ConversationWizard() {
               </button>
             </div>
           ) : (
-            <form onSubmit={submit} className="rounded-3xl border border-gray-100 bg-cream p-8 sm:p-10">
+            <form onSubmit={submit} className="rounded-3xl border border-gray-100 bg-cream p-5 sm:p-10">
               {/* Progress bar */}
               <div className="flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.18em] text-primary/50">
                 <span>
@@ -174,9 +174,9 @@ export default function ConversationWizard() {
               </div>
 
               {/* Step bodies */}
-              <div className="mt-10">
+              <div className="mt-6 sm:mt-10">
                 {step === 0 && (
-                  <div className="grid gap-6 sm:grid-cols-2">
+                  <div className="grid grid-cols-2 gap-3 sm:gap-6">
                     <Field label="Full name" required>
                       <input className={inputCls} value={form.name} onChange={set("name")} placeholder="Your name" />
                     </Field>
@@ -200,7 +200,7 @@ export default function ConversationWizard() {
                         placeholder="Company name"
                       />
                     </Field>
-                    <div className="sm:col-span-2">
+                    <div className="col-span-2">
                       <Field label="Country">
                         <input className={inputCls} value={form.country} onChange={set("country")} placeholder="Your country" />
                       </Field>
@@ -209,7 +209,7 @@ export default function ConversationWizard() {
                 )}
 
                 {step === 1 && (
-                  <div className="grid gap-6">
+                  <div className="grid gap-4 sm:gap-6">
                     <Field label="What can we help with?" required>
                       <select className={inputCls} value={form.topic} onChange={set("topic")}>
                         <option value="" disabled>
@@ -230,7 +230,7 @@ export default function ConversationWizard() {
                     </Field>
                     <Field label="Your message" required>
                       <textarea
-                        rows={6}
+                        rows={4}
                         className={inputCls}
                         value={form.message}
                         onChange={set("message")}
@@ -248,7 +248,7 @@ export default function ConversationWizard() {
                     </div>
                     <dl className="mt-6 divide-y divide-gray-200 rounded-2xl border border-gray-200 bg-white">
                       {reviewRows.map(([label, value, stepOf]) => (
-                        <div key={label} className="flex items-start justify-between gap-4 px-5 py-4">
+                        <div key={label} className="flex items-start justify-between gap-4 px-4 py-3 sm:px-5 sm:py-4">
                           <dt className="w-36 shrink-0 text-xs font-semibold uppercase tracking-wide text-gray-400">
                             {label}
                           </dt>
@@ -265,7 +265,7 @@ export default function ConversationWizard() {
                           </button>
                         </div>
                       ))}
-                      <div className="flex items-start justify-between gap-4 px-5 py-4">
+                      <div className="flex items-start justify-between gap-4 px-4 py-3 sm:px-5 sm:py-4">
                         <dt className="w-36 shrink-0 text-xs font-semibold uppercase tracking-wide text-gray-400">
                           Message
                         </dt>
@@ -290,7 +290,7 @@ export default function ConversationWizard() {
               </div>
 
               {/* Step navigation */}
-              <div className="mt-10 flex items-center justify-between border-t border-gray-200 pt-8">
+              <div className="mt-6 flex items-center justify-between border-t border-gray-200 pt-6 sm:mt-10 sm:pt-8">
                 <button
                   type="button"
                   onClick={() => setStep((s) => Math.max(0, s - 1))}

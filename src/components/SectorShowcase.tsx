@@ -1,10 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { FaArrowRight, FaChevronDown, FaChevronUp } from "react-icons/fa6";
+import { FaArrowRight } from "react-icons/fa6";
 import { BRAND_IMAGE } from "@/lib/content";
 import MosaicGrid from "@/components/MosaicGrid";
+import Reveal from "@/components/Reveal";
 
 const ITEMS = [
   { title: "Agribusiness", note: "Value chains & export", pos: "object-center" },
@@ -16,167 +17,139 @@ const ITEMS = [
   { title: "Manufacturing", note: "Local value addition", pos: "object-bottom" },
 ];
 
-const SCROLL_STEP = 220; // px of wheel/touch scroll to advance one sector
+/** Each sector gets this share of viewport height worth of scroll while pinned. */
+const WRAP_FACTOR = 70;
 
 /**
  * Sectors imagery, two behaviours:
- *  - lg+: the Pinterest-style corner-curve mosaic grid.
- *  - below lg: one full-screen section where the current sector's image is the
- *    whole background. Scrolling auto-advances with a parallax drift, clicking
- *    a sector jumps straight to it, and the sequence loops 7 → 1.
+ *  - lg+: the Pinterest-style corner-curve mosaic grid (reveal-wrapped).
+ *  - below lg: a pinned full-screen gallery. The current sector's image fills the
+ *    viewport while the section stays fixed; it starts advancing only once the
+ *    section is fully visible, releases and scrolls away with the page after the
+ *    last sector. Tap a chip to jump straight to a sector.
  */
 export default function SectorShowcase() {
   const [index, setIndex] = useState(0);
   const [bgOffset, setBgOffset] = useState(0);
-  const sectionRef = useRef<HTMLElement>(null);
-  const inView = useRef(false);
-  const lastY = useRef(0);
-  const acc = useRef(0);
+  const wrapRef = useRef<HTMLDivElement>(null);
   const n = ITEMS.length;
 
-  const goTo = useCallback((i: number) => setIndex(((i % n) + n) % n), [n]);
-  const step = useCallback((dir: 1 | -1) => setIndex((prev) => ((prev + dir) % n + n) % n), [n]);
-
   useEffect(() => {
-    const el = sectionRef.current;
+    const el = wrapRef.current;
     if (!el) return;
 
-    // Track whether the section is actually the one being scrolled through.
-    const io = new IntersectionObserver(([entry]) => {
-      inView.current = entry.isIntersecting;
-      if (entry.isIntersecting) lastY.current = window.scrollY;
-    });
-    io.observe(el);
-
     let raf = 0;
-    const onScroll = () => {
+    const update = () => {
       if (raf) return;
       raf = requestAnimationFrame(() => {
         raf = 0;
-        const rect = el.getBoundingClientRect();
         const vh = window.innerHeight;
-        const visible = rect.bottom > vh * 0.25 && rect.top < vh * 0.75;
-        // Parallax drift on the background while in sight.
-        const progress = (rect.top + rect.height / 2 - vh / 2) / vh;
-        setBgOffset(Math.round(-progress * 70));
-        if (!inView.current || !visible) return;
-
-        const y = window.scrollY;
-        const dy = y - lastY.current;
-        lastY.current = y;
-        acc.current += dy;
-        if (acc.current >= SCROLL_STEP) {
-          acc.current = 0;
-          step(1);
-        } else if (acc.current <= -SCROLL_STEP) {
-          acc.current = 0;
-          step(-1);
-        }
+        // Scroll distance the pinned section can be driven through before it
+        // releases at the very end of its tall wrapper.
+        const total = Math.max(1, el.offsetHeight - vh);
+        const done = Math.min(1, Math.max(0, -el.getBoundingClientRect().top / total));
+        setIndex(Math.min(n - 1, Math.floor(done * n)));
+        setBgOffset(Math.round(-done * 90));
       });
     };
 
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
     return () => {
-      io.disconnect();
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
       if (raf) cancelAnimationFrame(raf);
     };
-  }, [step]);
+  }, [n]);
+
+  const jumpTo = (i: number) => {
+    const el = wrapRef.current;
+    if (!el) return;
+    const vh = window.innerHeight;
+    const total = Math.max(1, el.offsetHeight - vh);
+    const top = el.offsetTop + ((i + 0.5) / n) * total;
+    window.scrollTo({ top, behavior: "smooth" });
+  };
 
   const current = ITEMS[index];
 
   return (
     <>
       {/* Desktop / tablet: the corner-curve mosaic grid */}
-      <div className="hidden lg:block">
+      <Reveal className="mt-14 hidden lg:block">
         <MosaicGrid />
-      </div>
+      </Reveal>
 
-      {/* Mobile: full-bleed scroll-driven full-screen section */}
-      <section
-        ref={sectionRef}
-        aria-label="Sectors gallery — scroll, or tap a sector to switch the background"
-        className="relative -mx-5 isolate overflow-hidden bg-primary sm:-mx-8 lg:hidden"
-      >
-        {/* Background stack — the active sector's image crossfades in */}
-        {ITEMS.map((item, i) => (
-          <img
-            key={item.title}
-            src={BRAND_IMAGE}
-            alt=""
-            draggable={false}
-            className={`absolute inset-0 h-full w-full object-cover transition-all duration-1000 ${item.pos}`}
-            style={{
-              opacity: i === index ? 1 : 0,
-              transform: `translateY(${bgOffset}px) scale(1.08)`,
-            }}
-          />
-        ))}
-        <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/60 to-primary/20" />
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/70 via-transparent to-transparent" />
+      {/* Mobile: pinned full-screen sector gallery */}
+      <div className="-mx-5 mt-14 sm:-mx-8 lg:hidden">
+        <div ref={wrapRef} className="relative" style={{ height: `${n * WRAP_FACTOR}vh` }}>
+          <section
+            aria-label="Sectors gallery — scroll to change the sector, or tap a sector to jump straight to it"
+            className="sticky top-0 flex h-[100svh] flex-col justify-between overflow-hidden bg-primary"
+          >
+            {/* Background stack — the active sector's image crossfades in */}
+            {ITEMS.map((item, i) => (
+              <img
+                key={item.title}
+                src={BRAND_IMAGE}
+                alt=""
+                draggable={false}
+                className={`absolute inset-0 h-full w-full object-cover transition-all duration-1000 ${item.pos}`}
+                style={{
+                  opacity: i === index ? 1 : 0,
+                  transform: `translateY(${bgOffset}px) scale(1.08)`,
+                }}
+              />
+            ))}
+            <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/60 to-primary/20" />
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/70 via-transparent to-transparent" />
 
-        <div className="relative flex min-h-[100svh] flex-col justify-between py-24">
-          {/* Current sector */}
-          <div className="px-5 pt-16 sm:px-8">
-            <div className="flex items-center justify-between">
-              <span className="h-px w-14 bg-gold" aria-hidden="true" />
-              <span className="font-display text-sm tracking-[0.2em] text-white/50">
-                {String(index + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}
-              </span>
+            {/* Current sector */}
+            <div className="relative px-5 pt-28 sm:px-8">
+              <div className="flex items-center justify-between">
+                <span className="h-px w-14 bg-gold" aria-hidden="true" />
+                <span className="font-display text-sm tracking-[0.2em] text-white/50">
+                  {String(index + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}
+                </span>
+              </div>
+              <h2 className="mt-8 font-serif text-4xl font-bold leading-[1.02] text-white sm:text-5xl">
+                {current.title}
+              </h2>
+              <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/65">{current.note}</p>
             </div>
-            <h2 className="mt-8 font-serif text-4xl font-bold leading-[1.02] text-white sm:text-5xl">
-              {current.title}
-            </h2>
-            <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/65">{current.note}</p>
 
-            <div className="mt-8 flex flex-wrap items-center gap-4">
-              <Link href="/sectors" className="btn bg-white text-primary-dark transition-colors hover:bg-gold-light">
-                See all sectors <FaArrowRight size={13} />
-              </Link>
-              <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/45">
-                Scroll to explore
-              </span>
+            {/* Tap-to-jump sectors + bottom-centre CTA */}
+            <div className="relative px-5 pb-8 sm:px-8">
+              <ul className="flex flex-wrap justify-center gap-2">
+                {ITEMS.map((item, i) => {
+                  const active = i === index;
+                  return (
+                    <li key={item.title}>
+                      <button
+                        type="button"
+                        onClick={() => jumpTo(i)}
+                        className={`rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-colors ${
+                          active
+                            ? "border-gold bg-gold/15 text-gold-light"
+                            : "border-white/20 bg-white/5 text-white/60 hover:border-white/40 hover:text-white"
+                        }`}
+                      >
+                        {String(i + 1).padStart(2, "0")} {item.title}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+              <div className="mt-6 flex justify-center">
+                <Link href="/sectors" className="btn bg-white text-primary-dark transition-colors hover:bg-gold-light">
+                  See all sectors <FaArrowRight size={13} />
+                </Link>
+              </div>
             </div>
-          </div>
-
-          {/* Jump list — tap any sector to make it the background */}
-          <div className="px-5 pb-8 sm:px-8">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-gold-light">
-              Jump to a sector
-            </p>
-            <ul className="mt-4 grid grid-cols-2 gap-x-8 gap-y-1">
-              {ITEMS.map((item, i) => {
-                const active = i === index;
-                return (
-                  <li key={item.title}>
-                    <button
-                      type="button"
-                      onClick={() => goTo(i)}
-                      className={`flex w-full items-baseline gap-3 border-b py-2.5 text-left transition-colors duration-300 ${
-                        active
-                          ? "border-gold/60 text-white"
-                          : "border-white/10 text-white/55 hover:border-white/25 hover:text-white"
-                      }`}
-                    >
-                      <span className={`font-serif text-[11px] ${active ? "text-gold-light" : "text-white/35"}`}>
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                      <span className="truncate text-sm font-semibold">{item.title}</span>
-                      {active ? <FaChevronUp size={10} className="ml-auto shrink-0 text-gold-light" /> : null}
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-            <p className="mt-4 inline-flex items-center gap-2 text-[11px] text-white/40">
-              <FaChevronDown size={10} aria-hidden="true" /> The background changes as you scroll
-            </p>
-          </div>
+          </section>
         </div>
-      </section>
+      </div>
     </>
   );
 }

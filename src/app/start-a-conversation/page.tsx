@@ -13,6 +13,7 @@ export default function StartAConversationPage() {
   return (
     <>
       <PageHero
+        compact
         title={
           <>
             Start <span className="italic text-gold">the conversation</span>

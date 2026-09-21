@@ -96,10 +96,8 @@ export default function HomePage() {
             title="Where we create connections"
             description="From agribusiness to logistics, the sectors shaping Africa's next economic transformation — where opportunity meets capital and markets."
           />
-          <Reveal className="mt-14">
-            <SectorShowcase />
-          </Reveal>
-          <Reveal className="mt-10 text-center">
+          <SectorShowcase />
+          <Reveal className="mt-10 hidden text-center lg:block">
             <Link
               href="/sectors"
               className="inline-flex items-center gap-2 text-sm font-semibold text-gold-dark transition-colors hover:text-gold"
@@ -153,8 +151,7 @@ export default function HomePage() {
               <img
                 src="/ACEGLOBALNEXUS_ICON.png"
                 alt=""
-                className="h-14 w-14 rounded-2xl object-contain"
-                style={{ filter: "brightness(0) invert(1)" }}
+                className="h-14 w-14 rounded-2xl bg-cream p-2.5 object-contain"
               />
               <div>
                 <p className="font-serif text-xl font-bold text-white">{FOUNDER.name}</p>
@@ -184,8 +181,7 @@ export default function HomePage() {
                 <img
                   src="/ACEGLOBALNEXUS_ICON.png"
                   alt="ACE Global Nexus mark"
-                  className="mx-auto h-16 w-16 rounded-2xl object-contain"
-                  style={{ filter: "brightness(0) invert(1)" }}
+                  className="mx-auto h-16 w-16 rounded-2xl bg-cream p-2.5 object-contain"
                 />
                 <p className="mt-4 font-serif text-2xl font-bold text-white">{FOUNDER.name}</p>
                 <p className="mt-1 text-sm text-gold-light">{FOUNDER.title}</p>
