@@ -9,11 +9,19 @@ import Marquee from "@/components/Marquee";
 import ServiceRows from "@/components/ServiceRows";
 import Showcase from "@/components/Showcase";
 import SectorShowcase from "@/components/SectorShowcase";
+import JsonLd from "@/components/JsonLd";
+import { canonical, openGraphMeta, webSiteSchema, professionalServiceSchema, serviceCatalogSchema } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "ACE Global Nexus — Connecting Businesses, Markets & Opportunities",
+  title: "Trade & Investment Advisory in Africa | ACE Global Nexus",
   description:
-    "Global trade, investment and strategic advisory from Yaoundé, Cameroon. Market entry, trade facilitation, matchmaking, market intelligence and export promotion across Africa and global markets.",
+    "Market entry & trade advisory from Cameroon. We connect businesses and investors with African markets, partners and bankable deals.",
+  ...canonical("/"),
+  ...openGraphMeta(
+    "/",
+    "Trade & Investment Advisory in Africa | ACE Global Nexus",
+    "Market entry & trade advisory from Cameroon. We connect businesses and investors with African markets, partners and bankable deals."
+  ),
 };
 
 const STATS = [
@@ -26,6 +34,7 @@ const STATS = [
 export default function HomePage() {
   return (
     <>
+      <JsonLd data={[webSiteSchema(), professionalServiceSchema(), serviceCatalogSchema()]} />
       {/* ============ HERO ============ */}
       <section className="relative flex min-h-[100svh] flex-col overflow-hidden bg-primary">
         <Parallax speed={0.16} className="absolute inset-0">

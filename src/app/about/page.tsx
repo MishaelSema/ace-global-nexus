@@ -7,11 +7,19 @@ import SectionHeading from "@/components/SectionHeading";
 import PageHero from "@/components/PageHero";
 import Parallax from "@/components/Parallax";
 import Statement from "@/components/Statement";
+import JsonLd from "@/components/JsonLd";
+import { canonical, openGraphMeta, breadcrumbSchema, personSchema } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "About & Founder",
+  title: "About Us | Trade & Investment Advisors in Cameroon",
   description:
-    "Meet ACE Global Nexus — a trusted business bridge between Africa and the world — and its founder, Christopher A. Ekom, a retired US Embassy Senior Commercial Specialist with 22+ years in trade and investment promotion.",
+    "Meet Christopher A. Ekom, a retired US Embassy Senior Commercial Specialist with 22+ years in trade & investment promotion, and his Yaoundé advisory team.",
+  ...canonical("/about"),
+  ...openGraphMeta(
+    "/about",
+    "About Us | Trade & Investment Advisors in Cameroon",
+    "Meet Christopher A. Ekom, a retired US Embassy Senior Commercial Specialist with 22+ years in trade & investment promotion, and his Yaoundé advisory team."
+  ),
 };
 
 const VALUES = [
@@ -34,6 +42,15 @@ const EXPERTISE_TAGS = ["Business Development", "International Trade", "Investme
 export default function AboutPage() {
   return (
     <>
+      <JsonLd
+        data={[
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "About & Founder", path: "/about" },
+          ]),
+          personSchema(),
+        ]}
+      />
       <PageHero
         title={
           <>

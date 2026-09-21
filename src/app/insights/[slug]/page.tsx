@@ -7,6 +7,8 @@ import { connectDB } from "@/lib/mongodb";
 import Insight from "@/models/Insight";
 import { cloudImageUrl, formatDate } from "@/lib/utils";
 import { BRAND_IMAGE } from "@/lib/content";
+import JsonLd from "@/components/JsonLd";
+import { SITE_URL, SITE_NAME, OG_IMAGE_DEFAULT, canonical, breadcrumbSchema, articleSchema } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
@@ -18,17 +20,41 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params;
   let title = "Insight | ACE Global Nexus";
   let description = "";
+  let coverUrl: string | undefined;
+  let publishedAt: Date | undefined;
   try {
     await connectDB();
-    const insight = await Insight.findOne({ slug }).select("title excerpt category").lean();
+    const insight = await Insight.findOne({ slug }).select("title excerpt category coverUrl publishedAt").lean();
     if (insight) {
       title = insight.title;
       description = insight.excerpt || "";
+      coverUrl = insight.coverUrl;
+      publishedAt = insight.publishedAt;
     }
   } catch {
     // fall through
   }
-  return { title, description };
+  const image = coverUrl ? cloudImageUrl(coverUrl, 1200) : `${SITE_URL}${OG_IMAGE_DEFAULT}`;
+  return {
+    title,
+    description,
+    ...canonical(`/insights/${slug}`),
+    openGraph: {
+      title,
+      description,
+      url: `${SITE_URL}/insights/${slug}`,
+      type: "article",
+      siteName: SITE_NAME,
+      publishedTime: publishedAt?.toISOString(),
+      images: [{ url: image, alt: title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [image],
+    },
+  };
 }
 
 export default async function InsightDetailPage({ params }: PageProps) {
@@ -60,6 +86,24 @@ export default async function InsightDetailPage({ params }: PageProps) {
 
   return (
     <article className="bg-white pb-24">
+      <JsonLd
+        data={[
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Insights", path: "/insights" },
+            { name: insight.title, path: `/insights/${insight.slug}` },
+          ]),
+          articleSchema({
+            title: insight.title,
+            slug: insight.slug,
+            excerpt: insight.excerpt,
+            coverUrl: insight.coverUrl ? cloudImageUrl(insight.coverUrl, 1200) : undefined,
+            author: insight.author,
+            publishedAt: insight.publishedAt,
+            category: insight.category,
+          }),
+        ]}
+      />
       {/* Full-bleed cover header */}
       <section className="relative flex min-h-[72vh] items-end overflow-hidden bg-primary">
         <img

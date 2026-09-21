@@ -6,13 +6,21 @@ import InsightCard from "@/components/InsightCard";
 import { INSIGHT_CATEGORIES } from "@/lib/content";
 import PageHero from "@/components/PageHero";
 import Statement from "@/components/Statement";
+import JsonLd from "@/components/JsonLd";
+import { canonical, openGraphMeta, breadcrumbSchema } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Insights",
+  title: "Insights on African Trade & Investment | ACE Global Nexus",
   description:
-    "Practical market intelligence on trade, investment, entrepreneurship, agribusiness and doing business in Africa — from ACE Global Nexus.",
+    "Practical market intelligence on doing business in Africa – trade, investment, AfCFTA, export and sector analysis from ACE Global Nexus, Yaoundé, Cameroon.",
+  ...canonical("/insights"),
+  ...openGraphMeta(
+    "/insights",
+    "Insights on African Trade & Investment | ACE Global Nexus",
+    "Practical market intelligence on doing business in Africa – trade, investment, AfCFTA, export and sector analysis from ACE Global Nexus, Yaoundé, Cameroon."
+  ),
 };
 
 export default async function InsightsPage({
@@ -57,6 +65,14 @@ export default async function InsightsPage({
 
   return (
     <>
+      <JsonLd
+        data={[
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Insights", path: "/insights" },
+          ]),
+        ]}
+      />
       <PageHero
         title={
           <>

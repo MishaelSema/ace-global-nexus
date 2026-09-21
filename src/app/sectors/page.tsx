@@ -7,16 +7,32 @@ import PageHero from "@/components/PageHero";
 import Parallax from "@/components/Parallax";
 import Marquee from "@/components/Marquee";
 import Statement from "@/components/Statement";
+import JsonLd from "@/components/JsonLd";
+import { canonical, openGraphMeta, breadcrumbSchema } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Sectors",
+  title: "Investment Opportunities in Africa by Sector | ACE Global Nexus",
   description:
-    "ACE Global Nexus operates across agribusiness, mining, energy, infrastructure, ICT, healthcare, logistics, manufacturing, education and professional services in Africa.",
+    "Where to invest in Africa in 2026: agribusiness, mining, energy, infrastructure, ICT, healthcare, logistics, manufacturing — with local market intelligence.",
+  ...canonical("/sectors"),
+  ...openGraphMeta(
+    "/sectors",
+    "Investment Opportunities in Africa by Sector | ACE Global Nexus",
+    "Where to invest in Africa in 2026: agribusiness, mining, energy, infrastructure, ICT, healthcare, logistics, manufacturing — with local market intelligence."
+  ),
 };
 
 export default function SectorsPage() {
   return (
     <>
+      <JsonLd
+        data={[
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Sectors", path: "/sectors" },
+          ]),
+        ]}
+      />
       <PageHero
         title={
           <>
