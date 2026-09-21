@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { SERVICES } from "@/lib/content";
+import { tForLocale } from "@/lib/i18n/server";
 
 interface ServiceRowsProps {
   limit?: number;
@@ -12,6 +13,7 @@ interface ServiceRowsProps {
  */
 export default function ServiceRows({ limit, className }: ServiceRowsProps) {
   const items = limit ? SERVICES.slice(0, limit) : SERVICES;
+  const t = tForLocale();
   return (
     <div className={cn("divide-y divide-gray-100 border-y border-gray-100", className)}>
       {items.map((service, i) => (
@@ -23,10 +25,10 @@ export default function ServiceRows({ limit, className }: ServiceRowsProps) {
             {String(i + 1).padStart(2, "0")}
           </span>
           <h3 className="font-serif text-xl font-bold text-primary transition-colors group-hover:text-gold-dark">
-            {service.title}
+            {t(service.title)}
           </h3>
           <p className="leading-relaxed text-gray-500 sm:col-start-2 lg:col-start-3 lg:row-start-1 lg:pt-1">
-            {service.description}
+            {t(service.description)}
           </p>
         </div>
       ))}

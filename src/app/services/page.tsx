@@ -9,6 +9,7 @@ import Marquee from "@/components/Marquee";
 import Statement from "@/components/Statement";
 import JsonLd from "@/components/JsonLd";
 import { canonical, openGraphMeta, breadcrumbSchema, serviceCatalogSchema, faqSchema } from "@/lib/seo";
+import { tForLocale } from "@/lib/i18n/server";
 
 export const metadata: Metadata = {
   title: "Market Entry & Trade Advisory Services | ACE Global Nexus",
@@ -64,6 +65,7 @@ const FAQS = [
 ];
 
 export default function ServicesPage() {
+  const t = tForLocale();
   return (
     <>
       <JsonLd
@@ -79,18 +81,22 @@ export default function ServicesPage() {
       <PageHero
         title={
           <>
-            Expertise that turns cross-border ambition into <span className="italic text-gold">commercial results</span>
+            {t("Expertise that turns cross-border ambition into")}{" "}
+            <span className="italic text-gold">{t("commercial results")}</span>
           </>
         }
-        description="Eight integrated services covering the full journey of international business — from market entry and intelligence to matchmaking, investment and export growth."
+        description={t(
+          "Eight integrated services covering the full journey of international business — from market entry and intelligence to matchmaking, investment and export growth."
+        )}
       />
 
       <section className="bg-white py-24 sm:py-32">
         <div className="container-site">
           <Reveal>
             <p className="max-w-2xl leading-relaxed text-gray-500">
-              No two engagements are alike. Each service is a lane of a single journey — one that takes you from first
-              assessment to the right market, the right partner and a result that is bankable.
+              {t(
+                "No two engagements are alike. Each service is a lane of a single journey — one that takes you from first assessment to the right market, the right partner and a result that is bankable."
+              )}
             </p>
           </Reveal>
           <ServiceRows className="mt-14" />
@@ -99,7 +105,7 @@ export default function ServicesPage() {
 
       <section className="border-y border-gray-100 bg-cream py-10">
         <Marquee
-          items={SERVICES.map((s) => s.title)}
+          items={SERVICES.map((s) => t(s.title))}
           speed="marquee"
           itemClassName="font-serif text-xl font-semibold text-primary/40 sm:text-2xl"
           separator="·"
@@ -112,11 +118,12 @@ export default function ServicesPage() {
           <Reveal className="lg:sticky lg:top-28">
             <span className="block h-px w-14 bg-gold" aria-hidden="true" />
             <h2 className="mt-6 font-serif text-3xl font-bold leading-tight text-primary sm:text-4xl">
-              A practical, partnership-based approach
+              {t("A practical, partnership-based approach")}
             </h2>
             <p className="mt-5 max-w-md leading-relaxed text-gray-500">
-              Every mandate begins with understanding your objective — then we build the market picture, the right
-              relationships and the execution path that gets you there.
+              {t(
+                "Every mandate begins with understanding your objective — then we build the market picture, the right relationships and the execution path that gets you there."
+              )}
             </p>
           </Reveal>
 
@@ -127,12 +134,12 @@ export default function ServicesPage() {
                   <span className="font-serif text-sm text-gold-dark transition-colors group-hover:text-gold">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <span className="text-base font-medium text-primary/85">{m}</span>
+                  <span className="text-base font-medium text-primary/85">{t(m)}</span>
                 </li>
               ))}
             </ol>
             <Link href="/contact" className="btn-primary mt-10">
-              Discuss Your Objective <FaArrowRight size={13} />
+              {t("Discuss Your Objective")} <FaArrowRight size={13} />
             </Link>
           </div>
         </div>
@@ -144,14 +151,15 @@ export default function ServicesPage() {
           <div>
             <span className="block h-px w-14 bg-gold" aria-hidden="true" />
             <h2 className="mt-6 font-serif text-3xl font-bold leading-tight text-primary sm:text-4xl">
-              Market entry questions, answered
+              {t("Market entry questions, answered")}
             </h2>
             <p className="mt-5 max-w-md leading-relaxed text-gray-500">
-              Straight answers on entering African markets, costs, ownership and timelines — from advisors who work
-              these corridors every day.
+              {t(
+                "Straight answers on entering African markets, costs, ownership and timelines — from advisors who work these corridors every day."
+              )}
             </p>
             <Link href="/contact" className="btn-primary mt-10">
-              Ask Your Own Question <FaArrowRight size={13} />
+              {t("Ask Your Own Question")} <FaArrowRight size={13} />
             </Link>
           </div>
 
@@ -159,12 +167,12 @@ export default function ServicesPage() {
             {FAQS.map((faq) => (
               <details key={faq.question} className="group">
                 <summary className="flex list-none cursor-pointer items-center justify-between gap-6 py-6 text-base font-semibold text-primary/90 transition-colors hover:text-gold-dark [&::-webkit-details-marker]:hidden">
-                  {faq.question}
+                  {t(faq.question)}
                   <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-gold/50 font-serif text-lg text-gold-dark transition-transform duration-300 group-open:rotate-45">
                     +
                   </span>
                 </summary>
-                <p className="max-w-2xl pb-6 text-sm leading-relaxed text-gray-500">{faq.answer}</p>
+                <p className="max-w-2xl pb-6 text-sm leading-relaxed text-gray-500">{t(faq.answer)}</p>
               </details>
             ))}
           </div>

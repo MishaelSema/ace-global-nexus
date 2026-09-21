@@ -2,6 +2,7 @@ import Link from "next/link";
 import { FaArrowRight } from "react-icons/fa6";
 import { cloudImageUrl, formatDate } from "@/lib/utils";
 import { BRAND_IMAGE } from "@/lib/content";
+import { tForLocale } from "@/lib/i18n/server";
 
 export interface InsightPreview {
   _id: string;
@@ -16,6 +17,7 @@ export interface InsightPreview {
 }
 
 export default function InsightCard({ insight }: { insight: InsightPreview }) {
+  const t = tForLocale();
   return (
     <Link
       href={`/insights/${insight.slug}`}
@@ -42,10 +44,10 @@ export default function InsightCard({ insight }: { insight: InsightPreview }) {
           {insight.title}
         </h3>
         <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-gray-500">
-          {insight.excerpt || "Read this insight from ACE Global Nexus."}
+          {insight.excerpt || t("Read this insight from ACE Global Nexus.")}
         </p>
         <span className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-gold-dark">
-          Read article <FaArrowRight size={12} className="transition-transform duration-300 group-hover:translate-x-1" />
+          {t("Read article")} <FaArrowRight size={12} className="transition-transform duration-300 group-hover:translate-x-1" />
         </span>
       </div>
     </Link>

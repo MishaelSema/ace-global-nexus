@@ -9,6 +9,7 @@ import { cloudImageUrl, formatDate } from "@/lib/utils";
 import { BRAND_IMAGE } from "@/lib/content";
 import JsonLd from "@/components/JsonLd";
 import { SITE_URL, SITE_NAME, OG_IMAGE_DEFAULT, canonical, breadcrumbSchema, articleSchema } from "@/lib/seo";
+import { tForLocale } from "@/lib/i18n/server";
 
 export const dynamic = "force-dynamic";
 
@@ -59,6 +60,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function InsightDetailPage({ params }: PageProps) {
   const { slug } = await params;
+  const t = tForLocale();
 
   interface InsightDetail {
     title: string;
@@ -115,7 +117,7 @@ export default async function InsightDetailPage({ params }: PageProps) {
 
         <div className="container-site relative pb-16 pt-40">
           <Link href="/insights" className="inline-flex items-center gap-2 text-sm text-white/60 transition-colors hover:text-gold">
-            <FaArrowLeft size={12} /> All insights
+            <FaArrowLeft size={12} /> {t("All insights")}
           </Link>
 
           <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-3">
@@ -144,7 +146,7 @@ export default async function InsightDetailPage({ params }: PageProps) {
             {insight.content ? (
               <ReactMarkdown>{insight.content}</ReactMarkdown>
             ) : (
-              <p className="text-gray-500">Full article coming soon.</p>
+              <p className="text-gray-500">{t("Full article coming soon.")}</p>
             )}
           </div>
 
@@ -166,13 +168,14 @@ export default async function InsightDetailPage({ params }: PageProps) {
             />
             <div className="absolute inset-0 bg-gradient-to-b from-primary/80 to-primary" />
             <div className="relative">
-              <h2 className="font-serif text-2xl font-bold text-white sm:text-3xl">Let&apos;s discuss your opportunity</h2>
+              <h2 className="font-serif text-2xl font-bold text-white sm:text-3xl">{t("Let's discuss your opportunity")}</h2>
               <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-white/65">
-                If this insight speaks to a market, sector or partnership you are exploring, our team would be glad to
-                help.
+                {t(
+                  "If this insight speaks to a market, sector or partnership you are exploring, our team would be glad to help."
+                )}
               </p>
               <Link href="/contact" className="btn-primary mt-7">
-                Contact ACE Global Nexus <FaArrowRight size={13} />
+                {t("Contact ACE Global Nexus")} <FaArrowRight size={13} />
               </Link>
             </div>
           </div>

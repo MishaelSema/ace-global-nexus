@@ -4,6 +4,7 @@ import Statement from "@/components/Statement";
 import JsonLd from "@/components/JsonLd";
 import ContactForm from "@/components/ContactForm";
 import { canonical, openGraphMeta, breadcrumbSchema, professionalServiceSchema } from "@/lib/seo";
+import { tForLocale } from "@/lib/i18n/server";
 
 export const metadata: Metadata = {
   title: "Contact Us | Trade & Investment Advisory in Cameroon",
@@ -18,6 +19,7 @@ export const metadata: Metadata = {
 };
 
 export default function ContactPage() {
+  const t = tForLocale();
   return (
     <>
       <JsonLd
@@ -32,10 +34,12 @@ export default function ContactPage() {
       <PageHero
         title={
           <>
-            Let&apos;s start <span className="italic text-gold">the conversation</span>
+            {t("Let's start")} <span className="italic text-gold">{t("the conversation")}</span>
           </>
         }
-        description="Tell us about your market, your sector and your objective — and we will map the path from opportunity to results."
+        description={t(
+          "Tell us about your market, your sector and your objective — and we will map the path from opportunity to results."
+        )}
       />
       <ContactForm />
       <Statement word="CONNECT" sub="You and the right markets, partners and opportunities." />

@@ -5,6 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaBars, FaXmark, FaArrowRight } from "react-icons/fa6";
 import Logo from "@/components/Logo";
+import LanguageToggle from "@/components/LanguageToggle";
+import { useLocale } from "@/components/LocaleProvider";
 
 const NAV = [
   { href: "/", label: "Home" },
@@ -17,6 +19,7 @@ const NAV = [
 
 export default function Navbar() {
   const pathname = usePathname();
+  const { t } = useLocale();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -59,12 +62,13 @@ export default function Navbar() {
                       : "text-primary/75 hover:text-primary"
                 }`}
               >
-                {item.label}
+                {t(item.label)}
               </Link>
             );
           })}
+          <LanguageToggle />
           <Link href="/start-a-conversation" className="btn-primary !px-5 !py-2.5">
-            Start a Conversation <FaArrowRight size={12} />
+            {t("Start a Conversation")} <FaArrowRight size={12} />
           </Link>
         </nav>
 
@@ -88,12 +92,15 @@ export default function Navbar() {
                 href={item.href}
                 className={`text-base font-medium ${pathname === item.href ? "text-gold-dark" : "text-primary/85"}`}
               >
-                {item.label}
+                {t(item.label)}
               </Link>
             ))}
             <Link href="/start-a-conversation" className="btn-primary mt-4 w-full">
-              Start a Conversation <FaArrowRight size={12} />
+              {t("Start a Conversation")} <FaArrowRight size={12} />
             </Link>
+            <div className="mt-1 flex justify-center">
+              <LanguageToggle />
+            </div>
           </nav>
         </div>
       )}

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { FaArrowRight, FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 import { cloudImageUrl } from "@/lib/utils";
 import { BRAND_IMAGE } from "@/lib/content";
+import { useLocale } from "@/components/LocaleProvider";
 
 interface Slide {
   _id: string;
@@ -18,6 +19,7 @@ interface Slide {
 }
 
 export default function Showcase() {
+  const { t } = useLocale();
   const [slides, setSlides] = useState<Slide[]>([]);
   const [loading, setLoading] = useState(true);
   const [index, setIndex] = useState(0);
@@ -63,10 +65,11 @@ export default function Showcase() {
   if (!slides.length) {
     return (
       <div className="flex min-h-[320px] flex-col items-center justify-center rounded-3xl bg-cream px-8 text-center">
-        <p className="font-serif text-2xl font-bold text-primary">Fresh market intelligence is on the way.</p>
+        <p className="font-serif text-2xl font-bold text-primary">{t("Fresh market intelligence is on the way.")}</p>
         <p className="mt-3 max-w-md text-sm leading-relaxed text-gray-500">
-          ACE Global Nexus is publishing practical insights on African trade, investment and doing business — follow
-          along to read them first.
+          {t(
+            "ACE Global Nexus is publishing practical insights on African trade, investment and doing business — follow along to read them first."
+          )}
         </p>
       </div>
     );
@@ -114,7 +117,7 @@ export default function Showcase() {
               {slides[index].excerpt}
             </p>
             <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-gold transition-transform duration-300 group-hover:translate-x-1">
-              Read the insight <FaArrowRight size={12} />
+              {t("Read the insight")} <FaArrowRight size={12} />
             </span>
           </Link>
         </div>

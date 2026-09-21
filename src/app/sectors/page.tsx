@@ -9,6 +9,7 @@ import Marquee from "@/components/Marquee";
 import Statement from "@/components/Statement";
 import JsonLd from "@/components/JsonLd";
 import { canonical, openGraphMeta, breadcrumbSchema } from "@/lib/seo";
+import { tForLocale } from "@/lib/i18n/server";
 
 export const metadata: Metadata = {
   title: "Investment Opportunities in Africa by Sector | ACE Global Nexus",
@@ -23,6 +24,7 @@ export const metadata: Metadata = {
 };
 
 export default function SectorsPage() {
+  const t = tForLocale();
   return (
     <>
       <JsonLd
@@ -36,11 +38,13 @@ export default function SectorsPage() {
       <PageHero
         title={
           <>
-            Where African opportunity meets
-            <br className="hidden sm:block" /> <span className="italic text-gold">global capital and markets</span>
+            {t("Where African opportunity meets")}
+            <br className="hidden sm:block" /> <span className="italic text-gold">{t("global capital and markets")}</span>
           </>
         }
-        description="We focus on the sectors driving Africa's growth — and pair them with the market intelligence, partners and investors that make them work."
+        description={t(
+          "We focus on the sectors driving Africa's growth — and pair them with the market intelligence, partners and investors that make them work."
+        )}
       />
 
       <section className="bg-white py-24 sm:py-32">
@@ -54,9 +58,9 @@ export default function SectorsPage() {
                   </span>
                   <div>
                     <h2 className="font-serif text-xl font-bold text-primary transition-colors group-hover:text-gold-dark">
-                      {sector.title}
+                      {t(sector.title)}
                     </h2>
-                    <p className="mt-1.5 max-w-md text-sm leading-relaxed text-gray-500">{sector.description}</p>
+                    <p className="mt-1.5 max-w-md text-sm leading-relaxed text-gray-500">{t(sector.description)}</p>
                   </div>
                 </div>
               </Reveal>
@@ -67,7 +71,7 @@ export default function SectorsPage() {
 
       <section className="border-y border-white/10 bg-primary py-10">
         <Marquee
-          items={SECTORS.map((s) => s.title)}
+          items={SECTORS.map((s) => t(s.title))}
           speed="marquee"
           itemClassName="font-serif text-2xl font-semibold text-white/45 sm:text-3xl"
           separator="◆"
@@ -82,13 +86,13 @@ export default function SectorsPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-primary/85 via-primary/75 to-primary" />
         <div className="container-site relative py-24 text-center sm:py-28">
           <h2 className="font-serif text-2xl font-bold leading-tight text-white sm:text-4xl">
-            Not sure where your opportunity fits?
+            {t("Not sure where your opportunity fits?")}
           </h2>
           <p className="mx-auto mt-4 max-w-xl leading-relaxed text-white/65">
-            Tell us your sector and objectives — we will map the market, the partners and the path forward.
+            {t("Tell us your sector and objectives — we will map the market, the partners and the path forward.")}
           </p>
           <Link href="/contact" className="btn-primary mt-8">
-            Talk to Our Team <FaArrowRight size={13} />
+            {t("Talk to Our Team")} <FaArrowRight size={13} />
           </Link>
         </div>
       </section>

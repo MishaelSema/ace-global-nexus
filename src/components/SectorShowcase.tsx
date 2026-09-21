@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { FaArrowRight } from "react-icons/fa6";
 import { BRAND_IMAGE } from "@/lib/content";
-import MosaicGrid from "@/components/MosaicGrid";
 import Reveal from "@/components/Reveal";
+import { useLocale } from "@/components/LocaleProvider";
 
 const ITEMS = [
   { title: "Agribusiness", note: "Value chains & export", pos: "object-center" },
@@ -28,7 +29,8 @@ const WRAP_FACTOR = 70;
  *    section is fully visible, releases and scrolls away with the page after the
  *    last sector. Tap a chip to jump straight to a sector.
  */
-export default function SectorShowcase() {
+export default function SectorShowcase({ children }: { children: ReactNode }) {
+  const { t } = useLocale();
   const [index, setIndex] = useState(0);
   const [bgOffset, setBgOffset] = useState(0);
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -76,10 +78,8 @@ export default function SectorShowcase() {
 
   return (
     <>
-      {/* Desktop / tablet: the corner-curve mosaic grid */}
-      <Reveal className="mt-14 hidden lg:block">
-        <MosaicGrid />
-      </Reveal>
+      {/* Desktop / tablet: the corner-curve mosaic grid (server-rendered child) */}
+      <Reveal className="mt-14 hidden lg:block">{children}</Reveal>
 
       {/* Mobile: pinned full-screen sector gallery */}
       <div className="-mx-5 mt-14 sm:-mx-8 lg:hidden">
@@ -114,9 +114,9 @@ export default function SectorShowcase() {
                 </span>
               </div>
               <h2 className="mt-8 font-serif text-4xl font-bold leading-[1.02] text-white sm:text-5xl">
-                {current.title}
+                {t(current.title)}
               </h2>
-              <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/65">{current.note}</p>
+              <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/65">{t(current.note)}</p>
             </div>
 
             {/* Tap-to-jump sectors + bottom-centre CTA */}
@@ -135,7 +135,7 @@ export default function SectorShowcase() {
                             : "border-white/20 bg-white/5 text-white/60 hover:border-white/40 hover:text-white"
                         }`}
                       >
-                        {String(i + 1).padStart(2, "0")} {item.title}
+                        {String(i + 1).padStart(2, "0")} {t(item.title)}
                       </button>
                     </li>
                   );
@@ -143,7 +143,7 @@ export default function SectorShowcase() {
               </ul>
               <div className="mt-6 flex justify-center">
                 <Link href="/sectors" className="btn bg-white text-primary-dark transition-colors hover:bg-gold-light">
-                  See all sectors <FaArrowRight size={13} />
+                  {t("See all sectors")} <FaArrowRight size={13} />
                 </Link>
               </div>
             </div>

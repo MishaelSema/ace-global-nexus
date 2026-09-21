@@ -1,5 +1,6 @@
 import Parallax from "@/components/Parallax";
 import { BRAND_IMAGE } from "@/lib/content";
+import { tForLocale } from "@/lib/i18n/server";
 
 interface StatementProps {
   /** One powerful word, set huge in the display face. */
@@ -14,6 +15,7 @@ interface StatementProps {
  * sitting over a parallax photograph background.
  */
 export default function Statement({ word, sub }: StatementProps) {
+  const t = tForLocale();
   return (
     <section className="relative overflow-hidden bg-primary">
       <Parallax speed={0.14} className="absolute inset-0">
@@ -26,11 +28,11 @@ export default function Statement({ word, sub }: StatementProps) {
           aria-hidden="true"
           className="select-none font-display text-[16vw] leading-[0.82] tracking-[0.01em] text-white/95 sm:text-[13vw] md:text-[10.5vw] lg:text-[8.5vw] xl:text-[7.5vw]"
         >
-          {word}
+          {t(word)}
         </p>
         {sub && (
           <p className="mx-auto mt-4 max-w-md text-[11px] font-semibold uppercase tracking-[0.32em] text-gold-light sm:text-sm">
-            {sub}
+            {t(sub)}
           </p>
         )}
       </div>

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BRAND_IMAGE } from "@/lib/content";
+import { tForLocale } from "@/lib/i18n/server";
 
 interface Tile {
   title: string;
@@ -86,6 +87,7 @@ export default function MosaicGrid() {
   const feature = TILES.slice(0, 1)[0];
   const stack = TILES.slice(1, 3);
   const row = TILES.slice(3);
+  const t = tForLocale();
 
   const renderTile = (tile: Tile, key: string) => (
     <Link
@@ -103,8 +105,8 @@ export default function MosaicGrid() {
       <div className="absolute inset-0 bg-gradient-to-t from-primary/85 via-primary/10 to-transparent" />
       <div className={`absolute flex p-5 sm:p-6 ${CAPTION_POS[tile.position]}`}>
         <div>
-          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-gold">{tile.note}</p>
-          <h3 className="mt-1 font-serif text-xl font-bold text-white sm:text-2xl">{tile.title}</h3>
+          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-gold">{t(tile.note)}</p>
+          <h3 className="mt-1 font-serif text-xl font-bold text-white sm:text-2xl">{t(tile.title)}</h3>
         </div>
       </div>
     </Link>

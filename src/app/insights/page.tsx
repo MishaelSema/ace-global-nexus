@@ -8,6 +8,7 @@ import PageHero from "@/components/PageHero";
 import Statement from "@/components/Statement";
 import JsonLd from "@/components/JsonLd";
 import { canonical, openGraphMeta, breadcrumbSchema } from "@/lib/seo";
+import { tForLocale } from "@/lib/i18n/server";
 
 export const dynamic = "force-dynamic";
 
@@ -41,6 +42,7 @@ export default async function InsightsPage({
   }
 
   const category = searchParams.category;
+  const t = tForLocale();
   let insights: InsightListItem[] = [];
 
   try {
@@ -76,11 +78,13 @@ export default async function InsightsPage({
       <PageHero
         title={
           <>
-            Practical market intelligence,
-            <br className="hidden sm:block" /> <span className="italic text-gold">from experience and research</span>
+            {t("Practical market intelligence,")}
+            <br className="hidden sm:block" /> <span className="italic text-gold">{t("from experience and research")}</span>
           </>
         }
-        description="Trade, investment, entrepreneurship, agribusiness and doing business in Africa — written to be read, acted on and shared."
+        description={t(
+          "Trade, investment, entrepreneurship, agribusiness and doing business in Africa — written to be read, acted on and shared."
+        )}
       />
 
       <section className="bg-white py-20 sm:py-24">
@@ -92,7 +96,7 @@ export default async function InsightsPage({
                 !category ? "bg-gold text-primary-dark" : "border border-gray-100 bg-cream text-primary/70 hover:bg-gold/15"
               }`}
             >
-              All
+              {t("All")}
             </Link>
             {INSIGHT_CATEGORIES.map((c) => (
               <Link
@@ -102,18 +106,22 @@ export default async function InsightsPage({
                   category === c ? "bg-gold text-primary-dark" : "border border-gray-100 bg-cream text-primary/70 hover:bg-gold/15"
                 }`}
               >
-                {c}
+                {t(c)}
               </Link>
             ))}
           </div>
 
           {insights.length === 0 ? (
             <div className="my-16 rounded-3xl border border-dashed border-gray-200 px-8 py-20 text-center">
-              <p className="font-serif text-2xl font-bold text-primary">No insights published yet</p>
+              <p className="font-serif text-2xl font-bold text-primary">{t("No insights published yet")}</p>
               <p className="mt-3 text-sm leading-relaxed text-gray-500">
-                {category
-                  ? `There are no articles in “${category}” yet — check the other categories or come back soon.`
-                  : "Check back soon for fresh, practical market intelligence."}
+                {category ? (
+                  <>
+                    {t("There are no articles in")} “{category}” {t("yet — check the other categories or come back soon.")}
+                  </>
+                ) : (
+                  t("Check back soon for fresh, practical market intelligence.")
+                )}
               </p>
             </div>
           ) : (

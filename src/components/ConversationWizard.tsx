@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { FormEvent, ReactNode } from "react";
 import { FaArrowLeft, FaArrowRight, FaCheck, FaPaperPlane, FaSpinner } from "react-icons/fa6";
 import { CONTACT_TOPICS, SERVICES } from "@/lib/content";
+import { useLocale } from "@/components/LocaleProvider";
 
 const STEP_LABELS = ["About you", "Your objective", "Review & send"];
 
@@ -48,6 +49,7 @@ function Field({ label, children, required }: { label: string; children: ReactNo
 }
 
 export default function ConversationWizard() {
+  const { t } = useLocale();
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<FormState>(EMPTY);
   const [sending, setSending] = useState(false);
@@ -75,10 +77,10 @@ export default function ConversationWizard() {
         setDone(true);
         window.scrollTo({ top: 0, behavior: "smooth" });
       } else {
-        setError(data.error || "Something went wrong. Please try again.");
+        setError(data.error || t("Something went wrong. Please try again."));
       }
     } catch {
-      setError("Network error. Please try again.");
+      setError(t("Network error. Please try again."));
     } finally {
       setSending(false);
     }
@@ -105,10 +107,13 @@ export default function ConversationWizard() {
               <span className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-gold/15 text-gold-dark">
                 <FaCheck size={22} aria-hidden="true" />
               </span>
-              <h2 className="mt-6 font-serif text-3xl font-bold text-primary">Conversation started</h2>
+              <h2 className="mt-6 font-serif text-3xl font-bold text-primary">{t("Conversation started")}</h2>
               <p className="mx-auto mt-4 max-w-md leading-relaxed text-gray-600">
-                Thanks{form.name.trim() ? `, ${form.name.trim().split(" ")[0]}` : ""} — your inquiry is in. Our team
-                typically responds within one business day, and a confirmation email is on its way to{" "}
+                {t("Thanks")}
+                {form.name.trim() ? `, ${form.name.trim().split(" ")[0]}` : ""}{" "}
+                {t(
+                  "— your inquiry is in. Our team typically responds within one business day, and a confirmation email is on its way to"
+                )}{" "}
                 <strong>{form.email}</strong>.
               </p>
               <button
@@ -121,7 +126,7 @@ export default function ConversationWizard() {
                 }}
                 className="btn-primary mt-9"
               >
-                Start another conversation
+                {t("Start another conversation")}
               </button>
             </div>
           ) : (
@@ -129,9 +134,9 @@ export default function ConversationWizard() {
               {/* Progress bar */}
               <div className="flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.18em] text-primary/50">
                 <span>
-                  Step {step + 1} of {STEP_LABELS.length}
+                  {t("Step")} {step + 1} {t("of")} {STEP_LABELS.length}
                 </span>
-                <span>{STEP_LABELS[step]}</span>
+                <span>{t(STEP_LABELS[step])}</span>
               </div>
               <div
                 className="mt-3 h-2 w-full overflow-hidden rounded-full bg-gray-200"
@@ -166,7 +171,7 @@ export default function ConversationWizard() {
                           state === "current" ? "text-primary" : "text-gray-400"
                         }`}
                       >
-                        {label}
+                        {t(label)}
                       </span>
                     </div>
                   );
@@ -177,32 +182,32 @@ export default function ConversationWizard() {
               <div className="mt-6 sm:mt-10">
                 {step === 0 && (
                   <div className="grid grid-cols-2 gap-3 sm:gap-6">
-                    <Field label="Full name" required>
-                      <input className={inputCls} value={form.name} onChange={set("name")} placeholder="Your name" />
+                    <Field label={t("Full name")} required>
+                      <input className={inputCls} value={form.name} onChange={set("name")} placeholder={t("Your name")} />
                     </Field>
-                    <Field label="Email" required>
+                    <Field label={t("Email")} required>
                       <input
                         type="email"
                         className={inputCls}
                         value={form.email}
                         onChange={set("email")}
-                        placeholder="you@company.com"
+                        placeholder={t("you@company.com")}
                       />
                     </Field>
-                    <Field label="Phone / WhatsApp">
-                      <input className={inputCls} value={form.phone} onChange={set("phone")} placeholder="+237 ..." />
+                    <Field label={t("Phone / WhatsApp")}>
+                      <input className={inputCls} value={form.phone} onChange={set("phone")} placeholder={t("+237 ...")} />
                     </Field>
-                    <Field label="Company / Organisation">
+                    <Field label={t("Company / Organisation")}>
                       <input
                         className={inputCls}
                         value={form.company}
                         onChange={set("company")}
-                        placeholder="Company name"
+                        placeholder={t("Company name")}
                       />
                     </Field>
                     <div className="col-span-2">
-                      <Field label="Country">
-                        <input className={inputCls} value={form.country} onChange={set("country")} placeholder="Your country" />
+                      <Field label={t("Country")}>
+                        <input className={inputCls} value={form.country} onChange={set("country")} placeholder={t("Your country")} />
                       </Field>
                     </div>
                   </div>
@@ -210,31 +215,31 @@ export default function ConversationWizard() {
 
                 {step === 1 && (
                   <div className="grid gap-4 sm:gap-6">
-                    <Field label="What can we help with?" required>
+                    <Field label={t("What can we help with?")} required>
                       <select className={inputCls} value={form.topic} onChange={set("topic")}>
                         <option value="" disabled>
-                          Choose a topic...
+                          {t("Choose a topic...")}
                         </option>
-                        {CONTACT_TOPICS.map((t) => (
-                          <option key={t}>{t}</option>
+                        {CONTACT_TOPICS.map((topic) => (
+                          <option key={topic}>{t(topic)}</option>
                         ))}
                       </select>
                     </Field>
-                    <Field label="Service of interest">
+                    <Field label={t("Service of interest")}>
                       <select className={inputCls} value={form.service} onChange={set("service")}>
-                        <option value="">No specific service</option>
+                        <option value="">{t("No specific service")}</option>
                         {SERVICES.map((s) => (
-                          <option key={s.title}>{s.title}</option>
+                          <option key={s.title}>{t(s.title)}</option>
                         ))}
                       </select>
                     </Field>
-                    <Field label="Your message" required>
+                    <Field label={t("Your message")} required>
                       <textarea
                         rows={4}
                         className={inputCls}
                         value={form.message}
                         onChange={set("message")}
-                        placeholder="Tell us about your objective, market, sector or partnership..."
+                        placeholder={t("Tell us about your objective, market, sector or partnership...")}
                       />
                     </Field>
                   </div>
@@ -243,14 +248,14 @@ export default function ConversationWizard() {
                 {step === 2 && (
                   <div>
                     <div className="flex items-center justify-between">
-                      <h3 className="font-serif text-xl font-bold text-primary">Review your conversation</h3>
-                      <p className="text-xs text-gray-400">Check everything, then send.</p>
+                      <h3 className="font-serif text-xl font-bold text-primary">{t("Review your conversation")}</h3>
+                      <p className="text-xs text-gray-400">{t("Check everything, then send.")}</p>
                     </div>
                     <dl className="mt-6 divide-y divide-gray-200 rounded-2xl border border-gray-200 bg-white">
                       {reviewRows.map(([label, value, stepOf]) => (
                         <div key={label} className="flex items-start justify-between gap-4 px-4 py-3 sm:px-5 sm:py-4">
                           <dt className="w-36 shrink-0 text-xs font-semibold uppercase tracking-wide text-gray-400">
-                            {label}
+                            {t(label)}
                           </dt>
                           <dd className="flex-1 break-words text-right text-sm font-medium text-primary">
                             {value || <span className="text-gray-300">—</span>}
@@ -259,15 +264,15 @@ export default function ConversationWizard() {
                             type="button"
                             onClick={() => setStep(stepOf)}
                             className="shrink-0 text-xs font-semibold text-gold-dark transition-colors hover:text-gold"
-                            aria-label={`Edit ${label}`}
+                            aria-label={`${t("Edit")} ${label}`}
                           >
-                            Edit
+                            {t("Edit")}
                           </button>
                         </div>
                       ))}
                       <div className="flex items-start justify-between gap-4 px-4 py-3 sm:px-5 sm:py-4">
                         <dt className="w-36 shrink-0 text-xs font-semibold uppercase tracking-wide text-gray-400">
-                          Message
+                          {t("Message")}
                         </dt>
                         <dd className="flex-1 whitespace-pre-line text-right text-sm leading-relaxed text-primary">
                           {form.message || <span className="text-gray-300">—</span>}
@@ -276,9 +281,9 @@ export default function ConversationWizard() {
                           type="button"
                           onClick={() => setStep(1)}
                           className="shrink-0 text-xs font-semibold text-gold-dark transition-colors hover:text-gold"
-                          aria-label="Edit message"
+                          aria-label={`${t("Edit")} ${t("Message")}`}
                         >
-                          Edit
+                          {t("Edit")}
                         </button>
                       </div>
                     </dl>
@@ -297,7 +302,7 @@ export default function ConversationWizard() {
                   disabled={step === 0}
                   className="inline-flex items-center gap-2 text-sm font-semibold text-primary/60 transition-colors hover:text-primary disabled:pointer-events-none disabled:opacity-30"
                 >
-                  <FaArrowLeft size={12} /> Back
+                  <FaArrowLeft size={12} /> {t("Back")}
                 </button>
 
                 {step < 2 ? (
@@ -307,12 +312,12 @@ export default function ConversationWizard() {
                     disabled={step === 0 ? !step1Ok : !step2Ok}
                     className="btn-primary disabled:cursor-not-allowed disabled:opacity-40"
                   >
-                    Continue <FaArrowRight size={12} />
+                    {t("Continue")} <FaArrowRight size={12} />
                   </button>
                 ) : (
                   <button type="submit" disabled={sending} className="btn-primary">
                     {sending ? <FaSpinner className="animate-spin" /> : <FaPaperPlane />}
-                    {sending ? "Sending..." : "Send Conversation"}
+                    {sending ? t("Sending...") : t("Send Conversation")}
                   </button>
                 )}
               </div>

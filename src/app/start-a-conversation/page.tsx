@@ -4,6 +4,7 @@ import Statement from "@/components/Statement";
 import ConversationWizard from "@/components/ConversationWizard";
 import JsonLd from "@/components/JsonLd";
 import { canonical, openGraphMeta, breadcrumbSchema } from "@/lib/seo";
+import { tForLocale } from "@/lib/i18n/server";
 
 export const metadata: Metadata = {
   title: "Start a Conversation | Market Entry & Investment Advisory",
@@ -18,6 +19,7 @@ export const metadata: Metadata = {
 };
 
 export default function StartAConversationPage() {
+  const t = tForLocale();
   return (
     <>
       <JsonLd
@@ -32,10 +34,12 @@ export default function StartAConversationPage() {
         compact
         title={
           <>
-            Start <span className="italic text-gold">the conversation</span>
+            {t("Start")} <span className="italic text-gold">{t("the conversation")}</span>
           </>
         }
-        description="Share your market, your sector and your objective in a few short steps — and we will map the path from opportunity to results."
+        description={t(
+          "Share your market, your sector and your objective in a few short steps — and we will map the path from opportunity to results."
+        )}
       />
       <ConversationWizard />
       <Statement word="START" sub="Every opportunity begins with a conversation." />

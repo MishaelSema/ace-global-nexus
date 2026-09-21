@@ -3,7 +3,10 @@ import { Bebas_Neue } from "next/font/google";
 import "./globals.css";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import Footer from "@/components/Footer";
 import JsonLd from "@/components/JsonLd";
+import { LocaleProvider } from "@/components/LocaleProvider";
+import { getLocale } from "@/lib/i18n/server";
 import { SITE_URL, SITE_NAME, organizationSchema } from "@/lib/seo";
 
 const display = Bebas_Neue({
@@ -72,12 +75,17 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = getLocale();
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body className={`${display.variable} bg-white font-sans text-primary antialiased`}>
-        <SiteHeader />
-        <main>{children}</main>
-        <SiteFooter />
+        <LocaleProvider initialLocale={locale}>
+          <SiteHeader />
+          <main>{children}</main>
+          <SiteFooter>
+            <Footer />
+          </SiteFooter>
+        </LocaleProvider>
         {/* Site-wide Organization structured data */}
         <JsonLd data={organizationSchema()} />
       </body>
