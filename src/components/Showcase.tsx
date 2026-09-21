@@ -19,7 +19,7 @@ interface Slide {
 }
 
 export default function Showcase() {
-  const { t } = useLocale();
+  const { t, p } = useLocale();
   const [slides, setSlides] = useState<Slide[]>([]);
   const [loading, setLoading] = useState(true);
   const [index, setIndex] = useState(0);
@@ -102,7 +102,7 @@ export default function Showcase() {
 
         <div className="absolute inset-x-0 bottom-0 p-8 pb-16 sm:p-12 sm:pb-16 lg:p-16">
           <Link
-            href={`/insights/${slides[index].slug}`}
+            href={p(`/insights/${slides[index].slug}`)}
             className="group block max-w-3xl"
             aria-label={slides[index].title}
           >

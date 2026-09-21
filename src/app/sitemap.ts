@@ -8,7 +8,8 @@ export const revalidate = 21600;
 
 const PAGE_LAST_MODIFIED = new Date();
 
-const STATIC_ROUTES = [
+/** Public marketing routes — mirrored in French under /fr with hreflang alternates. */
+const LOCALIZED_ROUTES = [
   "",
   "/services",
   "/sectors",
@@ -16,16 +17,32 @@ const STATIC_ROUTES = [
   "/insights",
   "/contact",
   "/start-a-conversation",
-  "/legal/terms",
-  "/legal/privacy",
-  "/legal/cookies",
 ];
+
+/** Legal pages stay single-language English — no French mirror, no alternates. */
+const LEGAL_ROUTES = ["/legal/terms", "/legal/privacy", "/legal/cookies"];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = SITE_URL;
 
   // Google ignores <priority> and <changefreq> — only stable lastModified is included.
-  const staticEntries: MetadataRoute.Sitemap = STATIC_ROUTES.map((path) => ({
+  const localizedEntries: MetadataRoute.Sitemap = LOCALIZED_ROUTES.map((path) => {
+    const enUrl = `${base}${path}`;
+    const frUrl = `${base}/fr${path === "" ? "" : path}`;
+    return {
+      url: enUrl,
+      lastModified: PAGE_LAST_MODIFIED,
+      alternates: {
+        languages: {
+          en: enUrl,
+          fr: frUrl,
+          "x-default": enUrl,
+        },
+      },
+    };
+  });
+
+  const legalEntries: MetadataRoute.Sitemap = LEGAL_ROUTES.map((path) => ({
     url: `${base}${path}`,
     lastModified: PAGE_LAST_MODIFIED,
   }));
@@ -37,14 +54,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       .select("slug publishedAt updatedAt")
       .lean<Array<{ slug: string; publishedAt?: Date; updatedAt?: Date }>>();
 
-    insightEntries = docs.map((d) => ({
-      url: `${base}/insights/${d.slug}`,
-      lastModified: d.updatedAt || d.publishedAt || PAGE_LAST_MODIFIED,
-    }));
+    insightEntries = docs.map((d) => {
+      const enUrl = `${base}/insights/${d.slug}`;
+      return {
+        url: enUrl,
+        lastModified: d.updatedAt || d.publishedAt || PAGE_LAST_MODIFIED,
+        alternates: {
+          languages: {
+            en: enUrl,
+            fr: `${base}/fr/insights/${d.slug}`,
+            "x-default": enUrl,
+          },
+        },
+      };
+    });
   } catch (error) {
     // Keep the static routes alive if the database is unreachable.
     console.error("Sitemap: insight lookup failed, serving static routes only.", error);
   }
 
-  return [...staticEntries, ...insightEntries];
+  return [...legalEntries, ...localizedEntries, ...insightEntries];
 }

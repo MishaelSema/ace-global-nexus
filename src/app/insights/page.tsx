@@ -7,22 +7,28 @@ import { INSIGHT_CATEGORIES } from "@/lib/content";
 import PageHero from "@/components/PageHero";
 import Statement from "@/components/Statement";
 import JsonLd from "@/components/JsonLd";
-import { canonical, openGraphMeta, breadcrumbSchema } from "@/lib/seo";
-import { tForLocale } from "@/lib/i18n/server";
+import { localizedPageMeta, breadcrumbSchema } from "@/lib/seo";
+import { tForLocale, pathForLocale, getLocale } from "@/lib/i18n/server";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Insights on African Trade & Investment | ACE Global Nexus",
-  description:
-    "Practical market intelligence on doing business in Africa – trade, investment, AfCFTA, export and sector analysis from ACE Global Nexus, Yaoundé, Cameroon.",
-  ...canonical("/insights"),
-  ...openGraphMeta(
-    "/insights",
-    "Insights on African Trade & Investment | ACE Global Nexus",
-    "Practical market intelligence on doing business in Africa – trade, investment, AfCFTA, export and sector analysis from ACE Global Nexus, Yaoundé, Cameroon."
-  ),
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = getLocale();
+  return localizedPageMeta({
+    path: "/insights",
+    locale,
+    en: {
+      title: "Insights on African Trade & Investment | ACE Global Nexus",
+      description:
+        "Practical market intelligence on doing business in Africa – trade, investment, AfCFTA, export and sector analysis from ACE Global Nexus, Yaoundé, Cameroon.",
+    },
+    fr: {
+      title: "Analyses sur le Commerce & l'Investissement en Afrique | ACE Global Nexus",
+      description:
+        "Intelligence économique pratique pour faire des affaires en Afrique : commerce, investissement, ZLECAf, exportation et analyses sectorielles d'ACE Global Nexus, Yaoundé, Cameroun.",
+    },
+  });
+}
 
 export default async function InsightsPage({
   searchParams,
@@ -43,6 +49,7 @@ export default async function InsightsPage({
 
   const category = searchParams.category;
   const t = tForLocale();
+  const p = pathForLocale();
   let insights: InsightListItem[] = [];
 
   try {
@@ -69,10 +76,13 @@ export default async function InsightsPage({
     <>
       <JsonLd
         data={[
-          breadcrumbSchema([
-            { name: "Home", path: "/" },
-            { name: "Insights", path: "/insights" },
-          ]),
+          breadcrumbSchema(
+            [
+              { name: "Home", path: "/" },
+              { name: "Insights", path: "/insights" },
+            ],
+            getLocale()
+          ),
         ]}
       />
       <PageHero
@@ -91,7 +101,7 @@ export default async function InsightsPage({
         <div className="container-site">
           <div className="flex flex-wrap gap-2">
             <Link
-              href="/insights"
+              href={p("/insights")}
               className={`rounded-full px-4 py-1.5 text-xs font-semibold transition-colors ${
                 !category ? "bg-gold text-primary-dark" : "border border-gray-100 bg-cream text-primary/70 hover:bg-gold/15"
               }`}
@@ -101,7 +111,7 @@ export default async function InsightsPage({
             {INSIGHT_CATEGORIES.map((c) => (
               <Link
                 key={c}
-                href={`/insights?category=${encodeURIComponent(c)}`}
+                href={`${p("/insights")}?category=${encodeURIComponent(c)}`}
                 className={`rounded-full px-4 py-1.5 text-xs font-semibold transition-colors ${
                   category === c ? "bg-gold text-primary-dark" : "border border-gray-100 bg-cream text-primary/70 hover:bg-gold/15"
                 }`}

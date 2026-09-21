@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { FaLocationDot, FaPhone, FaEnvelope } from "react-icons/fa6";
 import { CONTACT_INFO } from "@/lib/content";
-import { tForLocale } from "@/lib/i18n/server";
+import { tForLocale, pathForLocale } from "@/lib/i18n/server";
 
 const EXPLORE_LINKS = [
   { href: "/services", label: "Services" },
@@ -20,6 +20,8 @@ const LEGAL_LINKS = [
 export default function Footer() {
   const year = new Date().getFullYear();
   const t = tForLocale();
+  // Legal pages stay single-language English at root — only Explore is localized.
+  const p = pathForLocale();
 
   return (
     <footer className="relative overflow-hidden bg-cream text-primary">
@@ -45,7 +47,7 @@ export default function Footer() {
           <ul className="mt-6 space-y-3 text-sm font-medium text-primary/75">
             {EXPLORE_LINKS.map((l) => (
               <li key={l.href}>
-                <Link href={l.href} className="transition-colors hover:text-gold-dark">
+                <Link href={p(l.href)} className="transition-colors hover:text-gold-dark">
                   {t(l.label)}
                 </Link>
               </li>

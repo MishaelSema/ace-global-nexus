@@ -16,6 +16,11 @@ const display = Bebas_Neue({
   variable: "--font-display",
 });
 
+// Render every route per request: getLocale() reads the x-locale header set by
+// middleware, so /fr/* must never be baked as a static English shell at build.
+// (Also keeps the correct <html lang> for the requested URL.)
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: {
     default: "ACE Global Nexus — Connecting Businesses, Markets & Opportunities",
@@ -79,7 +84,9 @@ export default function RootLayout({
   return (
     <html lang={locale}>
       <body className={`${display.variable} bg-white font-sans text-primary antialiased`}>
-        <LocaleProvider initialLocale={locale}>
+        {/* key={locale} remounts the provider when navigating between / and /fr,
+            so client components pick up the new locale from the server render. */}
+        <LocaleProvider key={locale} initialLocale={locale}>
           <SiteHeader />
           <main>{children}</main>
           <SiteFooter>

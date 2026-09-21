@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { BRAND_IMAGE } from "@/lib/content";
-import { tForLocale } from "@/lib/i18n/server";
+import { tForLocale, pathForLocale } from "@/lib/i18n/server";
 
 interface Tile {
   title: string;
@@ -88,11 +88,12 @@ export default function MosaicGrid() {
   const stack = TILES.slice(1, 3);
   const row = TILES.slice(3);
   const t = tForLocale();
+  const p = pathForLocale();
 
   const renderTile = (tile: Tile, key: string) => (
     <Link
       key={key}
-      href="/sectors"
+      href={p("/sectors")}
       className={`group relative block overflow-hidden bg-primary ring-1 ring-transparent transition-all duration-300 hover:ring-gold/50 ${tile.corners} ${tile.span}`}
     >
       <img

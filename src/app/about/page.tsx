@@ -8,20 +8,26 @@ import PageHero from "@/components/PageHero";
 import Parallax from "@/components/Parallax";
 import Statement from "@/components/Statement";
 import JsonLd from "@/components/JsonLd";
-import { canonical, openGraphMeta, breadcrumbSchema, personSchema } from "@/lib/seo";
-import { tForLocale } from "@/lib/i18n/server";
+import { localizedPageMeta, breadcrumbSchema, personSchema } from "@/lib/seo";
+import { tForLocale, pathForLocale, getLocale } from "@/lib/i18n/server";
 
-export const metadata: Metadata = {
-  title: "About Us | Trade & Investment Advisors in Cameroon",
-  description:
-    "Meet Christopher A. Ekom, a retired US Embassy Senior Commercial Specialist with 22+ years in trade & investment promotion, and his Yaoundé advisory team.",
-  ...canonical("/about"),
-  ...openGraphMeta(
-    "/about",
-    "About Us | Trade & Investment Advisors in Cameroon",
-    "Meet Christopher A. Ekom, a retired US Embassy Senior Commercial Specialist with 22+ years in trade & investment promotion, and his Yaoundé advisory team."
-  ),
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = getLocale();
+  return localizedPageMeta({
+    path: "/about",
+    locale,
+    en: {
+      title: "About Us | Trade & Investment Advisors in Cameroon",
+      description:
+        "Meet Christopher A. Ekom, a retired US Embassy Senior Commercial Specialist with 22+ years in trade & investment promotion, and his Yaoundé advisory team.",
+    },
+    fr: {
+      title: "À Propos | Conseillers en Commerce & Investissement au Cameroun",
+      description:
+        "Découvrez Christopher A. Ekom, ancien spécialiste commercial senior de l'ambassade des États-Unis avec plus de 22 ans en promotion du commerce et de l'investissement, et son équipe de conseil à Yaoundé.",
+    },
+  });
+}
 
 const VALUES = [
   { title: "Integrity", description: "Trusted relationships built on transparency and reliability." },
@@ -42,15 +48,19 @@ const EXPERTISE_TAGS = ["Business Development", "International Trade", "Investme
 
 export default function AboutPage() {
   const t = tForLocale();
+  const p = pathForLocale();
   return (
     <>
       <JsonLd
         data={[
-          breadcrumbSchema([
-            { name: "Home", path: "/" },
-            { name: "About & Founder", path: "/about" },
-          ]),
-          personSchema(),
+          breadcrumbSchema(
+            [
+              { name: "Home", path: "/" },
+              { name: "About & Founder", path: "/about" },
+            ],
+            getLocale()
+          ),
+          personSchema(getLocale()),
         ]}
       />
       <PageHero
@@ -64,8 +74,8 @@ export default function AboutPage() {
           "We exist to make sure the right people find each other — and turn opportunity into commercial results."
         )}
       >
-        <Link href="/contact" className="btn-primary !text-base">{t("Work With Us")} <FaArrowRight size={14} /></Link>
-        <Link href="/services" className="btn border border-white/30 text-white transition-colors hover:border-gold hover:text-gold">{t("Our Services")}</Link>
+        <Link href={p("/contact")} className="btn-primary !text-base">{t("Work With Us")} <FaArrowRight size={14} /></Link>
+        <Link href={p("/services")} className="btn border border-white/30 text-white transition-colors hover:border-gold hover:text-gold">{t("Our Services")}</Link>
       </PageHero>
 
       {/* MISSION / VISION */}
@@ -222,7 +232,7 @@ export default function AboutPage() {
           <p className="mx-auto mt-4 max-w-xl leading-relaxed text-white/65">
             {t("Whether you are entering a market or looking for the right partner, the conversation starts here.")}
           </p>
-          <Link href="/contact" className="btn-primary mt-8">
+          <Link href={p("/contact")} className="btn-primary mt-8">
             {t("Start the Conversation")} <FaArrowRight size={13} />
           </Link>
         </div>

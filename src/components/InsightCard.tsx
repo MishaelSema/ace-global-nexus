@@ -2,7 +2,7 @@ import Link from "next/link";
 import { FaArrowRight } from "react-icons/fa6";
 import { cloudImageUrl, formatDate } from "@/lib/utils";
 import { BRAND_IMAGE } from "@/lib/content";
-import { tForLocale } from "@/lib/i18n/server";
+import { tForLocale, pathForLocale } from "@/lib/i18n/server";
 
 export interface InsightPreview {
   _id: string;
@@ -18,9 +18,10 @@ export interface InsightPreview {
 
 export default function InsightCard({ insight }: { insight: InsightPreview }) {
   const t = tForLocale();
+  const p = pathForLocale();
   return (
     <Link
-      href={`/insights/${insight.slug}`}
+      href={p(`/insights/${insight.slug}`)}
       className="group flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white transition-colors duration-300 hover:border-gold/50"
     >
       <div className="relative h-48 overflow-hidden bg-primary sm:h-52">

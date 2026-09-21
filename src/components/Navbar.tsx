@@ -19,7 +19,7 @@ const NAV = [
 
 export default function Navbar() {
   const pathname = usePathname();
-  const { t } = useLocale();
+  const { t, p } = useLocale();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -43,15 +43,16 @@ export default function Navbar() {
       }`}
     >
       <div className="container-site flex h-[72px] items-center justify-between">
-        <Logo light={isTransparent} />
+        <Logo light={isTransparent} href={p("/")} />
 
         <nav className="hidden items-center gap-7 lg:flex">
           {NAV.map((item) => {
-            const active = pathname === item.href;
+            const href = p(item.href);
+            const active = pathname === href;
             return (
               <Link
                 key={item.href}
-                href={item.href}
+                href={href}
                 className={`text-sm font-medium transition-colors ${
                   active
                     ? isTransparent
@@ -67,7 +68,7 @@ export default function Navbar() {
             );
           })}
           <LanguageToggle />
-          <Link href="/start-a-conversation" className="btn-primary !px-5 !py-2.5">
+          <Link href={p("/start-a-conversation")} className="btn-primary !px-5 !py-2.5">
             {t("Start a Conversation")} <FaArrowRight size={12} />
           </Link>
         </nav>
@@ -86,16 +87,19 @@ export default function Navbar() {
       {open && (
         <div className="border-t border-gray-100 bg-white px-6 py-6 lg:hidden">
           <nav className="flex flex-col gap-4">
-            {NAV.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`text-base font-medium ${pathname === item.href ? "text-gold-dark" : "text-primary/85"}`}
-              >
-                {t(item.label)}
-              </Link>
-            ))}
-            <Link href="/start-a-conversation" className="btn-primary mt-4 w-full">
+            {NAV.map((item) => {
+              const href = p(item.href);
+              return (
+                <Link
+                  key={item.href}
+                  href={href}
+                  className={`text-base font-medium ${pathname === href ? "text-gold-dark" : "text-primary/85"}`}
+                >
+                  {t(item.label)}
+                </Link>
+              );
+            })}
+            <Link href={p("/start-a-conversation")} className="btn-primary mt-4 w-full">
               {t("Start a Conversation")} <FaArrowRight size={12} />
             </Link>
             <div className="mt-1 flex justify-center">

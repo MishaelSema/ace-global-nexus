@@ -8,20 +8,26 @@ import ServiceRows from "@/components/ServiceRows";
 import Marquee from "@/components/Marquee";
 import Statement from "@/components/Statement";
 import JsonLd from "@/components/JsonLd";
-import { canonical, openGraphMeta, breadcrumbSchema, serviceCatalogSchema, faqSchema } from "@/lib/seo";
-import { tForLocale } from "@/lib/i18n/server";
+import { localizedPageMeta, breadcrumbSchema, serviceCatalogSchema, faqSchema } from "@/lib/seo";
+import { tForLocale, pathForLocale, getLocale } from "@/lib/i18n/server";
 
-export const metadata: Metadata = {
-  title: "Market Entry & Trade Advisory Services | ACE Global Nexus",
-  description:
-    "African market entry, trade & investment facilitation, B2B matchmaking, market intelligence, export promotion and investor advisory — from Yaoundé, Cameroon.",
-  ...canonical("/services"),
-  ...openGraphMeta(
-    "/services",
-    "Market Entry & Trade Advisory Services | ACE Global Nexus",
-    "African market entry, trade & investment facilitation, B2B matchmaking, market intelligence, export promotion and investor advisory — from Yaoundé, Cameroon."
-  ),
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = getLocale();
+  return localizedPageMeta({
+    path: "/services",
+    locale,
+    en: {
+      title: "Market Entry & Trade Advisory Services | ACE Global Nexus",
+      description:
+        "African market entry, trade & investment facilitation, B2B matchmaking, market intelligence, export promotion and investor advisory — from Yaoundé, Cameroon.",
+    },
+    fr: {
+      title: "Services de Conseil en Entrée de Marché & Commerce | ACE Global Nexus",
+      description:
+        "Entrée de marché africain, facilitation commerciale et d'investissement, mise en relation B2B, intelligence économique, promotion des exportations et conseil aux investisseurs — depuis Yaoundé, Cameroun.",
+    },
+  });
+}
 
 const DELIVERY_METHODS = [
   "One-on-one strategic advisory",
@@ -66,15 +72,19 @@ const FAQS = [
 
 export default function ServicesPage() {
   const t = tForLocale();
+  const p = pathForLocale();
   return (
     <>
       <JsonLd
         data={[
-          breadcrumbSchema([
-            { name: "Home", path: "/" },
-            { name: "Services", path: "/services" },
-          ]),
-          serviceCatalogSchema(),
+          breadcrumbSchema(
+            [
+              { name: "Home", path: "/" },
+              { name: "Services", path: "/services" },
+            ],
+            getLocale()
+          ),
+          serviceCatalogSchema(getLocale()),
           faqSchema(FAQS),
         ]}
       />
@@ -138,7 +148,7 @@ export default function ServicesPage() {
                 </li>
               ))}
             </ol>
-            <Link href="/contact" className="btn-primary mt-10">
+            <Link href={p("/contact")} className="btn-primary mt-10">
               {t("Discuss Your Objective")} <FaArrowRight size={13} />
             </Link>
           </div>
@@ -158,7 +168,7 @@ export default function ServicesPage() {
                 "Straight answers on entering African markets, costs, ownership and timelines — from advisors who work these corridors every day."
               )}
             </p>
-            <Link href="/contact" className="btn-primary mt-10">
+            <Link href={p("/contact")} className="btn-primary mt-10">
               {t("Ask Your Own Question")} <FaArrowRight size={13} />
             </Link>
           </div>

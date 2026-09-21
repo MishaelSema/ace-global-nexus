@@ -3,12 +3,14 @@ import Link from "next/link";
 interface LogoProps {
   className?: string;
   light?: boolean;
+  /** Locale-aware home link (e.g. "/fr" on the French site). */
+  href?: string;
 }
 
-export default function Logo({ className = "", light = false }: LogoProps) {
+export default function Logo({ className = "", light = false, href = "/" }: LogoProps) {
   return (
     <Link
-      href="/"
+      href={href}
       className={`inline-flex shrink-0 items-center ${className}`}
       aria-label="ACE Global Nexus — home"
     >

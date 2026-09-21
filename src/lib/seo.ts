@@ -1,4 +1,6 @@
 import { SERVICES, SECTORS, CONTACT_INFO, FOUNDER } from "@/lib/content";
+import type { Locale } from "@/lib/i18n/core";
+import { localizedPath } from "@/lib/i18n/path";
 
 /** Base site URL — configurable via env, defaults to the production domain. */
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.aceglobalnexus.com").replace(/\/+$/, "");
@@ -9,29 +11,66 @@ export const SITE_SLOGAN = "Connecting businesses, markets & opportunity.";
 
 export const OG_IMAGE_DEFAULT = "/opengraph-image.png";
 
-/** Self-referencing canonical metadata for a route. */
-export function canonical(path: string) {
+/**
+ * Self-referencing canonical metadata for a route, with the full set of
+ * hreflang alternates (en, fr, x-default) pointing at real URLs.
+ */
+export function canonical(path: string, locale: Locale = "en") {
   return {
-    alternates: { canonical: path },
+    alternates: {
+      canonical: localizedPath(path, locale),
+      languages: {
+        en: localizedPath(path, "en"),
+        fr: localizedPath(path, "fr"),
+        "x-default": localizedPath(path, "en"),
+      },
+    },
   };
 }
 
-/** Page-level Open Graph meta. */
-export function openGraphMeta(path: string, title: string, description: string) {
+/** Page-level Open Graph meta (locale-aware URL + og:locale). */
+export function openGraphMeta(path: string, title: string, description: string, locale: Locale = "en") {
+  const image = `${SITE_URL}${OG_IMAGE_DEFAULT}`;
   return {
     openGraph: {
       title,
       description,
-      url: `${SITE_URL}${path}`,
+      url: `${SITE_URL}${localizedPath(path, locale)}`,
       type: "website" as const,
-      locale: "en_US",
+      locale: locale === "fr" ? "fr_FR" : "en_US",
+      locales: ["en_US", "fr_FR"],
       siteName: SITE_NAME,
+      images: [{ url: image, width: 1200, height: 630, alt: title }],
     },
     twitter: {
       card: "summary_large_image" as const,
       title,
       description,
+      images: [image],
     },
+  };
+}
+
+/** Full localized page metadata: title, description, canonical, hreflang & Open Graph. */
+export function localizedPageMeta({
+  path,
+  locale,
+  en,
+  fr,
+}: {
+  path: string;
+  locale: Locale;
+  en: { title: string; description: string };
+  fr: { title: string; description: string };
+}) {
+  const copy = locale === "fr" ? fr : en;
+  return {
+    // absolute: our titles already include the brand suffix, so opt out of the
+    // root layout's title template and prevent double-branded <title> tags.
+    title: { absolute: copy.title },
+    description: copy.description,
+    ...canonical(path, locale),
+    ...openGraphMeta(path, copy.title, copy.description, locale),
   };
 }
 
@@ -70,23 +109,23 @@ export function organizationSchema() {
 }
 
 /** WebSite — homepage only. */
-export function webSiteSchema() {
+export function webSiteSchema(locale: Locale = "en") {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: SITE_NAME,
-    url: SITE_URL,
-    inLanguage: "en",
+    url: `${SITE_URL}${localizedPath("", locale)}`,
+    inLanguage: locale === "fr" ? "fr" : "en",
   };
 }
 
 /** ProfessionalService (LocalBusiness) — homepage only. */
-export function professionalServiceSchema() {
+export function professionalServiceSchema(locale: Locale = "en") {
   return {
     "@context": "https://schema.org",
     "@type": ["ProfessionalService", "LocalBusiness"],
     name: SITE_NAME,
-    url: SITE_URL,
+    url: `${SITE_URL}${localizedPath("", locale)}`,
     image: `${SITE_URL}${OG_IMAGE_DEFAULT}`,
     telephone: CONTACT_INFO.phone.replace(/\s/g, ""),
     email: CONTACT_INFO.emailPrimary,
@@ -102,12 +141,12 @@ export function professionalServiceSchema() {
 }
 
 /** OfferCatalog of the advisory services — homepage + services pages. */
-export function serviceCatalogSchema() {
+export function serviceCatalogSchema(locale: Locale = "en") {
   return {
     "@context": "https://schema.org",
     "@type": "OfferCatalog",
     name: "Advisory Services",
-    url: `${SITE_URL}/services`,
+    url: `${SITE_URL}${localizedPath("/services", locale)}`,
     itemListElement: SERVICES.map((s, i) => ({
       "@type": "Service",
       position: i + 1,
@@ -125,12 +164,12 @@ export function serviceCatalogSchema() {
 }
 
 /** Founder Person schema — about page. */
-export function personSchema() {
+export function personSchema(locale: Locale = "en") {
   return {
     "@type": "Person",
     name: FOUNDER.name,
     jobTitle: [FOUNDER.title, FOUNDER.role],
-    url: `${SITE_URL}/about`,
+    url: `${SITE_URL}${localizedPath("/about", locale)}`,
     worksFor: {
       "@type": "Organization",
       name: SITE_NAME,
@@ -141,7 +180,7 @@ export function personSchema() {
 }
 
 /** Breadcrumbs for inner pages. */
-export function breadcrumbSchema(items: Array<{ name: string; path: string }>) {
+export function breadcrumbSchema(items: Array<{ name: string; path: string }>, locale: Locale = "en") {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -149,30 +188,33 @@ export function breadcrumbSchema(items: Array<{ name: string; path: string }>) {
       "@type": "ListItem",
       position: i + 1,
       name: item.name,
-      item: `${SITE_URL}${item.path}`,
+      item: `${SITE_URL}${localizedPath(item.path, locale)}`,
     })),
   };
 }
 
 /** Article / BlogPosting — insight detail pages. */
-export function articleSchema(insight: {
-  title: string;
-  slug: string;
-  excerpt?: string;
-  coverUrl?: string;
-  author: string;
-  publishedAt?: Date;
-  category?: string;
-}) {
+export function articleSchema(
+  insight: {
+    title: string;
+    slug: string;
+    excerpt?: string;
+    coverUrl?: string;
+    author: string;
+    publishedAt?: Date;
+    category?: string;
+  },
+  locale: Locale = "en"
+) {
   return {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: insight.title,
     description: insight.excerpt || "",
     image: insight.coverUrl ? [insight.coverUrl] : [`${SITE_URL}${OG_IMAGE_DEFAULT}`],
-    url: `${SITE_URL}/insights/${insight.slug}`,
+    url: `${SITE_URL}${localizedPath(`/insights/${insight.slug}`, locale)}`,
     datePublished: insight.publishedAt ? insight.publishedAt.toISOString() : undefined,
-    inLanguage: "en",
+    inLanguage: locale === "fr" ? "fr" : "en",
     articleSection: insight.category,
     author: {
       "@type": "Person",

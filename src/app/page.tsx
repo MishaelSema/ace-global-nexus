@@ -11,20 +11,31 @@ import Showcase from "@/components/Showcase";
 import SectorShowcase from "@/components/SectorShowcase";
 import MosaicGrid from "@/components/MosaicGrid";
 import JsonLd from "@/components/JsonLd";
-import { canonical, openGraphMeta, webSiteSchema, professionalServiceSchema, serviceCatalogSchema } from "@/lib/seo";
-import { tForLocale } from "@/lib/i18n/server";
+import {
+  localizedPageMeta,
+  webSiteSchema,
+  professionalServiceSchema,
+  serviceCatalogSchema,
+} from "@/lib/seo";
+import { tForLocale, pathForLocale, getLocale } from "@/lib/i18n/server";
 
-export const metadata: Metadata = {
-  title: "Trade & Investment Advisory in Africa | ACE Global Nexus",
-  description:
-    "Market entry & trade advisory from Cameroon. We connect businesses and investors with African markets, partners and bankable deals.",
-  ...canonical("/"),
-  ...openGraphMeta(
-    "/",
-    "Trade & Investment Advisory in Africa | ACE Global Nexus",
-    "Market entry & trade advisory from Cameroon. We connect businesses and investors with African markets, partners and bankable deals."
-  ),
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = getLocale();
+  return localizedPageMeta({
+    path: "/",
+    locale,
+    en: {
+      title: "Trade & Investment Advisory in Africa | ACE Global Nexus",
+      description:
+        "Market entry & trade advisory from Cameroon. We connect businesses and investors with African markets, partners and bankable deals.",
+    },
+    fr: {
+      title: "Conseil en Commerce & Investissement en Afrique | ACE Global Nexus",
+      description:
+        "Conseil en entrée de marché et facilitation commerciale depuis le Cameroun. Nous connectons entreprises et investisseurs aux marchés africains, aux partenaires et aux opportunités finançables.",
+    },
+  });
+}
 
 const STATS = [
   { value: "22+", label: "Years in trade & investment promotion" },
@@ -35,9 +46,10 @@ const STATS = [
 
 export default function HomePage() {
   const t = tForLocale();
+  const p = pathForLocale();
   return (
     <>
-      <JsonLd data={[webSiteSchema(), professionalServiceSchema(), serviceCatalogSchema()]} />
+      <JsonLd data={[webSiteSchema(getLocale()), professionalServiceSchema(getLocale()), serviceCatalogSchema(getLocale())]} />
       {/* ============ HERO ============ */}
       <section className="relative flex min-h-[100svh] flex-col overflow-hidden bg-primary">
         <Parallax speed={0.16} className="absolute inset-0">
@@ -64,10 +76,10 @@ export default function HomePage() {
           </p>
 
           <div className="mt-10 flex flex-wrap justify-center gap-4 animate-fade-up" style={{ animationDelay: "220ms" }}>
-            <Link href="/start-a-conversation" className="btn-primary !text-base">
+            <Link href={p("/start-a-conversation")} className="btn-primary !text-base">
               {t("Start a Conversation")} <FaArrowRight size={14} />
             </Link>
-            <Link href="/services" className="btn border border-white/30 text-white transition-colors hover:border-gold hover:text-gold">
+            <Link href={p("/services")} className="btn border border-white/30 text-white transition-colors hover:border-gold hover:text-gold">
               {t("Explore Our Services")}
             </Link>
           </div>
@@ -116,7 +128,7 @@ export default function HomePage() {
           </SectorShowcase>
           <Reveal className="mt-10 hidden text-center lg:block">
             <Link
-              href="/sectors"
+              href={p("/sectors")}
               className="inline-flex items-center gap-2 text-sm font-semibold text-gold-dark transition-colors hover:text-gold"
             >
               {t("Explore all sectors")} <FaArrowRight size={13} />
@@ -140,7 +152,7 @@ export default function HomePage() {
                 )}
               </p>
               <Link
-                href="/services"
+                href={p("/services")}
                 className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-gold-dark transition-colors hover:text-gold"
               >
                 {t("Explore all services")} <FaArrowRight size={13} />
@@ -184,7 +196,7 @@ export default function HomePage() {
             <blockquote className="mt-8 border-l-2 border-gold pl-6 font-serif text-xl italic leading-snug text-gold">
               “{t(FOUNDER.quote)}”
             </blockquote>
-            <Link href="/about" className="btn-primary mt-9">
+            <Link href={p("/about")} className="btn-primary mt-9">
               {t("Meet Christopher A. Ekom")} <FaArrowRight size={13} />
             </Link>
           </Reveal>
@@ -223,7 +235,7 @@ export default function HomePage() {
           </Reveal>
           <Reveal className="mt-10 text-center">
             <Link
-              href="/insights"
+              href={p("/insights")}
               className="inline-flex items-center gap-2 text-sm font-semibold text-gold-dark transition-colors hover:text-gold"
             >
               {t("Browse all insights")} <FaArrowRight size={13} />
@@ -248,10 +260,10 @@ export default function HomePage() {
             )}
           </p>
           <div className="mt-10 flex flex-wrap justify-center gap-4">
-            <Link href="/contact" className="btn-primary text-base">
+            <Link href={p("/contact")} className="btn-primary text-base">
               {t("Contact Us Today")} <FaArrowRight size={13} />
             </Link>
-            <Link href="/sectors" className="btn border border-white/30 text-white transition-colors hover:border-gold hover:text-gold">
+            <Link href={p("/sectors")} className="btn border border-white/30 text-white transition-colors hover:border-gold hover:text-gold">
               {t("Explore Sectors")}
             </Link>
           </div>

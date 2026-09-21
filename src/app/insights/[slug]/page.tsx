@@ -9,7 +9,7 @@ import { cloudImageUrl, formatDate } from "@/lib/utils";
 import { BRAND_IMAGE } from "@/lib/content";
 import JsonLd from "@/components/JsonLd";
 import { SITE_URL, SITE_NAME, OG_IMAGE_DEFAULT, canonical, breadcrumbSchema, articleSchema } from "@/lib/seo";
-import { tForLocale } from "@/lib/i18n/server";
+import { tForLocale, pathForLocale, getLocale } from "@/lib/i18n/server";
 
 export const dynamic = "force-dynamic";
 
@@ -19,6 +19,7 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
+  const locale = getLocale();
   let title = "Insight | ACE Global Nexus";
   let description = "";
   let coverUrl: string | undefined;
@@ -36,16 +37,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     // fall through
   }
   const image = coverUrl ? cloudImageUrl(coverUrl, 1200) : `${SITE_URL}${OG_IMAGE_DEFAULT}`;
+  const path = `/insights/${slug}`;
   return {
-    title,
+    // absolute: article titles carry the brand suffix already — skip the layout template.
+    title: { absolute: title },
     description,
-    ...canonical(`/insights/${slug}`),
+    ...canonical(path, locale),
     openGraph: {
       title,
       description,
-      url: `${SITE_URL}/insights/${slug}`,
+      url: `${SITE_URL}${locale === "fr" ? `/fr${path}` : path}`,
       type: "article",
       siteName: SITE_NAME,
+      locale: locale === "fr" ? "fr_FR" : "en_US",
       publishedTime: publishedAt?.toISOString(),
       images: [{ url: image, alt: title }],
     },
@@ -61,6 +65,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function InsightDetailPage({ params }: PageProps) {
   const { slug } = await params;
   const t = tForLocale();
+  const p = pathForLocale();
 
   interface InsightDetail {
     title: string;
@@ -90,20 +95,26 @@ export default async function InsightDetailPage({ params }: PageProps) {
     <article className="bg-white pb-24">
       <JsonLd
         data={[
-          breadcrumbSchema([
-            { name: "Home", path: "/" },
-            { name: "Insights", path: "/insights" },
-            { name: insight.title, path: `/insights/${insight.slug}` },
-          ]),
-          articleSchema({
-            title: insight.title,
-            slug: insight.slug,
-            excerpt: insight.excerpt,
-            coverUrl: insight.coverUrl ? cloudImageUrl(insight.coverUrl, 1200) : undefined,
-            author: insight.author,
-            publishedAt: insight.publishedAt,
-            category: insight.category,
-          }),
+          breadcrumbSchema(
+            [
+              { name: "Home", path: "/" },
+              { name: "Insights", path: "/insights" },
+              { name: insight.title, path: `/insights/${insight.slug}` },
+            ],
+            getLocale()
+          ),
+          articleSchema(
+            {
+              title: insight.title,
+              slug: insight.slug,
+              excerpt: insight.excerpt,
+              coverUrl: insight.coverUrl ? cloudImageUrl(insight.coverUrl, 1200) : undefined,
+              author: insight.author,
+              publishedAt: insight.publishedAt,
+              category: insight.category,
+            },
+            getLocale()
+          ),
         ]}
       />
       {/* Full-bleed cover header */}
@@ -116,7 +127,7 @@ export default async function InsightDetailPage({ params }: PageProps) {
         <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/60 to-primary/30" />
 
         <div className="container-site relative pb-16 pt-40">
-          <Link href="/insights" className="inline-flex items-center gap-2 text-sm text-white/60 transition-colors hover:text-gold">
+          <Link href={p("/insights")} className="inline-flex items-center gap-2 text-sm text-white/60 transition-colors hover:text-gold">
             <FaArrowLeft size={12} /> {t("All insights")}
           </Link>
 
@@ -174,7 +185,7 @@ export default async function InsightDetailPage({ params }: PageProps) {
                   "If this insight speaks to a market, sector or partnership you are exploring, our team would be glad to help."
                 )}
               </p>
-              <Link href="/contact" className="btn-primary mt-7">
+              <Link href={p("/contact")} className="btn-primary mt-7">
                 {t("Contact ACE Global Nexus")} <FaArrowRight size={13} />
               </Link>
             </div>

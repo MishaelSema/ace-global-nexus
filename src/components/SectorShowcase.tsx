@@ -30,7 +30,7 @@ const WRAP_FACTOR = 70;
  *    last sector. Tap a chip to jump straight to a sector.
  */
 export default function SectorShowcase({ children }: { children: ReactNode }) {
-  const { t } = useLocale();
+  const { t, p } = useLocale();
   const [index, setIndex] = useState(0);
   const [bgOffset, setBgOffset] = useState(0);
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -142,7 +142,7 @@ export default function SectorShowcase({ children }: { children: ReactNode }) {
                 })}
               </ul>
               <div className="mt-6 flex justify-center">
-                <Link href="/sectors" className="btn bg-white text-primary-dark transition-colors hover:bg-gold-light">
+                <Link href={p("/sectors")} className="btn bg-white text-primary-dark transition-colors hover:bg-gold-light">
                   {t("See all sectors")} <FaArrowRight size={13} />
                 </Link>
               </div>

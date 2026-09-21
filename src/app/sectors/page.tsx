@@ -8,31 +8,41 @@ import Parallax from "@/components/Parallax";
 import Marquee from "@/components/Marquee";
 import Statement from "@/components/Statement";
 import JsonLd from "@/components/JsonLd";
-import { canonical, openGraphMeta, breadcrumbSchema } from "@/lib/seo";
-import { tForLocale } from "@/lib/i18n/server";
+import { localizedPageMeta, breadcrumbSchema } from "@/lib/seo";
+import { tForLocale, pathForLocale, getLocale } from "@/lib/i18n/server";
 
-export const metadata: Metadata = {
-  title: "Investment Opportunities in Africa by Sector | ACE Global Nexus",
-  description:
-    "Where to invest in Africa in 2026: agribusiness, mining, energy, infrastructure, ICT, healthcare, logistics, manufacturing — with local market intelligence.",
-  ...canonical("/sectors"),
-  ...openGraphMeta(
-    "/sectors",
-    "Investment Opportunities in Africa by Sector | ACE Global Nexus",
-    "Where to invest in Africa in 2026: agribusiness, mining, energy, infrastructure, ICT, healthcare, logistics, manufacturing — with local market intelligence."
-  ),
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = getLocale();
+  return localizedPageMeta({
+    path: "/sectors",
+    locale,
+    en: {
+      title: "Investment Opportunities in Africa by Sector | ACE Global Nexus",
+      description:
+        "Where to invest in Africa in 2026: agribusiness, mining, energy, infrastructure, ICT, healthcare, logistics, manufacturing — with local market intelligence.",
+    },
+    fr: {
+      title: "Opportunités d'Investissement en Afrique par Secteur | ACE Global Nexus",
+      description:
+        "Où investir en Afrique en 2026 : agro-industrie, mines, énergie, infrastructures, TIC, santé, logistique, industrie manufacturière — avec une intelligence économique locale.",
+    },
+  });
+}
 
 export default function SectorsPage() {
   const t = tForLocale();
+  const p = pathForLocale();
   return (
     <>
       <JsonLd
         data={[
-          breadcrumbSchema([
-            { name: "Home", path: "/" },
-            { name: "Sectors", path: "/sectors" },
-          ]),
+          breadcrumbSchema(
+            [
+              { name: "Home", path: "/" },
+              { name: "Sectors", path: "/sectors" },
+            ],
+            getLocale()
+          ),
         ]}
       />
       <PageHero
@@ -91,7 +101,7 @@ export default function SectorsPage() {
           <p className="mx-auto mt-4 max-w-xl leading-relaxed text-white/65">
             {t("Tell us your sector and objectives — we will map the market, the partners and the path forward.")}
           </p>
-          <Link href="/contact" className="btn-primary mt-8">
+          <Link href={p("/contact")} className="btn-primary mt-8">
             {t("Talk to Our Team")} <FaArrowRight size={13} />
           </Link>
         </div>
