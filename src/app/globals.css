@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #0b1e38;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: rgba(201, 162, 39, 0.25);
+}
+
+.hero-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 42px 42px;
+}
+
+@layer components {
+  .container-site {
+    @apply mx-auto w-full max-w-7xl px-5 sm:px-8;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-7 py-3 text-sm font-semibold transition-all duration-200;
+  }
+  .btn-primary {
+    @apply btn bg-gold text-primary-dark hover:bg-gold-light;
+  }
+  .btn-outline {
+    @apply btn border border-primary/25 text-primary hover:border-gold hover:text-gold;
+  }
+  .prose-agn h1,
+  .prose-agn h2,
+  .prose-agn h3 {
+    @apply font-serif text-primary mt-7 mb-3;
+  }
+  .prose-agn h2 {
+    @apply text-2xl;
+  }
+  .prose-agn h3 {
+    @apply text-xl;
+  }
+  .prose-agn p {
+    @apply text-gray-600 leading-relaxed mb-4;
+  }
+  .prose-agn ul,
+  .prose-agn ol {
+    @apply text-gray-600 leading-relaxed mb-4 pl-6;
+  }
+  .prose-agn ul {
+    @apply list-disc;
+  }
+  .prose-agn ol {
+    @apply list-decimal;
+  }
+  .prose-agn blockquote {
+    @apply border-l-4 border-gold bg-cream px-5 py-3 rounded-r-lg text-gray-700 italic my-4;
+  }
+  .prose-agn a {
+    @apply text-gold-dark underline;
+  }
+  .prose-agn strong {
+    @apply text-primary;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .mask-fade-x {
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 12%,
+      black 88%,
+      transparent
+    );
+    mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+  }
+}
