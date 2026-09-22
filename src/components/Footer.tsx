@@ -89,7 +89,7 @@ export default function Footer() {
           src="/ACEGLOBALNEXUS_ICON_with_name.png"
           alt=""
           draggable={false}
-          className="w-[min(1500px,150vw)] max-w-none opacity-90 [transform:translateY(20%)] sm:[transform:translateY(30%)]"
+          className="w-[min(1500px,150vw)] max-w-none opacity-90 [transform:translateY(-6%)] sm:[transform:translateY(30%)]"
         />
       </div>
 
