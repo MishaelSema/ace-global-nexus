@@ -6,12 +6,15 @@ import { FaArrowRight, FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 import { cloudImageUrl } from "@/lib/utils";
 import { BRAND_IMAGE } from "@/lib/content";
 import { useLocale } from "@/components/LocaleProvider";
+import { localizedField } from "@/lib/i18n/core";
 
 interface Slide {
   _id: string;
   title: string;
+  titleFr?: string;
   slug: string;
   excerpt: string;
+  excerptFr?: string;
   category: string;
   coverUrl?: string;
   author: string;
@@ -19,7 +22,7 @@ interface Slide {
 }
 
 export default function Showcase() {
-  const { t, p } = useLocale();
+  const { t, p, locale } = useLocale();
   const [slides, setSlides] = useState<Slide[]>([]);
   const [loading, setLoading] = useState(true);
   const [index, setIndex] = useState(0);
@@ -75,6 +78,9 @@ export default function Showcase() {
     );
   }
 
+  const active = slides[index];
+  const activeTitle = active ? localizedField(active, locale, "title") : "";
+
   return (
     <div
       className="relative overflow-hidden rounded-3xl bg-primary"
@@ -92,7 +98,7 @@ export default function Showcase() {
           >
             <img
               src={slide.coverUrl ? cloudImageUrl(slide.coverUrl, 1600) : BRAND_IMAGE}
-              alt={slide.title}
+              alt={localizedField(slide, locale, "title")}
               className="h-full w-full scale-105 object-cover"
               loading="lazy"
             />
@@ -102,19 +108,19 @@ export default function Showcase() {
 
         <div className="absolute inset-x-0 bottom-0 p-8 pb-16 sm:p-12 sm:pb-16 lg:p-16">
           <Link
-            href={p(`/insights/${slides[index].slug}`)}
+            href={p(`/insights/${active.slug}`)}
             className="group block max-w-3xl"
-            aria-label={slides[index].title}
+            aria-label={activeTitle}
           >
             <span className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.22em] text-gold">
               <span className="h-px w-8 bg-gold" />
-              {slides[index].category}
+              {t(active.category)}
             </span>
             <h3 className="mt-4 font-serif text-2xl font-bold leading-snug text-white sm:text-3xl lg:text-4xl">
-              {slides[index].title}
+              {activeTitle}
             </h3>
             <p className="mt-3 hidden max-w-xl line-clamp-2 text-sm leading-relaxed text-white/70 sm:block">
-              {slides[index].excerpt}
+              {localizedField(active, locale, "excerpt")}
             </p>
             <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-gold transition-transform duration-300 group-hover:translate-x-1">
               {t("Read the insight")} <FaArrowRight size={12} />
@@ -126,14 +132,14 @@ export default function Showcase() {
       <div className="absolute inset-x-0 top-1/2 hidden -translate-y-1/2 justify-between px-4 sm:flex">
         <button
           onClick={prev}
-          aria-label="Previous insight"
+          aria-label={t("Previous insight")}
           className="grid h-11 w-11 place-items-center rounded-full border border-white/20 bg-primary/30 text-white backdrop-blur-sm transition-colors hover:border-gold hover:text-gold"
         >
           <FaChevronLeft size={15} />
         </button>
         <button
           onClick={next}
-          aria-label="Next insight"
+          aria-label={t("Next insight")}
           className="grid h-11 w-11 place-items-center rounded-full border border-white/20 bg-primary/30 text-white backdrop-blur-sm transition-colors hover:border-gold hover:text-gold"
         >
           <FaChevronRight size={15} />
@@ -141,11 +147,11 @@ export default function Showcase() {
       </div>
 
       <div className="absolute inset-x-0 bottom-4 flex justify-center gap-2 sm:hidden">
-        {slides.map((_, i) => (
+        {slides.map((slide, i) => (
           <button
-            key={i}
+            key={slide._id}
             onClick={() => setIndex(i)}
-            aria-label={`Go to insight ${i + 1}`}
+            aria-label={`${t("Go to insight")} ${i + 1}`}
             className={`h-1.5 rounded-full transition-all ${i === index ? "w-6 bg-gold" : "w-1.5 bg-white/40"}`}
           />
         ))}

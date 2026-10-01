@@ -1,4 +1,6 @@
 import { ImageResponse } from "next/og";
+import { getLocale } from "@/lib/i18n/server";
+import { translate } from "@/lib/i18n/core";
 
 export const alt = "ACE Global Nexus — Connecting businesses, markets & opportunity";
 export const size = { width: 1200, height: 630 };
@@ -7,7 +9,11 @@ export const contentType = "image/png";
 // Generated on demand (avoids a static-prerender edge case in Next 14.2).
 export const dynamic = "force-dynamic";
 
-export default function OgImage() {
+export default async function OgImage() {
+  const locale = getLocale();
+  const slogan = translate(locale, "Connecting businesses, markets & opportunity");
+  const descriptor = translate(locale, "TRADE · INVESTMENT · STRATEGIC ADVISORY");
+
   return new ImageResponse(
     (
       <div
@@ -43,7 +49,7 @@ export default function OgImage() {
             fontStyle: "italic",
           }}
         >
-          Connecting businesses, markets &amp; opportunity
+          {slogan}
         </div>
         <div
           style={{
@@ -54,7 +60,7 @@ export default function OgImage() {
             letterSpacing: 2,
           }}
         >
-          TRADE · INVESTMENT · STRATEGIC ADVISORY
+          {descriptor}
         </div>
       </div>
     ),

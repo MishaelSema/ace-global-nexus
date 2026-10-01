@@ -3,6 +3,7 @@ import { connectDB } from "@/lib/mongodb";
 import ContactMessage from "@/models/ContactMessage";
 import { requireAdmin } from "@/lib/adminAuth";
 import { sendEmail, getContactReceivedTemplate, getContactConfirmationTemplate, ContactSubmission } from "@/lib/email";
+import { isLocale } from "@/lib/i18n/core";
 
 export const dynamic = "force-dynamic";
 
@@ -30,11 +31,22 @@ export async function POST(request: NextRequest) {
     topic: body.topic ? String(body.topic).slice(0, 80) : undefined,
     service: body.service ? String(body.service).slice(0, 120) : undefined,
     message: String(body.message).slice(0, 5000),
+    locale: isLocale(body.locale) ? body.locale : "en",
   };
 
   try {
     await connectDB();
-    const saved = await ContactMessage.create(submission);
+    // `locale` is only needed for the confirmation email — never persisted.
+    const saved = await ContactMessage.create({
+      name: submission.name,
+      email: submission.email,
+      phone: submission.phone,
+      company: submission.company,
+      country: submission.country,
+      topic: submission.topic,
+      service: submission.service,
+      message: submission.message,
+    });
 
     const smtpConfigured = !!(process.env.SMTP_USER && process.env.SMTP_PASS);
     const adminInbox = process.env.CONTACT_EMAIL || process.env.SMTP_USER || "";
@@ -46,7 +58,13 @@ export async function POST(request: NextRequest) {
         console.error("Contact notification email failed:", e);
       }
       try {
-        await sendEmail(submission.email, "Thanks for contacting ACE Global Nexus — we've received your inquiry", getContactConfirmationTemplate(submission));
+        await sendEmail(
+          submission.email,
+          submission.locale === "fr"
+            ? "Merci de nous avoir contactés — nous avons bien reçu votre demande"
+            : "Thanks for contacting ACE Global Nexus — we've received your inquiry",
+          getContactConfirmationTemplate(submission)
+        );
       } catch (e) {
         console.error("Contact confirmation email failed:", e);
       }

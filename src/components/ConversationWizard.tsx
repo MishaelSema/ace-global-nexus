@@ -49,7 +49,7 @@ function Field({ label, children, required }: { label: string; children: ReactNo
 }
 
 export default function ConversationWizard() {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<FormState>(EMPTY);
   const [sending, setSending] = useState(false);
@@ -70,7 +70,7 @@ export default function ConversationWizard() {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, locale }),
       });
       const data = await res.json();
       if (data.success) {
@@ -221,7 +221,9 @@ export default function ConversationWizard() {
                           {t("Choose a topic...")}
                         </option>
                         {CONTACT_TOPICS.map((topic) => (
-                          <option key={topic}>{t(topic)}</option>
+                          <option key={topic} value={topic}>
+                            {t(topic)}
+                          </option>
                         ))}
                       </select>
                     </Field>
@@ -229,7 +231,9 @@ export default function ConversationWizard() {
                       <select className={inputCls} value={form.service} onChange={set("service")}>
                         <option value="">{t("No specific service")}</option>
                         {SERVICES.map((s) => (
-                          <option key={s.title}>{t(s.title)}</option>
+                          <option key={s.title} value={s.title}>
+                            {t(s.title)}
+                          </option>
                         ))}
                       </select>
                     </Field>

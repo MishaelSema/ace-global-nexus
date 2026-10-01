@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useLocale } from "@/components/LocaleProvider";
 
 interface LogoProps {
   className?: string;
@@ -7,12 +10,13 @@ interface LogoProps {
   href?: string;
 }
 
-export default function Logo({ className = "", light = false, href = "/" }: LogoProps) {
+export default function Logo({ className = "", light = false, href }: LogoProps) {
+  const { t, p } = useLocale();
   return (
     <Link
-      href={href}
+      href={href ?? p("/")}
       className={`inline-flex shrink-0 items-center ${className}`}
-      aria-label="ACE Global Nexus — home"
+      aria-label={t("ACE Global Nexus — home")}
     >
       <img
         src="/ACEGLOBALNEXUS_ICON_with_name.png"

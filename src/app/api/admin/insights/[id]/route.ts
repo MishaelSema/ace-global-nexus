@@ -34,7 +34,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       return NextResponse.json({ success: false, error: "Insight not found" }, { status: 404 });
     }
 
-    const allowed = ["title", "excerpt", "content", "category", "tags", "coverUrl", "coverPublicId", "author", "published", "featured"];
+    const allowed = ["title", "titleFr", "excerpt", "excerptFr", "content", "contentFr", "category", "tags", "coverUrl", "coverPublicId", "author", "published", "featured"];
     for (const key of allowed) {
       if (key in body) {
         if (key === "tags") {

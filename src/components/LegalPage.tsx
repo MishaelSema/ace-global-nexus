@@ -3,6 +3,7 @@ import Link from "next/link";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 import { BRAND_IMAGE } from "@/lib/content";
 import Parallax from "@/components/Parallax";
+import { tForLocale, pathForLocale } from "@/lib/i18n/server";
 
 interface LegalPageProps {
   title: string;
@@ -16,7 +17,10 @@ const LEGAL_LINKS = [
   { href: "/legal/cookies", label: "Cookie Policy" },
 ];
 
-export default function LegalPage({ title, updated, children }: LegalPageProps) {
+export default async function LegalPage({ title, updated, children }: LegalPageProps) {
+  const t = tForLocale();
+  const p = pathForLocale();
+
   return (
     <article className="bg-white pb-24">
       {/* Slim navy band */}
@@ -27,16 +31,16 @@ export default function LegalPage({ title, updated, children }: LegalPageProps) 
         <div className="absolute inset-0 bg-gradient-to-b from-primary/85 via-primary/75 to-primary" />
         <div className="container-site relative pb-14 pt-36 sm:pb-16">
           <Link
-            href="/"
+            href={p("/")}
             className="inline-flex items-center gap-2 text-sm text-white/60 transition-colors hover:text-gold"
           >
-            <FaArrowLeft size={12} /> Back to home
+            <FaArrowLeft size={12} /> {t("Back to home")}
           </Link>
           <span className="mt-8 block h-px w-14 bg-gold" aria-hidden="true" />
-          <h1 className="mt-6 max-w-3xl font-serif text-3xl font-bold text-white sm:text-4xl">{title}</h1>
+          <h1 className="mt-6 max-w-3xl font-serif text-3xl font-bold text-white sm:text-4xl">{t(title)}</h1>
           <p className="mt-3 text-sm text-white/55">
-            Last updated: {updated} · This document is provided for general information and is not a substitute for
-            professional legal advice.
+            {t("Last updated:")} {t(updated)} ·{" "}
+            {t("This document is provided for general information and is not a substitute for professional legal advice.")}
           </p>
         </div>
       </section>
@@ -46,22 +50,22 @@ export default function LegalPage({ title, updated, children }: LegalPageProps) 
 
         <aside className="h-fit lg:sticky lg:top-28 lg:self-start">
           <span className="block h-px w-14 bg-gold" aria-hidden="true" />
-          <h2 className="mt-5 font-serif text-xl font-bold text-primary">Legal</h2>
+          <h2 className="mt-5 font-serif text-xl font-bold text-primary">{t("Legal")}</h2>
           <ul className="mt-4 divide-y divide-gray-100 border-y border-gray-100">
             {LEGAL_LINKS.map((l) => (
               <li key={l.href}>
                 <Link
-                  href={l.href}
+                  href={p(l.href)}
                   className="group flex items-center justify-between py-3.5 text-sm font-medium text-primary/80 transition-colors hover:text-gold-dark"
                 >
-                  {l.label}
+                  {t(l.label)}
                   <FaArrowRight size={12} className="text-gold-dark transition-transform group-hover:translate-x-1" />
                 </Link>
               </li>
             ))}
           </ul>
           <p className="mt-6 text-xs leading-relaxed text-gray-400">
-            Questions about these policies? Reach us at{" "}
+            {t("Questions about these policies? Reach us at")}{" "}
             <a href="mailto:chris.ekom@aceglobalnexus.com" className="text-gold-dark underline">
               chris.ekom@aceglobalnexus.com
             </a>

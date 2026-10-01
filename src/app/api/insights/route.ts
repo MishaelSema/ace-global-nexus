@@ -22,7 +22,7 @@ export async function GET(request: Request) {
     const insights = await Insight.find(filter)
       .sort({ publishedAt: -1, createdAt: -1 })
       .limit(limit)
-      .select("-content -coverPublicId -published -updatedAt")
+      .select("-content -contentFr -coverPublicId -published -updatedAt")
       .lean();
 
     return NextResponse.json({ success: true, data: insights });

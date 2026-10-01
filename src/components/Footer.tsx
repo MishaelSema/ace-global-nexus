@@ -20,7 +20,6 @@ const LEGAL_LINKS = [
 export default function Footer() {
   const year = new Date().getFullYear();
   const t = tForLocale();
-  // Legal pages stay single-language English at root — only Explore is localized.
   const p = pathForLocale();
 
   return (
@@ -42,7 +41,7 @@ export default function Footer() {
           </p>
         </div>
 
-        <nav aria-label="Explore" className="order-2 lg:order-1 lg:col-span-1 lg:justify-self-start">
+        <nav aria-label={t("Explore")} className="order-2 lg:order-1 lg:col-span-1 lg:justify-self-start">
           <p className="text-xs font-bold uppercase tracking-[0.22em] text-primary/40">{t("Explore")}</p>
           <ul className="mt-6 space-y-3 text-sm font-medium text-primary/75">
             {EXPLORE_LINKS.map((l) => (
@@ -59,7 +58,7 @@ export default function Footer() {
           <p className="text-right text-xs font-bold uppercase tracking-[0.22em] text-primary/40">{t("Contact")}</p>
           <ul className="mt-6 space-y-4 text-sm font-medium text-primary/75">
             <li className="flex items-center justify-end gap-3 text-right">
-              <span>{CONTACT_INFO.address}</span>
+              <span>{t(CONTACT_INFO.address)}</span>
               <FaLocationDot className="shrink-0 text-gold" aria-hidden="true" />
             </li>
             <li className="flex items-center justify-end gap-3 text-right">
@@ -100,9 +99,9 @@ export default function Footer() {
             © {year} {t("ACE Global Nexus. All rights reserved.")} · {t("Founded by Christopher A. Ekom")} ·{" "}
             {t("22+ years in international trade & investment promotion")}
           </p>
-          <nav aria-label="Legal" className="flex flex-wrap justify-center gap-x-5 gap-y-1">
+          <nav aria-label={t("Legal")} className="flex flex-wrap justify-center gap-x-5 gap-y-1">
             {LEGAL_LINKS.map((l) => (
-              <Link key={l.href} href={l.href} className="transition-colors hover:text-gold-dark">
+              <Link key={l.href} href={p(l.href)} className="transition-colors hover:text-gold-dark">
                 {t(l.label)}
               </Link>
             ))}

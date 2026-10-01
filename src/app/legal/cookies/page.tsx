@@ -1,11 +1,20 @@
 import type { Metadata } from "next";
 import LegalPage from "@/components/LegalPage";
+import { tForLocale, getLocale } from "@/lib/i18n/server";
+import { canonical } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Cookie Policy",
-  description:
-    "How ace-global-nexus.com uses cookies and similar technologies, why we use them, and how you can control them in your browser.",
-};
+const PATH = "/legal/cookies";
+const DESCRIPTION =
+  "How ace-global-nexus.com uses cookies and similar technologies, why we use them, and how you can control them in your browser.";
+
+export function generateMetadata(): Metadata {
+  const t = tForLocale();
+  return {
+    title: t("Cookie Policy"),
+    description: t(DESCRIPTION),
+    ...canonical(PATH, getLocale()),
+  };
+}
 
 const SECTIONS = [
   {
@@ -65,14 +74,15 @@ const SECTIONS = [
   },
 ];
 
-export default function CookiesPage() {
+export default async function CookiesPage() {
+  const t = tForLocale();
   return (
     <LegalPage title="Cookie Policy" updated="21 September 2026">
       {SECTIONS.map((s) => (
         <section key={s.title}>
-          <h2>{s.title}</h2>
+          <h2>{t(s.title)}</h2>
           {s.body.map((p) => (
-            <p key={p.slice(0, 32)}>{p}</p>
+            <p key={p.slice(0, 32)}>{t(p)}</p>
           ))}
         </section>
       ))}

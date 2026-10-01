@@ -1,11 +1,20 @@
 import type { Metadata } from "next";
 import LegalPage from "@/components/LegalPage";
+import { tForLocale, getLocale } from "@/lib/i18n/server";
+import { canonical } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Terms of Service",
-  description:
-    "Terms of service for ace-global-nexus.com — the agreement governing your use of the ACE Global Nexus website and our trade and investment advisory services.",
-};
+const PATH = "/legal/terms";
+const DESCRIPTION =
+  "Terms of service for ace-global-nexus.com — the agreement governing your use of the ACE Global Nexus website and our trade and investment advisory services.";
+
+export function generateMetadata(): Metadata {
+  const t = tForLocale();
+  return {
+    title: t("Terms of Service"),
+    description: t(DESCRIPTION),
+    ...canonical(PATH, getLocale()),
+  };
+}
 
 const SECTIONS = [
   {
@@ -97,14 +106,15 @@ const SECTIONS = [
   },
 ];
 
-export default function TermsPage() {
+export default async function TermsPage() {
+  const t = tForLocale();
   return (
     <LegalPage title="Terms of Service" updated="21 September 2026">
       {SECTIONS.map((s) => (
         <section key={s.title}>
-          <h2>{s.title}</h2>
+          <h2>{t(s.title)}</h2>
           {s.body.map((p) => (
-            <p key={p.slice(0, 32)}>{p}</p>
+            <p key={p.slice(0, 32)}>{t(p)}</p>
           ))}
         </section>
       ))}

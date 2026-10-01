@@ -7,9 +7,11 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaArrowLeft, FaLock, FaSpinner } from "react-icons/fa6";
 import Logo from "@/components/Logo";
+import { useLocale } from "@/components/LocaleProvider";
 
 export default function AdminLoginPage() {
   const router = useRouter();
+  const { t } = useLocale();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
@@ -26,7 +28,7 @@ export default function AdminLoginPage() {
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!email.trim() || !password) {
-      toast.error("Enter your admin email and password.");
+      toast.error(t("Enter your admin email and password."));
       return;
     }
     setBusy(true);
@@ -38,13 +40,13 @@ export default function AdminLoginPage() {
       });
       const data = await res.json();
       if (data.success) {
-        toast.success("Logged in");
+        toast.success(t("Logged in"));
         router.replace("/admin");
       } else {
-        toast.error(data.error || "Login failed.");
+        toast.error(data.error ? t(data.error) : t("Login failed."));
       }
     } catch {
-      toast.error("Network error. Please try again.");
+      toast.error(t("Network error. Please try again."));
     } finally {
       setBusy(false);
     }
@@ -56,7 +58,7 @@ export default function AdminLoginPage() {
       <div className="container-site flex items-center justify-between py-5">
         <Logo light />
         <Link href="/" className="inline-flex items-center gap-2 text-sm text-white/60 hover:text-gold transition-colors">
-          <FaArrowLeft size={12} /> Back to site
+          <FaArrowLeft size={12} /> {t("Back to site")}
         </Link>
       </div>
 
@@ -67,14 +69,16 @@ export default function AdminLoginPage() {
               <FaLock />
             </span>
             <div>
-              <h1 className="font-serif text-2xl font-bold text-primary">Admin Sign In</h1>
-              <p className="text-xs text-gray-400">ACE Global Nexus content management</p>
+              <h1 className="font-serif text-2xl font-bold text-primary">{t("Admin Sign In")}</h1>
+              <p className="text-xs text-gray-400">{t("ACE Global Nexus content management")}</p>
             </div>
           </div>
 
           <form onSubmit={onSubmit} className="mt-8 space-y-5">
             <div>
-              <label className="mb-2 block text-xs font-semibold uppercase tracking-wide text-primary/70">Admin email</label>
+              <label className="mb-2 block text-xs font-semibold uppercase tracking-wide text-primary/70">
+                {t("Admin email")}
+              </label>
               <input
                 type="email"
                 value={email}
@@ -84,7 +88,9 @@ export default function AdminLoginPage() {
               />
             </div>
             <div>
-              <label className="mb-2 block text-xs font-semibold uppercase tracking-wide text-primary/70">Password</label>
+              <label className="mb-2 block text-xs font-semibold uppercase tracking-wide text-primary/70">
+                {t("Password")}
+              </label>
               <input
                 type="password"
                 value={password}
@@ -95,7 +101,7 @@ export default function AdminLoginPage() {
             </div>
             <button type="submit" disabled={busy} className="btn-primary w-full !text-base">
               {busy ? <FaSpinner className="animate-spin" /> : <FaLock />}
-              {busy ? "Signing in..." : "Sign In"}
+              {busy ? t("Signing in...") : t("Sign In")}
             </button>
           </form>
         </div>

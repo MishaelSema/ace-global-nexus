@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import { translate, isLocale, htmlLang, type Locale } from "@/lib/i18n/core";
 
 const COMPANY_NAME = "ACE Global Nexus";
 const CONTACT_EMAIL = process.env.CONTACT_EMAIL || process.env.SMTP_USER || "";
@@ -34,12 +35,14 @@ interface LayoutInput {
   title: string;
   subtitle: string;
   body: string;
+  locale?: Locale;
 }
 
 // Branded email shell — header, gold accent band, content area, footer.
-function wrap({ title, subtitle, body }: LayoutInput): string {
+function wrap({ title, subtitle, body, locale = "en" }: LayoutInput): string {
+  const t = (text: string) => translate(locale, text);
   return `<!DOCTYPE html>
-<html lang="en">
+<html lang="${htmlLang(locale)}">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -51,7 +54,7 @@ function wrap({ title, subtitle, body }: LayoutInput): string {
       <tr>
         <td style="background:#0b1e38;border-radius:14px 14px 0 0;padding:30px 32px 24px;text-align:center;">
           <div style="color:#e3c66b;font-size:22px;font-weight:800;letter-spacing:3px;">ACE&nbsp;<span style="color:#f5d97e;">GLOBAL</span>&nbsp;NEXUS</div>
-          <div style="color:#c9a227;font-size:10px;letter-spacing:4px;margin-top:8px;">CONNECT • GROW • INVEST • GO GLOBAL</div>
+          <div style="color:#c9a227;font-size:10px;letter-spacing:4px;margin-top:8px;">${locale === "fr" ? "CONNECTER • DÉVELOPPER • INVESTIR • S'INTERNATIONALISER" : "CONNECT • GROW • INVEST • GO GLOBAL"}</div>
         </td>
       </tr>
       <tr>
@@ -69,11 +72,11 @@ function wrap({ title, subtitle, body }: LayoutInput): string {
       <tr>
         <td style="background:#0b1e38;border-radius:0 0 14px 14px;padding:26px 32px;text-align:center;">
           <div style="color:#c9a227;font-size:13px;font-weight:700;letter-spacing:1.5px;">ACE GLOBAL NEXUS</div>
-          <div style="color:#cbd5e1;font-size:12px;margin-top:6px;">Connecting Businesses, Markets &amp; Opportunities</div>
+          <div style="color:#cbd5e1;font-size:12px;margin-top:6px;">${t("Connecting Businesses, Markets & Opportunities")}</div>
           <div style="color:#7f93b5;font-size:11px;margin-top:8px;">
-            Yaoundé, Cameroon &nbsp;•&nbsp; +237 675 033 792 &nbsp;•&nbsp; ${escapeHtml(CONTACT_EMAIL || "chris.ekom@aceglobalnexus.com")}
+            ${escapeHtml(t("Yaoundé, Cameroon"))} &nbsp;•&nbsp; +237 675 033 792 &nbsp;•&nbsp; ${escapeHtml(CONTACT_EMAIL || "chris.ekom@aceglobalnexus.com")}
           </div>
-          <div style="color:#556e92;font-size:11px;margin-top:6px;">© ${new Date().getFullYear()} ${COMPANY_NAME}. All rights reserved.</div>
+          <div style="color:#556e92;font-size:11px;margin-top:6px;">© ${new Date().getFullYear()} ${COMPANY_NAME}. ${escapeHtml(t("All rights reserved."))}</div>
         </td>
       </tr>
     </table>
@@ -125,9 +128,12 @@ export interface ContactSubmission {
   topic?: string;
   service?: string;
   message: string;
+  /** Language the visitor was browsing in — drives the confirmation email. */
+  locale?: string;
 }
 
 // NDA-style notification sent to the admin inbox when someone submits the contact form.
+// Internal staff mail: always English, regardless of the visitor's language.
 export function getContactReceivedTemplate(d: ContactSubmission) {
   const rows: [string, string][] = [
     ["Name", escapeHtml(d.name)],
@@ -137,6 +143,7 @@ export function getContactReceivedTemplate(d: ContactSubmission) {
     ["Country", d.country ? escapeHtml(d.country) : ""],
     ["Topic", d.topic ? escapeHtml(d.topic) : ""],
     ["Service of interest", d.service ? escapeHtml(d.service) : ""],
+    ["Submitted language", d.locale === "fr" ? "Français" : "English"],
   ];
 
   const body = `
@@ -153,29 +160,38 @@ export function getContactReceivedTemplate(d: ContactSubmission) {
   });
 }
 
-// Confirmation sent back to the person who submitted the contact form.
+// Confirmation sent back to the person who submitted the contact form, in the
+// language they were browsing in (falls back to English).
 export function getContactConfirmationTemplate(d: ContactSubmission) {
+  const locale: Locale = isLocale(d.locale) ? d.locale : "en";
+  const t = (text: string) => translate(locale, text);
+
   const details = `${[d.topic, d.service]
     .filter((v): v is string => !!v)
-    .map(escapeHtml)
+    .map((v) => escapeHtml(t(v)))
     .join(" · ")}`;
 
   const body = `
-    <p>Dear <strong>${escapeHtml(d.name)}</strong>,</p>
-    <p>Thank you for reaching out to <strong>ACE Global Nexus</strong>. Your inquiry has been received and is now being reviewed by our team — we typically respond within one business day.</p>
-    ${details ? `<p style="font-size:13px;"><strong style="color:#0b1e38;">Your inquiry:</strong> ${details}</p>` : ""}
-    <p style="margin-top:6px;">A copy of your message is included below for your records.</p>
+    <p>${escapeHtml(t("Dear"))} <strong>${escapeHtml(d.name)}</strong>,</p>
+    <p>${escapeHtml(t("Thank you for reaching out to"))} <strong>ACE Global Nexus</strong>. ${escapeHtml(
+      t("Your inquiry has been received and is now being reviewed by our team — we typically respond within one business day.")
+    )}</p>
+    ${details ? `<p style="font-size:13px;"><strong style="color:#0b1e38;">${escapeHtml(t("Your inquiry:"))}</strong> ${details}</p>` : ""}
+    <p style="margin-top:6px;">${escapeHtml(t("A copy of your message is included below for your records."))}</p>
     ${quoteBlock(d.message)}
     <div style="margin:22px 0 0;padding:16px 18px;background:#f4f1ea;border-radius:10px;font-size:13px;color:#444;">
-      <strong style="color:#0b1e38;display:block;margin-bottom:6px;">Need a faster answer?</strong>
-      Phone / WhatsApp: <a href="tel:+237675033792" style="color:#a07f18;text-decoration:none;">+237 675 033 792</a><br/>
-      Email: <a href="mailto:${escapeHtml(CONTACT_EMAIL || "chris.ekom@aceglobalnexus.com")}" style="color:#a07f18;text-decoration:none;">${escapeHtml(CONTACT_EMAIL || "chris.ekom@aceglobalnexus.com")}</a>
+      <strong style="color:#0b1e38;display:block;margin-bottom:6px;">${escapeHtml(t("Need a faster answer?"))}</strong>
+      ${escapeHtml(t("Phone / WhatsApp"))}: <a href="tel:+237675033792" style="color:#a07f18;text-decoration:none;">+237 675 033 792</a><br/>
+      ${escapeHtml(t("Email"))}: <a href="mailto:${escapeHtml(CONTACT_EMAIL || "chris.ekom@aceglobalnexus.com")}" style="color:#a07f18;text-decoration:none;">${escapeHtml(CONTACT_EMAIL || "chris.ekom@aceglobalnexus.com")}</a>
     </div>
-    <p>Best regards,<br/><strong style="color:#0b1e38;">Christopher A. Ekom</strong><br/>Founder &amp; Principal Consultant, ACE Global Nexus</p>`;
+    <p>${escapeHtml(t("Best regards,"))}<br/><strong style="color:#0b1e38;">Christopher A. Ekom</strong><br/>${escapeHtml(
+      t("Founder & Principal Consultant, ACE Global Nexus")
+    )}</p>`;
 
   return wrap({
-    title: "We received your inquiry",
-    subtitle: "Thank you for contacting ACE Global Nexus",
+    title: t("We received your inquiry"),
+    subtitle: t("Thank you for contacting ACE Global Nexus"),
     body,
+    locale,
   });
 }

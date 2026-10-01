@@ -26,9 +26,12 @@ export async function POST(request: NextRequest) {
 
   interface CreateInsightBody {
     title?: string;
+    titleFr?: string;
     slug?: string;
     excerpt?: string;
+    excerptFr?: string;
     content?: string;
+    contentFr?: string;
     category?: string;
     tags?: string[] | string;
     coverUrl?: string;
@@ -60,9 +63,12 @@ export async function POST(request: NextRequest) {
 
     const insight = new Insight({
       title: body.title,
+      titleFr: body.titleFr || "",
       slug: body.slug && slugify(body.slug) !== baseSlug ? slugify(body.slug) : slug,
       excerpt: body.excerpt || "",
+      excerptFr: body.excerptFr || "",
       content: body.content || "",
+      contentFr: body.contentFr || "",
       category: body.category || "Market Intelligence",
       tags: Array.isArray(body.tags) ? body.tags : String(body.tags || "").split(",").map((t: string) => t.trim()).filter(Boolean),
       coverUrl: body.coverUrl || "",

@@ -1,5 +1,5 @@
 import { SERVICES, SECTORS, CONTACT_INFO, FOUNDER } from "@/lib/content";
-import type { Locale } from "@/lib/i18n/core";
+import { translate, ogLocale, type Locale } from "@/lib/i18n/core";
 import { localizedPath } from "@/lib/i18n/path";
 
 /** Base site URL — configurable via env, defaults to the production domain. */
@@ -37,7 +37,7 @@ export function openGraphMeta(path: string, title: string, description: string, 
       description,
       url: `${SITE_URL}${localizedPath(path, locale)}`,
       type: "website" as const,
-      locale: locale === "fr" ? "fr_FR" : "en_US",
+      locale: ogLocale(locale),
       locales: ["en_US", "fr_FR"],
       siteName: SITE_NAME,
       images: [{ url: image, width: 1200, height: 630, alt: title }],
@@ -79,7 +79,7 @@ export function localizedPageMeta({
 // ---------------------------------------------------------------------------
 
 /** Organization — injected site-wide from the root layout. */
-export function organizationSchema() {
+export function organizationSchema(locale: Locale = "en") {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -95,8 +95,10 @@ export function organizationSchema() {
       addressCountry: "CM",
     },
     areaServed: ["Cameroon", "Africa", "Central Africa", "International Markets"],
-    description:
-      "A global trade, investment and strategic advisory firm connecting businesses, investors and opportunities across Africa and the international marketplace.",
+    description: translate(
+      locale,
+      "A global trade, investment and strategic advisory firm connecting businesses, investors and opportunities across Africa and the international marketplace."
+    ),
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "customer service",
@@ -104,7 +106,7 @@ export function organizationSchema() {
       email: CONTACT_INFO.emailPrimary,
       availableLanguage: ["English", "French"],
     },
-    founder: personSchema(),
+    founder: personSchema(locale),
   };
 }
 
@@ -136,7 +138,8 @@ export function professionalServiceSchema(locale: Locale = "en") {
     },
     areaServed: ["Cameroon", "Africa", "Central Africa", "International Markets"],
     priceRange: "$$",
-    founder: personSchema(),
+    inLanguage: locale === "fr" ? "fr" : "en",
+    founder: personSchema(locale),
   };
 }
 
@@ -145,14 +148,14 @@ export function serviceCatalogSchema(locale: Locale = "en") {
   return {
     "@context": "https://schema.org",
     "@type": "OfferCatalog",
-    name: "Advisory Services",
+    name: translate(locale, "Advisory Services"),
     url: `${SITE_URL}${localizedPath("/services", locale)}`,
     itemListElement: SERVICES.map((s, i) => ({
       "@type": "Service",
       position: i + 1,
-      name: s.title,
-      description: s.description,
-      serviceType: s.title,
+      name: translate(locale, s.title),
+      description: translate(locale, s.description),
+      serviceType: translate(locale, s.title),
       provider: {
         "@type": "Organization",
         name: SITE_NAME,
@@ -168,14 +171,15 @@ export function personSchema(locale: Locale = "en") {
   return {
     "@type": "Person",
     name: FOUNDER.name,
-    jobTitle: [FOUNDER.title, FOUNDER.role],
+    jobTitle: [translate(locale, FOUNDER.title), translate(locale, FOUNDER.role)],
     url: `${SITE_URL}${localizedPath("/about", locale)}`,
     worksFor: {
       "@type": "Organization",
       name: SITE_NAME,
       url: SITE_URL,
     },
-    description: FOUNDER.credentials,
+    inLanguage: locale === "fr" ? "fr" : "en",
+    description: translate(locale, FOUNDER.credentials),
   };
 }
 

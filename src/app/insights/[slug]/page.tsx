@@ -10,6 +10,7 @@ import { BRAND_IMAGE } from "@/lib/content";
 import JsonLd from "@/components/JsonLd";
 import { SITE_URL, SITE_NAME, OG_IMAGE_DEFAULT, canonical, breadcrumbSchema, articleSchema } from "@/lib/seo";
 import { tForLocale, pathForLocale, getLocale } from "@/lib/i18n/server";
+import { localizedField, ogLocale, translate } from "@/lib/i18n/core";
 
 export const dynamic = "force-dynamic";
 
@@ -20,16 +21,18 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const locale = getLocale();
-  let title = "Insight | ACE Global Nexus";
+  let title = translate(locale, "Insight | ACE Global Nexus");
   let description = "";
   let coverUrl: string | undefined;
   let publishedAt: Date | undefined;
   try {
     await connectDB();
-    const insight = await Insight.findOne({ slug }).select("title excerpt category coverUrl publishedAt").lean();
+    const insight = await Insight.findOne({ slug })
+      .select("title titleFr excerpt excerptFr category coverUrl publishedAt")
+      .lean();
     if (insight) {
-      title = insight.title;
-      description = insight.excerpt || "";
+      title = localizedField(insight, locale, "title");
+      description = localizedField(insight, locale, "excerpt");
       coverUrl = insight.coverUrl;
       publishedAt = insight.publishedAt;
     }
@@ -49,7 +52,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       url: `${SITE_URL}${locale === "fr" ? `/fr${path}` : path}`,
       type: "article",
       siteName: SITE_NAME,
-      locale: locale === "fr" ? "fr_FR" : "en_US",
+      locale: ogLocale(locale),
       publishedTime: publishedAt?.toISOString(),
       images: [{ url: image, alt: title }],
     },
@@ -66,12 +69,16 @@ export default async function InsightDetailPage({ params }: PageProps) {
   const { slug } = await params;
   const t = tForLocale();
   const p = pathForLocale();
+  const locale = getLocale();
 
   interface InsightDetail {
     title: string;
+    titleFr?: string;
     slug: string;
     excerpt?: string;
+    excerptFr?: string;
     content?: string;
+    contentFr?: string;
     category: string;
     tags?: string[];
     coverUrl?: string;
@@ -91,29 +98,34 @@ export default async function InsightDetailPage({ params }: PageProps) {
 
   if (!insight) notFound();
 
+  const title = localizedField(insight, locale, "title");
+  const excerpt = localizedField(insight, locale, "excerpt");
+  const content = localizedField(insight, locale, "content");
+  const category = t(insight.category);
+
   return (
     <article className="bg-white pb-24">
       <JsonLd
         data={[
           breadcrumbSchema(
             [
-              { name: "Home", path: "/" },
-              { name: "Insights", path: "/insights" },
-              { name: insight.title, path: `/insights/${insight.slug}` },
+              { name: t("Home"), path: "/" },
+              { name: t("Insights"), path: "/insights" },
+              { name: title, path: `/insights/${insight.slug}` },
             ],
-            getLocale()
+            locale
           ),
           articleSchema(
             {
-              title: insight.title,
+              title,
               slug: insight.slug,
-              excerpt: insight.excerpt,
+              excerpt,
               coverUrl: insight.coverUrl ? cloudImageUrl(insight.coverUrl, 1200) : undefined,
               author: insight.author,
               publishedAt: insight.publishedAt,
-              category: insight.category,
+              category,
             },
-            getLocale()
+            locale
           ),
         ]}
       />
@@ -133,29 +145,29 @@ export default async function InsightDetailPage({ params }: PageProps) {
 
           <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-3">
             <span className="rounded-full bg-gold px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-primary-dark">
-              {insight.category}
+              {category}
             </span>
-            <span className="text-xs text-white/60">{insight.publishedAt ? formatDate(insight.publishedAt) : ""}</span>
+            <span className="text-xs text-white/60">{insight.publishedAt ? formatDate(insight.publishedAt, locale) : ""}</span>
             <span className="text-xs text-white/60">{insight.author}</span>
           </div>
 
           <h1 className="mt-6 max-w-4xl font-serif text-3xl font-bold leading-tight text-white sm:text-5xl">
-            {insight.title}
+            {title}
           </h1>
         </div>
       </section>
 
       <div className="container-site">
         <div className="mx-auto max-w-3xl">
-          {insight.excerpt ? (
+          {excerpt ? (
             <p className="mt-12 border-l-2 border-gold pl-6 font-serif text-xl leading-relaxed text-primary sm:text-2xl">
-              {insight.excerpt}
+              {excerpt}
             </p>
           ) : null}
 
           <div className="prose-agn mt-10">
-            {insight.content ? (
-              <ReactMarkdown>{insight.content}</ReactMarkdown>
+            {content ? (
+              <ReactMarkdown>{content}</ReactMarkdown>
             ) : (
               <p className="text-gray-500">{t("Full article coming soon.")}</p>
             )}
@@ -165,7 +177,7 @@ export default async function InsightDetailPage({ params }: PageProps) {
             <div className="mt-12 flex flex-wrap gap-2 border-t border-gray-100 pt-8">
               {insight.tags.map((tag: string) => (
                 <span key={tag} className="rounded-full border border-gray-100 bg-cream px-3 py-1 text-xs font-medium text-primary/70">
-                  {tag}
+                  {t(tag)}
                 </span>
               ))}
             </div>

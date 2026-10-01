@@ -1,10 +1,40 @@
 /**
- * French dictionary — keyed by the exact English strings used across the site.
- * Unknown keys pass through unchanged (safe fallback keeps the UI whole).
- * Coverage is verified against usage during builds.
+ * French dictionary — public site chrome, page copy, forms and data strings.
+ * Keyed by the exact English string used in the markup (see `./core.ts` for
+ * the whitespace-normalised lookup). Unknown keys pass through unchanged, so a
+ * missing entry degrades to readable English rather than breaking the layout.
  */
-export const fr: Record<string, string> = {
-  // ---- Common / global ----
+
+// ---------------------------------------------------------------------------
+// Global / navigation / footer
+// ---------------------------------------------------------------------------
+export const siteFr: Record<string, string> = {
+  // Brand + meta
+  "ACE Global Nexus — Connecting Businesses, Markets & Opportunities":
+    "ACE Global Nexus — Connecter les entreprises, les marchés et les opportunités",
+  "ACE Global Nexus — Connecting businesses, markets & opportunity":
+    "ACE Global Nexus — Connecter les entreprises, les marchés et les opportunités",
+  "ACE Global Nexus — home": "ACE Global Nexus — accueil",
+  "ACE Global Nexus is a global trade, investment and strategic advisory firm in Yaoundé, Cameroon, connecting businesses, investors and opportunities across Africa and the international marketplace.":
+    "ACE Global Nexus est un cabinet mondial de conseil en commerce, investissement et stratégie, basé à Yaoundé, Cameroun, qui relie entreprises, investisseurs et opportunités à travers l'Afrique et le marché international.",
+  "Global trade, investment and strategic advisory. Connect · Grow · Invest · Go Global.":
+    "Conseil mondial en commerce, investissement et stratégie. Connecter · Grandir · Investir · S'internationaliser.",
+  "Connecting businesses, markets & opportunity.": "Connecter les entreprises, les marchés et les opportunités.",
+  // Without the trailing period — used by the OG / Twitter image generators.
+  "Connecting businesses, markets & opportunity": "Connecter les entreprises, les marchés et les opportunités",
+  "TRADE · INVESTMENT · STRATEGIC ADVISORY": "COMMERCE · INVESTISSEMENT · CONSEIL STRATÉGIQUE",
+  "Advisory Services": "Services de conseil",
+  INSIGHTS: "ANALYSES",
+  "trade advisory": "conseil commercial",
+  "investment promotion": "promotion de l'investissement",
+  "market entry Africa": "entrée sur le marché africain",
+  "business matchmaking": "mise en relation d'affaires",
+  "export promotion": "promotion des exportations",
+  "Cameroon business": "affaires au Cameroun",
+  "Africa investment": "investissement en Afrique",
+  "market intelligence": "intelligence de marché",
+
+  // Nav
   Home: "Accueil",
   Services: "Services",
   Sectors: "Secteurs",
@@ -14,15 +44,27 @@ export const fr: Record<string, string> = {
   "About Us": "À propos",
   "Contact Us": "Nous contacter",
   Explore: "Explorer",
+  Legal: "Mentions légales",
+  "Toggle menu": "Ouvrir le menu",
+  "Skip to main content": "Aller au contenu principal",
   "Start": "Commencer",
   "Start a Conversation": "Commencer une conversation",
   "Start the Conversation": "Commencer la conversation",
   "Start another conversation": "Commencer une autre conversation",
-  "All": "Tout",
-  "of": "sur",
-  "Message": "Message",
+  All: "Tout",
+  of: "sur",
+  Message: "Message",
 
-  // ---- Footer ----
+  // Language switcher
+  "Choose language": "Choisir la langue",
+  "Switch to French": "Passer au français",
+  "Switch to English": "Passer à l'anglais",
+  "Current language: English": "Langue actuelle : anglais",
+  "Current language: Français": "Langue actuelle : français",
+  "View this page in English": "Voir cette page en anglais",
+  "View this page in Français": "Voir cette page en français",
+
+  // Footer
   "A global trade, investment and strategic advisory firm connecting businesses, investors and opportunities across Africa and the international marketplace.":
     "Un cabinet mondial de conseil en commerce, investissement et stratégie, qui relie entreprises, investisseurs et opportunités à travers l'Afrique et le marché international.",
   "“Connect businesses. Turn opportunities into results.”":
@@ -36,7 +78,17 @@ export const fr: Record<string, string> = {
   "22+ years in international trade & investment promotion":
     "Plus de 22 ans de promotion du commerce international et des investissements",
 
-  // ---- Statement impact words ----
+  // Contact details
+  "Yaoundé, Cameroon": "Yaoundé, Cameroun",
+  "Head office": "Siège social",
+  "Phone / WhatsApp": "Téléphone / WhatsApp",
+  Email: "E-mail",
+  "Contact details": "Coordonnées",
+  "How we respond": "Comment nous répondons",
+  "Messages are reviewed promptly by our team. For time-sensitive investment or market-entry inquiries, mention the sector and your timeline in your message.":
+    "Nos équipes examinent rapidement les messages. Pour les demandes urgentes d'investissement ou d'entrée sur le marché, mentionnez le secteur et votre calendrier dans votre message.",
+
+  // Statement impact words
   STRATEGY: "STRATÉGIE",
   AFRICA: "AFRIQUE",
   TRUST: "CONFIANCE",
@@ -53,7 +105,9 @@ export const fr: Record<string, string> = {
     "Vous et les bons marchés, partenaires et opportunités.",
   "Every opportunity begins with a conversation.": "Toute opportunité commence par une conversation.",
 
-  // ---- Home ----
+  // -------------------------------------------------------------------------
+  // Home
+  // -------------------------------------------------------------------------
   "Connecting businesses,": "Connecter les entreprises,",
   "markets & opportunity.": "marchés & opportunités.",
   "We help businesses and investors navigate Africa and the international marketplace — turning commercial opportunity into measurable results.":
@@ -84,14 +138,18 @@ export const fr: Record<string, string> = {
     "Une PME africaine à la recherche d'acheteurs internationaux, une entreprise cherchant des investissements, un investisseur de la diaspora explorant des opportunités, ou une entreprise établie entrant au Cameroun — commençons la conversation.",
   "Contact Us Today": "Contactez-nous aujourd'hui",
   "Explore Sectors": "Explorer les secteurs",
+  "Sectors gallery — scroll to change the sector, or tap a sector to jump straight to it":
+    "Galerie de secteurs — faites défiler pour changer de secteur, ou touchez un secteur pour y accéder directement",
 
-  // ---- Services page ----
+  // -------------------------------------------------------------------------
+  // Services
+  // -------------------------------------------------------------------------
   "Expertise that turns cross-border ambition into": "L'expertise qui transforme l'ambition transfrontalière en",
   "commercial results": "résultats commerciaux",
   "Eight integrated services covering the full journey of international business — from market entry and intelligence to matchmaking, investment and export growth.":
-    "Huit services intégrés couvrant tout le parcours du commerce international — de l'entrée sur le marché et de l'intelligence économique au matchmaking, à l'investissement et à la croissance des exportations.",
+    "Huit services intégrés couvrant tout le parcours du commerce international — de l'entrée sur le marché et l'intelligence économique à la mise en relation, l'investissement et la croissance des exportations.",
   "No two engagements are alike. Each service is a lane of a single journey — one that takes you from first assessment to the right market, the right partner and a result that is bankable.":
-    "Aucun engagement ne se ressemble. Chaque service est une voie d'un même parcours — qui vous mène de la première évaluation au bon marché, au bon partenaire et à un résultat bancable.",
+    "Aucun engagement ne se ressemble. Chaque service est une voie d'un même parcours — qui vous mène de la première évaluation au bon marché, au bon partenaire et à un résultat finançable.",
   "A practical, partnership-based approach": "Une approche pratique et fondée sur le partenariat",
   "Every mandate begins with understanding your objective — then we build the market picture, the right relationships and the execution path that gets you there.":
     "Chaque mandat commence par la compréhension de votre objectif — puis nous construisons la vision du marché, les bonnes relations et le chemin d'exécution qui vous y mène.",
@@ -106,34 +164,33 @@ export const fr: Record<string, string> = {
     "Des réponses directes sur l'entrée sur les marchés africains, les coûts, la propriété et les délais — de la part de conseillers qui travaillent ces corridors chaque jour.",
   "Ask Your Own Question": "Poser votre question",
 
-  // FAQ questions
+  // Services FAQ (app/services/page.tsx)
   "How can my company enter the Cameroonian market?":
-    "Comment mon entreprise peut-elle entrer sur le marché camerounais ?",
+    "Comment mon entreprise peut-elle accéder au marché camerounais ?",
+  "Start with market intelligence and a vetted local partner. The practical path is: shortlist your segment, confirm demand and regulation, identify a distributor, agent or joint-venture partner, then register and execute. Companies can complete one-stop registration quickly — and foreign investors may hold 100% ownership in most sectors. ACE Global Nexus supports every step with local advisors on the ground.":
+    "Commencez par une intelligence économique et un partenaire local fiable. La démarche concrète est la suivante : présélectionner votre segment, confirmer la demande et la réglementation, identifier un distributeur, un agent ou un associé de coentreprise, puis vous immatriculer et lancer l'activité. Les entreprises peuvent effectuer une immatriculation en guichet unique rapidement — et les investisseurs étrangers peuvent détenir 100 % du capital dans la plupart des secteurs. ACE Global Nexus vous accompagne à chaque étape grâce à des conseillers locaux présents sur le terrain.",
   "What does market entry or trade facilitation cost?":
-    "Combien coûte l'entrée sur le marché ou la facilitation du commerce ?",
+    "Combien coûte l'entrée sur le marché ou la facilitation commerciale ?",
+  "There is no flat rate. Engagements are scoped as project fees, monthly retainers or success-linked facilitation fees, depending on the objective. We agree the scope on a discovery call, and many clients start with a scoping study before committing to a full programme.":
+    "Il n'existe pas de tarif unique. Les prestations sont chiffrées soit en honoraires de projet, soit en abonnements mensuels, soit en honoraires de facilitation liés au résultat, selon l'objectif. Nous convenons du périmètre lors d'un appel de cadrage, et de nombreux clients commencent par une étude de cadrage avant de s'engager sur un programme complet.",
   "Can a foreigner own a business in Cameroon?":
     "Un étranger peut-il posséder une entreprise au Cameroun ?",
+  "Yes — 100% ownership is allowed in most activities. For majority-foreign shareholding above 50%, a Ministry of Trade authorisation is required, and expatriate managers need work and residence permits. An experienced local advisor can run the entire process for you remotely.":
+    "Oui — la détention à 100 % est autorisée dans la plupart des activités. Pour une participation étrangère majoritaire supérieure à 50 %, une autorisation du Ministère du Commerce est requise, et les dirigeants expatriés doivent disposer de permis de travail et de résidence. Un conseiller local expérimenté peut mener l'ensemble de la procédure à distance pour vous.",
   "Which sectors offer the best investment opportunities in Cameroon?":
     "Quels secteurs offrent les meilleures opportunités d'investissement au Cameroun ?",
-  "How long does a market entry engagement take?":
-    "Combien de temps dure un engagement d'entrée sur le marché ?",
-  "Do you work outside Cameroon?": "Travaillez-vous en dehors du Cameroun ?",
-
-  // FAQ answers
-  "Start with market intelligence and a vetted local partner. The practical path is: shortlist your segment, confirm demand and regulation, identify a distributor, agent or joint-venture partner, then register and execute. Companies can complete one-stop registration quickly — and foreign investors may hold 100% ownership in most sectors. ACE Global Nexus supports every step with local advisors on the ground.":
-    "Commencez par une intelligence de marché et un partenaire local vérifié. Le chemin pratique est : présélectionnez votre segment, confirmez la demande et la réglementation, identifiez un distributeur, un agent ou un partenaire en coentreprise, puis enregistrez-vous et exécutez. Les entreprises peuvent compléter rapidement l'enregistrement en guichet unique — et les investisseurs étrangers peuvent détenir 100 % du capital dans la plupart des secteurs. ACE Global Nexus vous accompagne à chaque étape avec des conseillers locaux sur le terrain.",
-  "There is no flat rate. Engagements are scoped as project fees, monthly retainers or success-linked facilitation fees, depending on the objective. We agree the scope on a discovery call, and many clients start with a scoping study before committing to a full programme.":
-    "Il n'y a pas de tarif unique. Les engagements sont définis en honoraires de projet, en contrats mensuels ou en honoraires de facilitation liés au succès, selon l'objectif. Nous convenons du périmètre lors d'un appel de découverte, et de nombreux clients commencent par une étude de cadrage avant de s'engager sur un programme complet.",
-  "Yes — 100% ownership is allowed in most activities. For majority-foreign shareholding above 50%, a Ministry of Trade authorisation is required, and expatriate managers need work and residence permits. An experienced local advisor can run the entire process for you remotely.":
-    "Oui — la propriété à 100 % est autorisée dans la plupart des activités. Pour une participation étrangère majoritaire supérieure à 50 %, une autorisation du Ministère du Commerce est requise, et les dirigeants expatriés ont besoin de permis de travail et de séjour. Un conseiller local expérimenté peut gérer l'ensemble du processus pour vous à distance.",
   "Agribusiness and agro-processing, critical minerals, energy and renewables, infrastructure corridors, ICT and fintech, healthcare, logistics and manufacturing. Recent high-level commercial dialogue identified billions of dollars in opportunities, and Cameroon's AfCFTA membership gives investors access to a market of roughly 1.4 billion people.":
-    "L'agrobusiness et l'agro-transformation, les minerais critiques, l'énergie et les énergies renouvelables, les corridors d'infrastructures, les TIC et la fintech, la santé, la logistique et l'industrie manufacturière. De récents dialogues commerciaux de haut niveau ont identifié des milliards de dollars d'opportunités, et l'adhésion du Cameroun à la ZLECAf donne aux investisseurs accès à un marché d'environ 1,4 milliard de personnes.",
+    "Agro-industrie et transformation agricole, minerals critiques, énergie et énergies renouvelables, corridors d'infrastructure, TIC et fintech, santé, logistique et industrie manufacturière. De récents dialogues commerciaux de haut niveau ont identifié des opportunités de plusieurs milliards de dollars, et l'appartenance du Cameroun à la ZLECAf offre aux investisseurs un accès à un marché d'environ 1,4 milliard d'habitants.",
+  "How long does a market entry engagement take?":
+    "Combien de temps dure une mission d'entrée sur le marché ?",
   "Typically four to eight weeks: one to two weeks of discovery, two to three weeks of market and entry-mode assessment, then a roadmap with partner and buyer introductions running in parallel while you execute.":
-    "Généralement de quatre à huit semaines : une à deux semaines de découverte, deux à trois semaines d'évaluation du marché et du mode d'entrée, puis une feuille de route avec des présentations de partenaires et d'acheteurs en parallèle pendant que vous exécutez.",
+    "Généralement de quatre à huit semaines : une à deux semaines de découverte, deux à trois semaines d'évaluation du marché et du mode d'entrée, puis une feuille de route avec mise en relation de partenaires et d'acheteurs, en parallèle de votre mise en œuvre.",
+  "Do you work outside Cameroon?":
+    "Intervenez-vous hors du Cameroun ?",
   "Yes. Our headquarters is in Yaoundé, but we operate across Central and West Africa first, then the wider continent — plus established connections to North America, Europe, Asia and the Middle East for sourcing, export and investment links.":
-    "Oui. Notre siège est à Yaoundé, mais nous opérons d'abord en Afrique centrale et de l'Ouest, puis sur l'ensemble du continent — avec des connexions établies en Amérique du Nord, en Europe, en Asie et au Moyen-Orient pour l'approvisionnement, l'export et les liens d'investissement.",
+    "Oui. Notre siège est à Yaoundé, mais nous intervenons d'abord en Afrique centrale et de l'Ouest, puis sur l'ensemble du continent — ainsi que grâce à des relations établies avec l'Amérique du Nord, l'Europe, l'Asie et le Moyen-Orient pour l'approvisionnement, l'exportation et les liens d'investissement.",
 
-  // ---- Services data (content.ts) ----
+  // Services data (content.ts)
   "International Market Entry": "Entrée sur le marché international",
   "Strategic guidance to enter and expand within African and international markets — market selection, entry strategy, local regulations and route-to-market planning.":
     "Accompagnement stratégique pour entrer et se développer sur les marchés africains et internationaux — choix des marchés, stratégie d'entrée, réglementation locale et plan de mise sur le marché.",
@@ -159,7 +216,9 @@ export const fr: Record<string, string> = {
   "Practical training programmes in trade, export readiness, business development and international commercial engagement.":
     "Programmes de formation pratiques en commerce, préparation à l'export, développement des affaires et engagement commercial international.",
 
-  // ---- Sectors page ----
+  // -------------------------------------------------------------------------
+  // Sectors
+  // -------------------------------------------------------------------------
   "Where African opportunity meets": "Là où l'opportunité africaine rencontre",
   "global capital and markets": "les capitaux et marchés mondiaux",
   "We focus on the sectors driving Africa's growth — and pair them with the market intelligence, partners and investors that make them work.":
@@ -169,7 +228,7 @@ export const fr: Record<string, string> = {
     "Parlez-nous de votre secteur et de vos objectifs — nous tracerons le marché, les partenaires et la voie à suivre.",
   "Talk to Our Team": "Parler à notre équipe",
 
-  // ---- Sectors data (content.ts) ----
+  // Sectors data (content.ts)
   Agribusiness: "Agrobusiness",
   "Value chains, processing, and export of agricultural produce.":
     "Chaînes de valeur, transformation et exportation des produits agricoles.",
@@ -210,7 +269,9 @@ export const fr: Record<string, string> = {
   "Freight & supply chains": "Fret & chaînes d'approvisionnement",
   "Local value addition": "Valeur ajoutée locale",
 
-  // ---- About page ----
+  // -------------------------------------------------------------------------
+  // About
+  // -------------------------------------------------------------------------
   "Africa's next economic transformation will be built by entrepreneurs, companies, investors":
     "La prochaine transformation économique de l'Afrique sera construite par des entrepreneurs, des entreprises, des investisseurs",
   " and partnerships": " et des partenariats",
@@ -218,6 +279,8 @@ export const fr: Record<string, string> = {
     "Nous existons pour que les bonnes personnes se trouvent — et transforment l'opportunité en résultats commerciaux.",
   "Work With Us": "Travailler avec nous",
   "Our Services": "Nos services",
+  "01 — Mission": "01 — Mission",
+  "02 — Vision": "02 — Vision",
   "Connect businesses and opportunities.": "Connecter les entreprises et les opportunités.",
   "We connect Cameroonian companies with international markets, entrepreneurs with investors, businesses with strategic partners — and international companies with opportunities in Cameroon and Africa — then help them transform those connections into commercial results.":
     "Nous connectons les entreprises camerounaises aux marchés internationaux, les entrepreneurs aux investisseurs, les entreprises aux partenaires stratégiques — et les entreprises internationales aux opportunités du Cameroun et de l'Afrique — puis les aidons à transformer ces connexions en résultats commerciaux.",
@@ -225,10 +288,8 @@ export const fr: Record<string, string> = {
   "To become a leading international trade and investment advisory platform recognized for integrity, professionalism, innovation and impactful global business connectivity — starting from Cameroon and connecting Cameroon to the world.":
     "Devenir une plateforme internationale de conseil en commerce et investissement reconnue pour son intégrité, son professionnalisme, son innovation et sa connectivité commerciale mondiale — à partir du Cameroun et reliant le Cameroun au monde.",
   "Who is Christopher Ekom Anyang?": "Qui est Christopher Ekom Anyang ?",
-  "Christopher spent more than two decades at the intersection of business, trade, investment and international economic relations — first as a ":
-    "Christopher a passé plus de deux décennies à l'intersection des affaires, du commerce, de l'investissement et des relations économiques internationales — d'abord comme ",
-  "retired senior commercial specialist, embassy of the united states of america, yaoundé — 22+ years in international trade and investment promotion.":
-    "ancien spécialiste commercial senior de l'ambassade des États-Unis d'Amérique à Yaoundé — plus de 22 ans de promotion du commerce et des investissements internationaux.",
+  "Christopher spent more than two decades at the intersection of business, trade, investment and international economic relations — first as a":
+    "Christopher a passé plus de deux décennies à l'intersection des affaires, du commerce, de l'investissement et des relations économiques internationales — d'abord comme",
   "His work placed him alongside companies looking for markets, investors looking for opportunities, governments looking to attract investment, and entrepreneurs looking for the connections that could take their businesses further. He saw clearly that opportunity alone does not become business — it takes the right information, the right partners and the right strategy.":
     "Son travail l'a placé aux côtés d'entreprises cherchant des marchés, d'investisseurs cherchant des opportunités, de gouvernements cherchant à attirer l'investissement, et d'entrepreneurs cherchant les connexions qui pourraient faire grandir leurs affaires. Il a clairement vu que l'opportunité seule ne devient pas une affaire — il faut les bonnes informations, les bons partenaires et la bonne stratégie.",
   "was founded around one simple idea: connect businesses and opportunities — and help turn those connections into results.":
@@ -270,7 +331,7 @@ export const fr: Record<string, string> = {
   "Investment Promotion": "Promotion des investissements",
   "Strategic Partnerships": "Partenariats stratégiques",
 
-  // ---- Founder data ----
+  // Founder data
   "Founder & Principal Consultant": "Fondateur & Consultant Principal",
   "Business Development Expert": "Expert en développement des affaires",
   "Retired Senior Commercial Specialist, Embassy of the United States of America, Yaoundé — 22+ years in international trade and investment promotion.":
@@ -280,7 +341,9 @@ export const fr: Record<string, string> = {
   "Opportunity exists. But opportunity does not automatically become business.":
     "L'opportunité existe. Mais l'opportunité ne devient pas automatiquement une affaire.",
 
-  // ---- Insights page ----
+  // -------------------------------------------------------------------------
+  // Insights
+  // -------------------------------------------------------------------------
   "Practical market intelligence,": "Une intelligence de marché pratique,",
   "from experience and research": "issue de l'expérience et de la recherche",
   "Trade, investment, entrepreneurship, agribusiness and doing business in Africa — written to be read, acted on and shared.":
@@ -297,22 +360,38 @@ export const fr: Record<string, string> = {
   "Doing Business in Africa": "Faire des affaires en Afrique",
   "Read article": "Lire l'article",
   "Read this insight from ACE Global Nexus.": "Lisez cette analyse d'ACE Global Nexus.",
-
-  // ---- Insight detail ----
   "All insights": "Toutes les analyses",
   "Full article coming soon.": "Article complet à venir.",
+  "This article is not yet available in English.":
+    "Cet article n'est pas encore disponible en français. Voici la version anglaise :",
   "Let's discuss your opportunity": "Parlons de votre opportunité",
   "If this insight speaks to a market, sector or partnership you are exploring, our team would be glad to help.":
     "Si cette analyse évoque un marché, un secteur ou un partenariat que vous explorez, notre équipe se fera un plaisir de vous aider.",
   "Contact ACE Global Nexus": "Contacter ACE Global Nexus",
+  "Insight | ACE Global Nexus": "Analyse | ACE Global Nexus",
+  "Previous insight": "Analyse précédente",
+  "Next insight": "Analyse suivante",
+  "Next slide": "Diapositive suivante",
+  "Previous slide": "Diapositive précédente",
+  "Go to insight": "Aller à l'analyse",
+  "Fresh market intelligence is on the way.": "Une intelligence de marché fraîche arrive.",
+  "ACE Global Nexus is publishing practical insights on African trade, investment and doing business — follow along to read them first.":
+    "ACE Global Nexus publie des analyses pratiques sur le commerce, l'investissement et les affaires en Afrique — suivez-nous pour les lire en premier.",
+  "Read the insight": "Lire l'analyse",
+  "Fresh insights are on the way.": "De nouvelles analyses arrivent bientôt.",
+  "Practical market intelligence on African trade, investment and doing business — coming soon.":
+    "Une intelligence de marché pratique sur le commerce, l'investissement et les affaires en Afrique — bientôt disponible.",
+  "Loading insights…": "Chargement des analyses…",
 
-  // ---- Contact page ----
+  // -------------------------------------------------------------------------
+  // Contact
+  // -------------------------------------------------------------------------
   "Let's start": "Commençons",
   "the conversation": "la conversation",
   "Tell us about your market, your sector and your objective — and we will map the path from opportunity to results.":
     "Parlez-nous de votre marché, de votre secteur et de votre objectif — et nous tracerons le chemin de l'opportunité au résultat.",
 
-  // ---- Contact form ----
+  // Contact form
   "Tell us about your objective": "Parlez-nous de votre objectif",
   "The more context you share, the faster we can map the right path.":
     "Plus vous partagez de contexte, plus vite nous pouvons tracer le bon chemin.",
@@ -340,25 +419,19 @@ export const fr: Record<string, string> = {
     "Message envoyé — nous reviendrons vers vous rapidement.",
   "Something went wrong. Please try again or email us directly.":
     "Une erreur s'est produite. Veuillez réessayer ou nous écrire directement.",
-  "Contact details": "Coordonnées",
-  "Head office": "Siège social",
-  "Phone / WhatsApp": "Téléphone / WhatsApp",
-  Email: "E-mail",
-  "How we respond": "Comment nous répondons",
-  "Messages are reviewed promptly by our team. For time-sensitive investment or market-entry inquiries, mention the sector and your timeline in your message.":
-    "Nos équipes examinent rapidement les messages. Pour les demandes urgentes d'investissement ou d'entrée sur le marché, mentionnez le secteur et votre calendrier dans votre message.",
 
-  // ---- Contact topics ----
+  // Contact topics
   "Market entry or expansion": "Entrée ou expansion sur un marché",
   "Investment opportunity": "Opportunité d'investissement",
   "Trade / export facilitation": "Facilitation commerce / export",
   "Business matchmaking": "Mise en relation d'affaires",
-  "Market intelligence": "Intelligence de marché",
   "Partnership proposal": "Proposition de partenariat",
   "Training programme": "Programme de formation",
   "Other inquiry": "Autre demande",
 
-  // ---- Start a conversation ----
+  // -------------------------------------------------------------------------
+  // Start a conversation wizard
+  // -------------------------------------------------------------------------
   "Share your market, your sector and your objective in a few short steps — and we will map the path from opportunity to results.":
     "Partagez votre marché, votre secteur et votre objectif en quelques étapes — et nous tracerons le chemin de l'opportunité au résultat.",
   "About you": "À propos de vous",
@@ -375,7 +448,7 @@ export const fr: Record<string, string> = {
   "Review your conversation": "Vérifiez votre conversation",
   "Check everything, then send.": "Vérifiez tout, puis envoyez.",
   Topic: "Sujet",
-  "Edit": "Modifier",
+  Edit: "Modifier",
   Back: "Retour",
   Continue: "Continuer",
   "Send Conversation": "Envoyer la conversation",
@@ -386,9 +459,32 @@ export const fr: Record<string, string> = {
   "Something went wrong. Please try again.": "Une erreur s'est produite. Veuillez réessayer.",
   "Network error. Please try again.": "Erreur réseau. Veuillez réessayer.",
 
-  // ---- Insights showcase (client) ----
-  "Fresh market intelligence is on the way.": "Une intelligence de marché fraîche arrive.",
-  "ACE Global Nexus is publishing practical insights on African trade, investment and doing business — follow along to read them first.":
-    "ACE Global Nexus publie des analyses pratiques sur le commerce, l'investissement et les affaires en Afrique — suivez-nous pour les lire en premier.",
-  "Read the insight": "Lire l'analyse",
+  // ---------------------------------------------------------------------------
+  // Confirmation email (client-side sent from /api/contact)
+  // ---------------------------------------------------------------------------
+  "Connecting Businesses, Markets & Opportunities": "Relier entreprises, marchés et opportunités",
+  "All rights reserved.": "Tous droits réservés.",
+  Dear: "Madame, Monsieur,",
+  "Thank you for reaching out to": "Nous vous remercions d'avoir contacté",
+  "Your inquiry has been received and is now being reviewed by our team — we typically respond within one business day.":
+    "Votre demande a bien été reçue et est en cours d'examen par notre équipe — nous répondons généralement sous un jour ouvré.",
+  "Your inquiry:": "Votre demande :",
+  "A copy of your message is included below for your records.":
+    "Une copie de votre message figure ci-dessous pour vos archives.",
+  "Need a faster answer?": "Besoin d'une réponse plus rapide ?",
+  "Best regards,": "Cordialement,",
+  "Founder & Principal Consultant, ACE Global Nexus": "Fondateur et Consultant Principal, ACE Global Nexus",
+  "We received your inquiry": "Nous avons bien reçu votre demande",
+  "Thank you for contacting ACE Global Nexus": "Merci d'avoir contacté ACE Global Nexus",
+
+  // ---------------------------------------------------------------------------
+  // Misc UI
+  // ---------------------------------------------------------------------------
+  "Skip to content": "Aller au contenu",
+  Loading: "Chargement",
+  "Something went wrong": "Une erreur s'est produite",
+  "Not found": "Page introuvable",
+  "This page could not be found.": "Cette page est introuvable.",
+  "Return to homepage": "Retour à l'accueil",
+  "Admin": "Administration",
 };

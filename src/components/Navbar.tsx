@@ -34,6 +34,14 @@ export default function Navbar() {
     setOpen(false);
   }, [pathname]);
 
+  // Lock body scroll while the mobile drawer is open.
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
   const isTransparent = !scrolled;
 
   return (
@@ -43,7 +51,7 @@ export default function Navbar() {
       }`}
     >
       <div className="container-site flex h-[72px] items-center justify-between">
-        <Logo light={isTransparent} href={p("/")} />
+        <Logo light={isTransparent} />
 
         <nav className="hidden items-center gap-7 lg:flex">
           {NAV.map((item) => {
@@ -53,6 +61,7 @@ export default function Navbar() {
               <Link
                 key={item.href}
                 href={href}
+                aria-current={active ? "page" : undefined}
                 className={`text-sm font-medium transition-colors ${
                   active
                     ? isTransparent
@@ -67,25 +76,33 @@ export default function Navbar() {
               </Link>
             );
           })}
-          <LanguageToggle />
+          <LanguageToggle tone={isTransparent ? "light" : "dark"} />
           <Link href={p("/start-a-conversation")} className="btn-primary !px-5 !py-2.5">
             {t("Start a Conversation")} <FaArrowRight size={12} />
           </Link>
         </nav>
 
-        <button
-          onClick={() => setOpen(!open)}
-          aria-label="Toggle menu"
-          className={`grid h-11 w-11 place-items-center rounded-lg text-xl lg:hidden ${
-            isTransparent ? "text-white" : "text-primary"
-          }`}
-        >
-          {open ? <FaXmark /> : <FaBars />}
-        </button>
+        <div className="flex items-center gap-2 lg:hidden">
+          <LanguageToggle variant="iconOnly" />
+          <button
+            onClick={() => setOpen(!open)}
+            aria-label={open ? t("Close") : t("Toggle menu")}
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            className={`grid h-11 w-11 place-items-center rounded-lg text-xl lg:hidden ${
+              isTransparent ? "text-white" : "text-primary"
+            }`}
+          >
+            {open ? <FaXmark /> : <FaBars />}
+          </button>
+        </div>
       </div>
 
       {open && (
-        <div className="border-t border-gray-100 bg-white px-6 py-6 lg:hidden">
+        <div
+          id="mobile-menu"
+          className="max-h-[calc(100svh-72px)] overflow-y-auto border-t border-gray-100 bg-white px-6 py-6 lg:hidden"
+        >
           <nav className="flex flex-col gap-4">
             {NAV.map((item) => {
               const href = p(item.href);
@@ -93,7 +110,10 @@ export default function Navbar() {
                 <Link
                   key={item.href}
                   href={href}
-                  className={`text-base font-medium ${pathname === href ? "text-gold-dark" : "text-primary/85"}`}
+                  aria-current={pathname === href ? "page" : undefined}
+                  className={`text-base font-medium ${
+                    pathname === href ? "text-gold-dark" : "text-primary/85"
+                  }`}
                 >
                   {t(item.label)}
                 </Link>
@@ -102,8 +122,11 @@ export default function Navbar() {
             <Link href={p("/start-a-conversation")} className="btn-primary mt-4 w-full">
               {t("Start a Conversation")} <FaArrowRight size={12} />
             </Link>
-            <div className="mt-1 flex justify-center">
-              <LanguageToggle />
+            <div className="mt-2 flex items-center justify-between gap-4 border-t border-gray-100 pt-4">
+              <span className="text-xs font-bold uppercase tracking-[0.22em] text-primary/40">
+                {t("Choose language")}
+              </span>
+              <LanguageToggle tone="dark" />
             </div>
           </nav>
         </div>

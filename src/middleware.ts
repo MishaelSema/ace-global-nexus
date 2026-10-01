@@ -25,9 +25,11 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // Exclude API, admin, legal, Next.js internals and static assets.
-  // (Legal pages remain single-language English; admin/API are locale-neutral.)
+  // Exclude API, admin, Next.js internals and static assets.
+  // (`legal` is deliberately NOT excluded: /legal/* and /fr/legal/* both need
+  // the x-locale header so each renders in the language of its own URL.)
+  // Admin/API are locale-neutral.
   matcher: [
-    "/((?!api|admin|legal|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|txt|xml|json)$).*)",
+    "/((?!api|admin|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|txt|xml|json)$).*)",
   ],
 };

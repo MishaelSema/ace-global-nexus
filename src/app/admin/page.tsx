@@ -9,11 +9,13 @@ import { FaFileLines, FaEnvelope, FaArrowLeft, FaSpinner } from "react-icons/fa6
 import Logo from "@/components/Logo";
 import InsightsManager from "./InsightsManager";
 import MessagesInbox from "./MessagesInbox";
+import { useLocale } from "@/components/LocaleProvider";
 
 type Tab = "insights" | "messages";
 
 export default function AdminDashboardPage() {
   const router = useRouter();
+  const { t } = useLocale();
   const [tab, setTab] = useState<Tab>("insights");
   const [checking, setChecking] = useState(true);
 
@@ -48,7 +50,7 @@ export default function AdminDashboardPage() {
                   tab === "insights" ? "bg-gold/15 text-gold-dark" : "text-primary/60 hover:text-primary"
                 }`}
               >
-                <FaFileLines /> Insights
+                <FaFileLines /> {t("Insights")}
               </button>
               <button
                 onClick={() => setTab("messages")}
@@ -56,13 +58,13 @@ export default function AdminDashboardPage() {
                   tab === "messages" ? "bg-gold/15 text-gold-dark" : "text-primary/60 hover:text-primary"
                 }`}
               >
-                <FaEnvelope /> Messages
+                <FaEnvelope /> {t("Messages")}
               </button>
             </nav>
           </div>
           <div className="flex items-center gap-2">
             <Link href="/" className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm text-primary/60 hover:text-primary transition-colors">
-              <FaArrowLeft size={12} /> View site
+              <FaArrowLeft size={12} /> {t("View site")}
             </Link>
           </div>
         </div>
@@ -72,13 +74,13 @@ export default function AdminDashboardPage() {
             onClick={() => setTab("insights")}
             className={`flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-semibold ${tab === "insights" ? "bg-gold/15 text-gold-dark" : "text-primary/60"}`}
           >
-            <FaFileLines /> Insights
+            <FaFileLines /> {t("Insights")}
           </button>
           <button
             onClick={() => setTab("messages")}
             className={`flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-semibold ${tab === "messages" ? "bg-gold/15 text-gold-dark" : "text-primary/60"}`}
           >
-            <FaEnvelope /> Messages
+            <FaEnvelope /> {t("Messages")}
           </button>
         </div>
       </header>

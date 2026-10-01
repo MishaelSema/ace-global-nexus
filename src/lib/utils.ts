@@ -1,3 +1,5 @@
+import { dateLocale, DEFAULT_LOCALE, type Locale } from "@/lib/i18n/core";
+
 export function cn(...classes: Array<string | false | null | undefined>): string {
   return classes.filter(Boolean).join(" ");
 }
@@ -12,9 +14,17 @@ export function slugify(input: string): string {
     .replace(/^-|-$/g, "");
 }
 
-export function formatDate(date: string | Date): string {
+/**
+ * Locale-aware long-form date ("21 September 2026" / "21 septembre 2026").
+ * Defaults to English when no locale is supplied.
+ */
+export function formatDate(date: string | Date, locale: Locale = DEFAULT_LOCALE): string {
   const d = new Date(date);
-  return d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+  return d.toLocaleDateString(dateLocale(locale), {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 }
 
 export function stripHtml(html: string, max = 160): string {

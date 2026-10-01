@@ -85,7 +85,7 @@ export default function SectorShowcase({ children }: { children: ReactNode }) {
       <div className="-mx-5 mt-14 sm:-mx-8 lg:hidden">
         <div ref={wrapRef} className="relative" style={{ height: `${n * WRAP_FACTOR}vh` }}>
           <section
-            aria-label="Sectors gallery — scroll to change the sector, or tap a sector to jump straight to it"
+            aria-label={t("Sectors gallery — scroll to change the sector, or tap a sector to jump straight to it")}
             className="sticky top-0 flex h-[100svh] flex-col justify-between overflow-hidden bg-primary"
           >
             {/* Background stack — the active sector's image crossfades in */}

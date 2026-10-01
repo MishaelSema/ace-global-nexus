@@ -11,3 +11,19 @@ export function localizedPath(path: string, locale: Locale): string {
   if (path.startsWith("/")) return `/fr${path}`;
   return path;
 }
+
+/** Inverse of `localizedPath` — strips the `/fr` prefix ("/fr/about" → "/about"). */
+export function delocalizePath(path: string): string {
+  if (path === "/fr") return "/";
+  if (path.startsWith("/fr/")) return path.slice(3) || "/";
+  return path || "/";
+}
+
+/**
+ * The same page in the other locale, preserving the path shape.
+ * "/about" ↔ "/fr/about", "/" ↔ "/fr", "/fr" ↔ "/".
+ */
+export function alternateLocalePath(pathname: string, next: Locale): string {
+  const base = delocalizePath(pathname || "/");
+  return localizedPath(base, next);
+}

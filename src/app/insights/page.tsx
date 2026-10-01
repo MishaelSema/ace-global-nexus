@@ -38,8 +38,10 @@ export default async function InsightsPage({
   interface InsightListItem {
     _id: string;
     title: string;
+    titleFr?: string;
     slug: string;
     excerpt: string;
+    excerptFr?: string;
     category: string;
     tags: string[];
     coverUrl?: string;
@@ -61,7 +63,7 @@ export default async function InsightsPage({
     if (category) filter.category = category;
     const docs = await Insight.find(filter)
       .sort({ publishedAt: -1, createdAt: -1 })
-      .select("-content -coverPublicId -published -updatedAt")
+      .select("-content -contentFr -coverPublicId -published -updatedAt")
       .lean();
     insights = docs.map((d) => ({
       ...d,
@@ -127,7 +129,7 @@ export default async function InsightsPage({
               <p className="mt-3 text-sm leading-relaxed text-gray-500">
                 {category ? (
                   <>
-                    {t("There are no articles in")} “{category}” {t("yet — check the other categories or come back soon.")}
+                    {t("There are no articles in")} “{t(category)}” {t("yet — check the other categories or come back soon.")}
                   </>
                 ) : (
                   t("Check back soon for fresh, practical market intelligence.")

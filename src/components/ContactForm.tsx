@@ -14,7 +14,7 @@ const inputCls =
 const labelCls = "mb-2 block text-xs font-semibold uppercase tracking-wide text-primary/60";
 
 export default function ContactForm() {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
   const [form, setForm] = useState({
     name: "", email: "", phone: "", company: "", country: "", topic: "", service: "", message: "",
   });
@@ -34,7 +34,7 @@ export default function ContactForm() {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, locale }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || "Request failed");
@@ -83,7 +83,9 @@ export default function ContactForm() {
                 <label className={labelCls}>{t("Topic *")}</label>
                 <select className={inputCls} value={form.topic} onChange={set("topic")}>
                   {CONTACT_TOPICS.map((topic) => (
-                    <option key={topic}>{t(topic)}</option>
+                    <option key={topic} value={topic}>
+                      {t(topic)}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -92,7 +94,9 @@ export default function ContactForm() {
                 <select className={inputCls} value={form.service} onChange={set("service")}>
                   <option value="">{t("No specific service")}</option>
                   {SERVICES.map((s) => (
-                    <option key={s.title}>{t(s.title)}</option>
+                    <option key={s.title} value={s.title}>
+                    {t(s.title)}
+                  </option>
                   ))}
                 </select>
               </div>
@@ -123,7 +127,7 @@ export default function ContactForm() {
                   </span>
                   <div>
                     <p className="text-[11px] uppercase tracking-[0.18em] text-white/45">{t("Head office")}</p>
-                    <p className="mt-1 text-sm font-medium">{CONTACT_INFO.address}</p>
+                    <p className="mt-1 text-sm font-medium">{t(CONTACT_INFO.address)}</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-4">

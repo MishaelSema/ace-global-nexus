@@ -1,11 +1,20 @@
 import type { Metadata } from "next";
 import LegalPage from "@/components/LegalPage";
+import { tForLocale, getLocale } from "@/lib/i18n/server";
+import { canonical } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Privacy Policy",
-  description:
-    "How ACE Global Nexus collects, uses, stores and protects your personal information when you use our website or contact us.",
-};
+const PATH = "/legal/privacy";
+const DESCRIPTION =
+  "How ACE Global Nexus collects, uses, stores and protects your personal information when you use our website or contact us.";
+
+export function generateMetadata(): Metadata {
+  const t = tForLocale();
+  return {
+    title: t("Privacy Policy"),
+    description: t(DESCRIPTION),
+    ...canonical(PATH, getLocale()),
+  };
+}
 
 const SECTIONS = [
   {
@@ -86,14 +95,15 @@ const SECTIONS = [
   },
 ];
 
-export default function PrivacyPage() {
+export default async function PrivacyPage() {
+  const t = tForLocale();
   return (
     <LegalPage title="Privacy Policy" updated="21 September 2026">
       {SECTIONS.map((s) => (
         <section key={s.title}>
-          <h2>{s.title}</h2>
+          <h2>{t(s.title)}</h2>
           {s.body.map((p) => (
-            <p key={p.slice(0, 32)}>{p}</p>
+            <p key={p.slice(0, 32)}>{t(p)}</p>
           ))}
         </section>
       ))}

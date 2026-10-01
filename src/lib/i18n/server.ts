@@ -11,7 +11,7 @@ export const LOCALE_HEADER = "x-locale";
 
 /**
  * Resolve the current locale, in order of authority:
- *  1. `x-locale` header set by middleware for /fr/* URLs (URL-based locale)
+ *  1. `x-locale` header set by middleware for the requested URL (URL-based locale)
  *  2. `lang` cookie (legacy personalization fallback)
  *  3. `en` default
  */
@@ -41,4 +41,12 @@ export function tForLocale(): (text: string) => string {
 export function pathForLocale(): (path: string) => string {
   const locale = getLocale();
   return (path: string) => localizedPath(path, locale);
+}
+
+/**
+ * Locale resolved from a pathname (no request headers required) — used by
+ * metadata generators and by any helper that only knows the URL.
+ */
+export function localeFromPath(pathname: string): Locale {
+  return pathname === "/fr" || pathname.startsWith("/fr/") ? "fr" : "en";
 }
