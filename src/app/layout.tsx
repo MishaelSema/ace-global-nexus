@@ -22,12 +22,16 @@ const display = Bebas_Neue({
 // (Also keeps the correct <html lang> for the requested URL.)
 export const dynamic = "force-dynamic";
 
-const HOME_TITLE_EN = "ACE Global Nexus — Connecting Businesses, Markets & Opportunities";
-const HOME_TITLE_FR = "ACE Global Nexus — Relier entreprises, marchés & opportunités";
+// Layout-level fallbacks. Every indexable page ships its own localized title
+// and description (see `localizedPageMeta`), so these only surface on routes
+// that define none — kept keyword-aligned with the homepage so the fallback
+// never contradicts it.
+const HOME_TITLE_EN = "Market Entry & Trade Advisory in Africa | ACE Global Nexus";
+const HOME_TITLE_FR = "Conseil en Entrée de Marché en Afrique | ACE Global Nexus";
 const HOME_DESCRIPTION_EN =
-  "ACE Global Nexus is a global trade, investment and strategic advisory firm in Yaoundé, Cameroon, connecting businesses, investors and opportunities across Africa and the international marketplace.";
+  "Market entry, trade and investment advisory from Yaoundé, Cameroon. We connect businesses and investors with African markets, partners and bankable deals.";
 const HOME_DESCRIPTION_FR =
-  "ACE Global Nexus est un cabinet mondial de conseil en commerce, investissement et stratégie à Yaoundé, Cameroun, reliant entreprises, investisseurs et opportunités à travers l'Afrique et le marché international.";
+  "Conseil en entrée de marché, commerce et investissement depuis Yaoundé, Cameroun. Nous relions entreprises et investisseurs aux marchés et opportunités africains.";
 const OG_DESCRIPTION_EN = "Global trade, investment and strategic advisory. Connect · Grow · Invest · Go Global.";
 const OG_DESCRIPTION_FR =
   "Conseil mondial en commerce, investissement et stratégie. Connecter · Développer · Investir · S'internationaliser.";
@@ -45,18 +49,9 @@ export function generateMetadata(): Metadata {
       template: "%s | ACE Global Nexus",
     },
     description: homeDescription,
-    keywords: [
-      "trade advisory",
-      "investment promotion",
-      "market entry Africa",
-      "business matchmaking",
-      "export promotion",
-      "Cameroon business",
-      "Africa investment",
-      "market intelligence",
-      "conseil commerce",
-      "investissement Afrique",
-    ],
+    // No `keywords` meta: Google has ignored it since 2009 and Bing since 2012.
+    // Targeting lives in the titles, descriptions and on-page copy instead —
+    // see docs/SEO-KEYWORDS.md for the full EN/FR keyword map.
     metadataBase: new URL(SITE_URL),
     robots: {
       index: true,

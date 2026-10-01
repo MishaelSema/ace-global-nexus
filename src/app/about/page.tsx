@@ -17,14 +17,16 @@ export async function generateMetadata(): Promise<Metadata> {
     path: "/about",
     locale,
     en: {
-      title: "About Us | Trade & Investment Advisors in Cameroon",
+      // Dropped the "About Us" prefix — it consumed 9 characters of the ~60 that
+      // Google renders, and carried no keyword weight.
+      title: "Trade & Investment Advisors in Cameroon | ACE Global Nexus",
       description:
-        "Meet Christopher A. Ekom, a retired US Embassy Senior Commercial Specialist with 22+ years in trade & investment promotion, and his Yaoundé advisory team.",
+        "Meet Christopher A. Ekom, a retired US Embassy Senior Commercial Specialist with 22+ years in trade and investment promotion, and the Yaoundé team.",
     },
     fr: {
-      title: "À Propos | Conseillers en Commerce & Investissement au Cameroun",
+      title: "Conseillers en Commerce & Investissement | ACE Global Nexus",
       description:
-        "Découvrez Christopher A. Ekom, ancien spécialiste commercial senior de l'ambassade des États-Unis avec plus de 22 ans en promotion du commerce et de l'investissement, et son équipe de conseil à Yaoundé.",
+        "Découvrez Christopher A. Ekom, ancien spécialiste commercial senior de l'ambassade des États-Unis, et son équipe de conseil à Yaoundé, Cameroun.",
     },
   });
 }

@@ -18,14 +18,14 @@ export async function generateMetadata(): Promise<Metadata> {
     path: "/insights",
     locale,
     en: {
-      title: "Insights on African Trade & Investment | ACE Global Nexus",
+      title: "Africa Trade & Investment Insights | ACE Global Nexus",
       description:
-        "Practical market intelligence on doing business in Africa – trade, investment, AfCFTA, export and sector analysis from ACE Global Nexus, Yaoundé, Cameroon.",
+        "Practical market intelligence on African trade, investment and the AfCFTA — export opportunities, sector analysis and guidance on doing business in Africa.",
     },
     fr: {
-      title: "Analyses sur le Commerce & l'Investissement en Afrique | ACE Global Nexus",
+      title: "Analyses ZLECAf & Commerce en Afrique | ACE Global Nexus",
       description:
-        "Intelligence économique pratique pour faire des affaires en Afrique : commerce, investissement, ZLECAf, exportation et analyses sectorielles d'ACE Global Nexus, Yaoundé, Cameroun.",
+        "Intelligence économique sur le commerce et l'investissement en Afrique : ZLECAf, opportunités d'exportation, analyses sectorielles et conseils pratiques.",
     },
   });
 }

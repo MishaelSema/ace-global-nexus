@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { connectDB } from "@/lib/mongodb";
 import Insight from "@/models/Insight";
 import { SITE_URL } from "@/lib/seo";
+import { localizedPath } from "@/lib/i18n/path";
 
 // Revalidate the cached sitemap every 6h (avoids a DB hit on every crawl).
 export const revalidate = 21600;
@@ -22,10 +23,17 @@ const LOCALIZED_ROUTES = [
 /** Legal pages are fully localized too — /legal/* and /fr/legal/* both exist. */
 const LEGAL_ROUTES = ["/legal/terms", "/legal/privacy", "/legal/cookies"];
 
-/** Build one sitemap entry with en/fr/x-default hreflang alternates. */
+/**
+ * Build one sitemap entry with en/fr/x-default hreflang alternates.
+ *
+ * Every URL here must be a real 200 that also matches that page's own canonical
+ * tag. The root needs care: Next renders the `/` canonical as the bare origin
+ * (no trailing slash), so emit it the same way rather than origin + "/".
+ */
 function alternates(path: string) {
-  const enUrl = `${SITE_URL}${path}`;
-  const frUrl = `${SITE_URL}/fr${path}`;
+  const p = path || "/";
+  const enUrl = p === "/" ? SITE_URL : `${SITE_URL}${p}`;
+  const frUrl = `${SITE_URL}${localizedPath(p, "fr")}`;
   return {
     en: enUrl,
     fr: frUrl,

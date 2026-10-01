@@ -12,14 +12,14 @@ export async function generateMetadata(): Promise<Metadata> {
     path: "/contact",
     locale,
     en: {
-      title: "Contact Us | Trade & Investment Advisory in Cameroon",
+      title: "Contact a Trade Advisor in Cameroon | ACE Global Nexus",
       description:
-        "Talk to a Cameroon-based trade & investment advisor. Market entry, matchmaking, export and diaspora services. Phone +237 675 033 792 or send a message today.",
+        "Talk to a Cameroon-based trade and investment advisor about market entry, export and diaspora investment. Call +237 675 033 792 or send a message.",
     },
     fr: {
-      title: "Contactez-Nous | Conseil en Commerce & Investissement au Cameroun",
+      title: "Contactez un Conseiller en Commerce | ACE Global Nexus",
       description:
-        "Parlez à un conseiller en commerce et investissement basé au Cameroun. Entrée de marché, mise en relation, export et services diaspora. Téléphone +237 675 033 792 ou envoyez un message dès aujourd'hui.",
+        "Parlez à un conseiller en commerce et investissement basé au Cameroun : entrée de marché, export, diaspora. Tél. +237 675 033 792 ou envoyez un message.",
     },
   });
 }

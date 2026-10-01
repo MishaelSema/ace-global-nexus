@@ -17,14 +17,15 @@ export async function generateMetadata(): Promise<Metadata> {
     path: "/sectors",
     locale,
     en: {
-      title: "Investment Opportunities in Africa by Sector | ACE Global Nexus",
+      title: "Investment Opportunities in Africa | ACE Global Nexus",
       description:
         "Where to invest in Africa in 2026: agribusiness, mining, energy, infrastructure, ICT, healthcare, logistics, manufacturing — with local market intelligence.",
     },
     fr: {
-      title: "Opportunités d'Investissement en Afrique par Secteur | ACE Global Nexus",
+      // Trimmed from "…par Secteur" — the old title ran 68 chars and truncated.
+      title: "Opportunités d'Investissement en Afrique | ACE Global Nexus",
       description:
-        "Où investir en Afrique en 2026 : agro-industrie, mines, énergie, infrastructures, TIC, santé, logistique, industrie manufacturière — avec une intelligence économique locale.",
+        "Où investir en Afrique en 2026 : agro-industrie, mines, énergie, infrastructures, TIC, santé, logistique, industrie — avec une intelligence économique locale.",
     },
   });
 }

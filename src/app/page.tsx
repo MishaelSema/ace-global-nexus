@@ -25,14 +25,16 @@ export async function generateMetadata(): Promise<Metadata> {
     path: "/",
     locale,
     en: {
-      title: "Trade & Investment Advisory in Africa | ACE Global Nexus",
+      // Primary EN keyword: "market entry Africa" (58 chars)
+      title: "Market Entry & Trade Advisory in Africa | ACE Global Nexus",
       description:
-        "Market entry & trade advisory from Cameroon. We connect businesses and investors with African markets, partners and bankable deals.",
+        "Market entry, trade and investment advisory from Yaoundé, Cameroon. We connect businesses and investors with African markets, partners and bankable deals.",
     },
     fr: {
-      title: "Conseil en Commerce & Investissement en Afrique | ACE Global Nexus",
+      // Primary FR keyword: "conseil en entrée de marché" (55 chars)
+      title: "Conseil en Entrée de Marché en Afrique | ACE Global Nexus",
       description:
-        "Conseil en entrée de marché et facilitation commerciale depuis le Cameroun. Nous connectons entreprises et investisseurs aux marchés africains, aux partenaires et aux opportunités finançables.",
+        "Conseil en entrée de marché, commerce et investissement à Yaoundé, Cameroun. Nous relions entreprises et investisseurs aux marchés et opportunités africains.",
     },
   });
 }

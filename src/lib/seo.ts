@@ -14,15 +14,24 @@ export const OG_IMAGE_DEFAULT = "/opengraph-image.png";
 /**
  * Self-referencing canonical metadata for a route, with the full set of
  * hreflang alternates (en, fr, x-default) pointing at real URLs.
+ *
+ * The URLs are emitted absolute rather than site-relative on purpose.
+ * SITE_URL has no trailing slash, so letting Next resolve the paths against
+ * metadataBase was producing two different URLs for the same page — for `/`
+ * the canonical resolved to `…/` while the `en` and `x-default` hreflangs
+ * resolved to the bare origin. Google treats those as one URL, so it was never
+ * a ranking bug, but an hreflang set that is not byte-identical to the
+ * canonical is needless ambiguity. Absolute URLs remove the guesswork.
  */
 export function canonical(path: string, locale: Locale = "en") {
+  const url = (loc: Locale) => `${SITE_URL}${localizedPath(path, loc)}`;
   return {
     alternates: {
-      canonical: localizedPath(path, locale),
+      canonical: url(locale),
       languages: {
-        en: localizedPath(path, "en"),
-        fr: localizedPath(path, "fr"),
-        "x-default": localizedPath(path, "en"),
+        en: url("en"),
+        fr: url("fr"),
+        "x-default": url("en"),
       },
     },
   };

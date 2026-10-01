@@ -12,14 +12,15 @@ export async function generateMetadata(): Promise<Metadata> {
     path: "/start-a-conversation",
     locale,
     en: {
-      title: "Start a Conversation | Market Entry & Investment Advisory",
+      // No brand on purpose — this page targets the generic consultation intent.
+      title: "Start a Conversation | Africa Market Entry & Investment",
       description:
         "Tell us your market, sector and objective in 3 quick steps. We map the path from opportunity to results – no obligation, no jargon.",
     },
     fr: {
-      title: "Démarrer une Conversation | Conseil en Entrée de Marché & Investissement",
+      title: "Démarrer une Conversation | Entrée de Marché en Afrique",
       description:
-        "Dites-nous votre marché, votre secteur et votre objectif en 3 étapes rapides. Nous traçons le chemin de l'opportunité au résultat — sans engagement, sans jargon.",
+        "Dites-nous votre marché, votre secteur et votre objectif en 3 étapes. Nous traçons le chemin de l'opportunité au résultat — sans engagement, sans jargon.",
     },
   });
 }

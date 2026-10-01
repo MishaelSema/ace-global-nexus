@@ -17,14 +17,14 @@ export async function generateMetadata(): Promise<Metadata> {
     path: "/services",
     locale,
     en: {
-      title: "Market Entry & Trade Advisory Services | ACE Global Nexus",
+      title: "Africa Trade & Investment Advisory | ACE Global Nexus",
       description:
-        "African market entry, trade & investment facilitation, B2B matchmaking, market intelligence, export promotion and investor advisory — from Yaoundé, Cameroon.",
+        "Market entry, trade and investment facilitation, B2B matchmaking, market intelligence, export promotion and investor advisory across Africa.",
     },
     fr: {
-      title: "Services de Conseil en Entrée de Marché & Commerce | ACE Global Nexus",
+      title: "Conseil & Mise en Relation en Afrique | ACE Global Nexus",
       description:
-        "Entrée de marché africain, facilitation commerciale et d'investissement, mise en relation B2B, intelligence économique, promotion des exportations et conseil aux investisseurs — depuis Yaoundé, Cameroun.",
+        "Entrée de marché, facilitation des échanges, mise en relation B2B, intelligence économique, promotion des exportations et conseil aux investisseurs en Afrique.",
     },
   });
 }
