@@ -6,6 +6,7 @@ import { FaArrowRight, FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 import { cloudImageUrl } from "@/lib/utils";
 import { BRAND_IMAGE } from "@/lib/content";
 import { useLocale } from "@/components/LocaleProvider";
+import { Skeleton, SkeletonRegion, SkeletonText } from "@/components/Skeleton";
 import { localizedField } from "@/lib/i18n/core";
 
 interface Slide {
@@ -59,9 +60,22 @@ export default function Showcase() {
 
   if (loading) {
     return (
-      <div className="grid h-[420px] place-items-center rounded-3xl bg-cream text-primary/30">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-current border-t-transparent" />
-      </div>
+      <SkeletonRegion
+        label={t("Loading…")}
+        className="relative overflow-hidden rounded-3xl bg-primary"
+      >
+        <div className="relative h-[420px] sm:h-[480px]">
+          <Skeleton tone="dark" className="absolute inset-0 opacity-70" />
+          <div className="absolute inset-x-0 bottom-0 p-8 pb-16 sm:p-12 sm:pb-16 lg:p-16">
+            <Skeleton tone="dark" className="h-3 w-32 rounded-full" />
+            <Skeleton tone="dark" className="mt-4 h-8 w-11/12 sm:h-10 sm:w-3/5" />
+            <div className="mt-4 hidden max-w-xl sm:block">
+              <SkeletonText lines={2} tone="dark" />
+            </div>
+            <Skeleton tone="dark" className="mt-5 h-3 w-36 rounded-full" />
+          </div>
+        </div>
+      </SkeletonRegion>
     );
   }
 

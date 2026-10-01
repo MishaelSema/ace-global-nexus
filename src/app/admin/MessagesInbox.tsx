@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { FaEnvelope, FaEnvelopeOpen, FaTrash, FaReply } from "react-icons/fa6";
 import { formatDate } from "@/lib/utils";
 import { useLocale } from "@/components/LocaleProvider";
+import { SkeletonListRows, SkeletonRegion } from "@/components/Skeleton";
 
 interface Message {
   _id: string;
@@ -96,7 +97,9 @@ export default function MessagesInbox() {
       </div>
 
       {loading ? (
-        <p className="mt-10 text-sm text-gray-400">{t("Loading messages…")}</p>
+        <SkeletonRegion label={t("Loading messages…")} className="mt-8">
+          <SkeletonListRows count={4} />
+        </SkeletonRegion>
       ) : messages.length === 0 ? (
         <div className="mt-10 rounded-2xl border border-dashed border-gray-200 p-12 text-center">
           <p className="font-serif text-lg font-bold text-primary">{t("No messages")}</p>

@@ -8,6 +8,7 @@ import {
 import { INSIGHT_CATEGORIES } from "@/lib/content";
 import { cloudImageUrl } from "@/lib/utils";
 import { useLocale } from "@/components/LocaleProvider";
+import { SkeletonListRows, SkeletonRegion } from "@/components/Skeleton";
 import { LOCALES, type Locale } from "@/lib/i18n/core";
 
 interface Insight {
@@ -238,7 +239,9 @@ export default function InsightsManager() {
       </div>
 
       {loading ? (
-        <p className="mt-10 text-sm text-gray-400">{t("Loading insights…")}</p>
+        <SkeletonRegion label={t("Loading insights…")} className="mt-8">
+          <SkeletonListRows count={4} />
+        </SkeletonRegion>
       ) : insights.length === 0 ? (
         <div className="mt-10 rounded-2xl border border-dashed border-gray-200 p-12 text-center">
           <p className="font-serif text-lg font-bold text-primary">{t("No insights yet")}</p>

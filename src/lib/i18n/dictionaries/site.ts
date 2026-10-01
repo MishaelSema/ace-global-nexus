@@ -482,6 +482,9 @@ export const siteFr: Record<string, string> = {
   // ---------------------------------------------------------------------------
   "Skip to content": "Aller au contenu",
   Loading: "Chargement",
+  "Loading…": "Chargement…",
+  "Loading page…": "Chargement de la page…",
+  "Loading articles…": "Chargement des articles…",
   "Something went wrong": "Une erreur s'est produite",
   "Not found": "Page introuvable",
   "This page could not be found.": "Cette page est introuvable.",

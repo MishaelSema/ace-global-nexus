@@ -2,8 +2,11 @@
 
 import { useEffect, useState } from "react";
 import InsightCard, { InsightPreview } from "@/components/InsightCard";
+import { SkeletonCardGrid, SkeletonRegion } from "@/components/Skeleton";
+import { useLocale } from "@/components/LocaleProvider";
 
 export default function InsightsPreview() {
+  const { t } = useLocale();
   const [insights, setInsights] = useState<InsightPreview[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -17,9 +20,9 @@ export default function InsightsPreview() {
 
   if (loading) {
     return (
-      <div className="grid place-items-center py-20 text-primary/25">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-current border-t-transparent" />
-      </div>
+      <SkeletonRegion label={t("Loading…")}>
+        <SkeletonCardGrid count={3} />
+      </SkeletonRegion>
     );
   }
 
