@@ -82,13 +82,16 @@ export default function Footer() {
         <div aria-hidden="true" className="h-36 sm:h-48 md:h-56 lg:h-72" />
       </div>
 
-      {/* Giant logo — full width, natural colours, clipped in half by the footer edge */}
+      {/* Giant logo — full width, natural colours, sunk below the footer edge.
+          The translate is a % of the image's own height, so the same value
+          crops proportionally at every width: 0% on mobile shows the lockup
+          almost in full, 37% from `sm` up leaves roughly the top 60% visible. */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 flex justify-center select-none">
         <img
           src="/ACEGLOBALNEXUS_ICON_with_name.png"
           alt=""
           draggable={false}
-          className="w-[min(1500px,150vw)] max-w-none opacity-90 [transform:translateY(-6%)] sm:[transform:translateY(30%)]"
+          className="w-[min(1500px,150vw)] max-w-none opacity-90 [transform:translateY(0%)] sm:[transform:translateY(37%)]"
         />
       </div>
 

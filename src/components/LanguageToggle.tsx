@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Suspense, useEffect, useRef, useState } from "react";
+import type { MouseEvent as ReactMouseEvent } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { FaGlobe, FaCheck, FaChevronDown } from "react-icons/fa6";
 import { useLocale } from "@/components/LocaleProvider";
@@ -32,6 +33,29 @@ function LanguageToggleInner({ variant, tone, className }: Required<LanguageTogg
   const otherHref = hrefFor(pathname, search, other);
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
+
+  /**
+   * Changing language has to be a real document navigation, not a client-side
+   * one. `/` and `/fr/*` are separate route trees, but they share the single
+   * root `app/layout.tsx` (there is no `app/fr/layout.tsx`), and the App
+   * Router preserves a shared layout across client-side navigation — it never
+   * re-renders it. Everything the root layout server-renders from
+   * `getLocale()` (the Navbar, the Footer, and `<html lang>`) therefore stays
+   * frozen at the locale of the first page load while only the page body
+   * switches, which reads as "the footer didn't translate". A full reload
+   * re-runs the server render and keeps the chrome in step with the URL.
+   */
+  const switchTo = (e: ReactMouseEvent<HTMLAnchorElement>, next: Locale) => {
+    setLocale(next); // persists the `lang` cookie for non-localized surfaces
+    if (next === locale) {
+      e.preventDefault(); // already reading this language; don't reload
+      return;
+    }
+    // Leave new-tab / window.open / download clicks to the browser.
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+    e.preventDefault();
+    window.location.assign(hrefFor(pathname, search, next));
+  };
 
   // Close on outside click / Escape — standard dropdown dismissal.
   useEffect(() => {
@@ -76,7 +100,7 @@ function LanguageToggleInner({ variant, tone, className }: Required<LanguageTogg
                 lang={opt}
                 aria-current={active ? "true" : undefined}
                 title={localeLabel(opt)}
-                onClick={() => setLocale(opt)}
+                onClick={(e) => switchTo(e, opt)}
                 className={
                   active
                     ? "rounded-full bg-gold px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-primary-dark transition-colors"
@@ -99,7 +123,7 @@ function LanguageToggleInner({ variant, tone, className }: Required<LanguageTogg
         href={otherHref}
         hrefLang={other}
         lang={other}
-        onClick={() => setLocale(other)}
+        onClick={(e) => switchTo(e, other)}
         aria-label={locale === "en" ? t("Switch to French") : t("Switch to English")}
         title={localeLabel(other)}
         className="flex h-9 w-9 items-center justify-center gap-1 rounded-full border border-white/15 bg-white/5 text-white/70 transition-colors hover:border-gold hover:text-gold"
@@ -149,9 +173,9 @@ function LanguageToggleInner({ variant, tone, className }: Required<LanguageTogg
                   href={hrefFor(pathname, search, opt)}
                   hrefLang={opt}
                   lang={opt}
-                  onClick={() => {
-                    setLocale(opt);
+                  onClick={(e) => {
                     setOpen(false);
+                    switchTo(e, opt);
                   }}
                   aria-current={active ? "true" : undefined}
                   className={`flex items-center justify-between gap-3 px-4 py-2.5 text-sm transition-colors ${
