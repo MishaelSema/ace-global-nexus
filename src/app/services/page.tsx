@@ -51,7 +51,7 @@ const FAQS = [
   {
     question: "Can a foreigner own a business in Cameroon?",
     answer:
-      "Yes — 100% ownership is allowed in most activities. For majority-foreign shareholding above 50%, a Ministry of Trade authorisation is required, and expatriate managers need work and residence permits. An experienced local advisor can run the entire process for you remotely.",
+      "Yes — 100% foreign ownership is permitted in most sectors, and Cameroon applies no sectoral negative list to foreign investment. Only defence and national security require prior approval, and that from the Ministry of Defence. Legal openness does not guarantee practical access, though: mining carries a 10% state equity requirement, oil and gas licences carry state interest, telecoms are licensed rather than freely entered, and forestry depends on concessions. Expatriate managers still need work and residence permits. An experienced local advisor can run the entire process for you remotely.",
   },
   {
     question: "Which sectors offer the best investment opportunities in Cameroon?",

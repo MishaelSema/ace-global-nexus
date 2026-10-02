@@ -8,7 +8,7 @@ import Insight from "@/models/Insight";
 import { cloudImageUrl, formatDate } from "@/lib/utils";
 import { BRAND_IMAGE } from "@/lib/content";
 import JsonLd from "@/components/JsonLd";
-import { SITE_URL, SITE_NAME, OG_IMAGE_DEFAULT, canonical, breadcrumbSchema, articleSchema } from "@/lib/seo";
+import { SITE_URL, SITE_NAME, canonical, breadcrumbSchema, articleSchema } from "@/lib/seo";
 import { tForLocale, pathForLocale, getLocale } from "@/lib/i18n/server";
 import { localizedField, ogLocale, translate } from "@/lib/i18n/core";
 
@@ -61,7 +61,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     coverUrl = found.coverUrl;
     publishedAt = found.publishedAt;
   }
-  const image = coverUrl ? cloudImageUrl(coverUrl, 1200) : `${SITE_URL}${OG_IMAGE_DEFAULT}`;
+  // Only pin `images` when the article actually has a cover. Setting it
+  // unconditionally overrode the per-article `opengraph-image.tsx` generator with
+  // one shared brand image, so all six articles had identical social previews.
+  // Omitting it lets Next fall back to the file-based generator, which renders
+  // the real headline per article. Twitter is treated the same way: a
+  // `twitter.images` entry suppresses the inherited opengraph-image just as an
+  // `openGraph.images` one does.
+  const images = coverUrl ? [{ url: cloudImageUrl(coverUrl, 1200), alt: title }] : undefined;
   const path = `/insights/${slug}`;
   return {
     // absolute: article titles carry the brand suffix already — skip the layout template.
@@ -76,13 +83,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       siteName: SITE_NAME,
       locale: ogLocale(locale),
       publishedTime: publishedAt?.toISOString(),
-      images: [{ url: image, alt: title }],
+      ...(images ? { images } : {}),
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: [image],
+      ...(images ? { images } : {}),
     },
   };
 }
