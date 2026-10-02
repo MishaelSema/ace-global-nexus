@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "og:image": "powershell -ExecutionPolicy Bypass -File scripts/generate-og-image.ps1"
+    "og:image": "powershell -ExecutionPolicy Bypass -File scripts/generate-og-image.ps1",
+    "seed:insights": "node scripts/seed-insights.mjs"
   },
 "dependencies": {
     "react": "^18",

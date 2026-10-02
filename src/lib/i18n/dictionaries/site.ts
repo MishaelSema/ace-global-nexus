@@ -383,6 +383,20 @@ export const siteFr: Record<string, string> = {
     "Une intelligence de marché pratique sur le commerce, l'investissement et les affaires en Afrique — bientôt disponible.",
   "Loading insights…": "Chargement des analyses…",
 
+  // Insight tags. These render through t(tag) on the article page and on the
+  // card, so every tag a published article carries needs an entry here or it
+  // shows up as English text on /fr/insights/...
+  AfCFTA: "ZLECAf",
+  "Trade in Africa": "Commerce en Afrique",
+  "Rules of Origin": "Règles d'origine",
+  Export: "Exportation",
+  "Critical Minerals": "Minerais critiques",
+  Cameroon: "Cameroun",
+  "Food & Agriculture": "Agriculture et alimentation",
+  "Market Entry": "Entrée de marché",
+  "Trade Advisory": "Conseil commercial",
+  Cocoa: "Cacao",
+
   // -------------------------------------------------------------------------
   // Contact
   // -------------------------------------------------------------------------
@@ -489,5 +503,8 @@ export const siteFr: Record<string, string> = {
   "Not found": "Page introuvable",
   "This page could not be found.": "Cette page est introuvable.",
   "Return to homepage": "Retour à l'accueil",
+  "The page you are looking for has moved, or the link may be out of date.":
+    "La page que vous cherchez a été déplacée, ou le lien n'est plus à jour.",
+  "You might be looking for:": "Vous cherchez peut-être :",
   "Admin": "Administration",
 };

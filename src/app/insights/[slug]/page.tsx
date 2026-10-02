@@ -25,19 +25,41 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   let description = "";
   let coverUrl: string | undefined;
   let publishedAt: Date | undefined;
+
+  interface MetaInsight {
+    title: string;
+    titleFr?: string;
+    excerpt?: string;
+    excerptFr?: string;
+    category: string;
+    coverUrl?: string;
+    publishedAt?: Date;
+  }
+
+  let found: MetaInsight | null = null;
+  let lookupFailed = false;
   try {
     await connectDB();
-    const insight = await Insight.findOne({ slug })
+    found = await Insight.findOne({ slug })
       .select("title titleFr excerpt excerptFr category coverUrl publishedAt")
       .lean();
-    if (insight) {
-      title = localizedField(insight, locale, "title");
-      description = localizedField(insight, locale, "excerpt");
-      coverUrl = insight.coverUrl;
-      publishedAt = insight.publishedAt;
-    }
   } catch {
-    // fall through
+    // A database outage is not evidence the slug is wrong. Flag it and fall
+    // through to the generic title below rather than 404-ing a live article.
+    lookupFailed = true;
+  }
+
+  // A lookup that *completed* and found nothing means the slug is wrong, so the
+  // metadata has to fail the same way the page does. Resolving metadata
+  // successfully while the page calls notFound() leaves Next.js rendering a
+  // bare error document: correct 404 status, but an empty body.
+  if (!lookupFailed && !found) notFound();
+
+  if (found) {
+    title = localizedField(found, locale, "title");
+    description = localizedField(found, locale, "excerpt");
+    coverUrl = found.coverUrl;
+    publishedAt = found.publishedAt;
   }
   const image = coverUrl ? cloudImageUrl(coverUrl, 1200) : `${SITE_URL}${OG_IMAGE_DEFAULT}`;
   const path = `/insights/${slug}`;
@@ -96,6 +118,16 @@ export default async function InsightDetailPage({ params }: PageProps) {
     console.error("Insight detail error:", e);
   }
 
+  // Correctness first: this route deliberately has NO `loading.tsx` above it,
+  // and there must never be one. A `loading.tsx` creates a Suspense boundary,
+  // so Next.js flushes the response header as `200` before this lookup
+  // resolves; `notFound()` then throws too late to amend the status and the
+  // crawler gets a soft 404 (200 + empty body) for every bad slug, which is
+  // exactly what we are trying to avoid. The listing page keeps its skeleton
+  // via the sibling `(index)` route group instead. Article pages lose the
+  // pending state as a result: the slug has to be resolved before we know
+  // whether to render at all. Navigation still feels responsive because the
+  // route is a single indexed query.
   if (!insight) notFound();
 
   const title = localizedField(insight, locale, "title");
