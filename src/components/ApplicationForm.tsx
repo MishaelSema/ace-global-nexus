@@ -94,7 +94,16 @@ export default function ApplicationForm() {
   }
 
   return (
-    <>
+    /*
+      Single root element, and it must stay that way: this component is a grid
+      item of the careers apply section. A fragment renders no DOM node, so a
+      fragment root would let both children become grid items directly — the
+      Toastify container would claim column 1, push <form> into column 2, and
+      drop the apply-details sidebar into row 2 beneath them.
+      min-w-0 keeps long unbroken content (URLs, emails) from overflowing the
+      minmax(0, 7fr) track.
+    */
+    <div className="min-w-0">
       <ToastContainer position="top-right" theme="colored" autoClose={5000} />
       <form onSubmit={onSubmit} className="rounded-3xl border border-gray-100 bg-cream p-8 sm:p-10">
         <h3 className="font-serif text-2xl font-bold text-primary">{t("Submit your application")}</h3>
@@ -102,7 +111,25 @@ export default function ApplicationForm() {
           {t("Attach your CV and a short statement. You can also apply by email or WhatsApp using the details above.")}
         </p>
 
-        <div className="mt-8 grid gap-6 sm:grid-cols-2">
+        {/*
+          Two-up only when the column can hold it. This grid sits inside the
+          form, which occupies the narrow side of a viewport-split grid, so
+          viewport width alone misjudges the space: from md (768px, where the
+          section starts splitting) to lg (1024px) the placeholders clipped
+          mid-word. Single column in that band, two-up either side of it.
+
+          Container queries would express this exactly (query the form, not
+          the viewport) but the Tailwind build this project installs does not
+          emit them — `@container` is recognised by the class extractor yet no
+          `container-type` rule is produced — so the classes silently do
+          nothing. Viewport breakpoints it is.
+
+          The full-width fields below must repeat this same breakpoint ladder.
+          A col-span wider than the explicit grid does not wrap gracefully: it
+          silently creates an implicit column, so `sm:col-span-2` against a
+          single-column track yields two unequal columns instead of one.
+        */}
+        <div className="mt-8 grid gap-6 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2">
           <div>
             <label htmlFor="app-name" className={labelCls}>
               {t("Full name *")}
@@ -157,7 +184,7 @@ export default function ApplicationForm() {
             />
           </div>
 
-          <div className="sm:col-span-2">
+          <div className="sm:col-span-2 md:col-span-1 lg:col-span-2">
             <label className={labelCls}>{t("CV *")}</label>
             <div className="flex flex-wrap items-center gap-3">
               <label
@@ -200,7 +227,7 @@ export default function ApplicationForm() {
             </div>
           </div>
 
-          <div className="sm:col-span-2">
+          <div className="sm:col-span-2 md:col-span-1 lg:col-span-2">
             <label htmlFor="app-statement" className={labelCls}>
               {t("Short statement *")}
             </label>
@@ -231,6 +258,6 @@ export default function ApplicationForm() {
           .
         </p>
       </form>
-    </>
+    </div>
   );
 }
