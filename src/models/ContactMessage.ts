@@ -9,6 +9,9 @@ export interface IContactMessage {
   topic?: string;
   service?: string;
   message: string;
+  /** Careers applications only — CV uploaded alongside the submission. */
+  cvUrl?: string;
+  cvPublicId?: string;
   read: boolean;
 }
 
@@ -22,6 +25,8 @@ const ContactMessageSchema = new Schema<IContactMessage>(
     topic: { type: String, default: "" },
     service: { type: String, default: "" },
     message: { type: String, required: true },
+    cvUrl: { type: String, default: "" },
+    cvPublicId: { type: String, default: "" },
     read: { type: Boolean, default: false },
   },
   { timestamps: { createdAt: true, updatedAt: false } }

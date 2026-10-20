@@ -17,6 +17,7 @@ interface Message {
   topic?: string;
   service?: string;
   message: string;
+  cvUrl?: string;
   read: boolean;
   createdAt: string;
 }
@@ -151,6 +152,16 @@ export default function MessagesInbox() {
                       {selected.country && <span className="rounded-full bg-cream px-2.5 py-1 text-[11px] font-semibold text-primary/70">{selected.country}</span>}
                       {selected.topic && <span className="rounded-full bg-gold/15 px-2.5 py-1 text-[11px] font-semibold text-gold-dark">{t(selected.topic)}</span>}
                       {selected.service && <span className="rounded-full bg-cream px-2.5 py-1 text-[11px] font-semibold text-primary/70">{t(selected.service)}</span>}
+                      {selected.cvUrl && (
+                        <a
+                          href={selected.cvUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="rounded-full bg-cream px-2.5 py-1 text-[11px] font-semibold text-primary/70 underline transition-colors hover:text-gold-dark"
+                        >
+                          {t("View CV")}
+                        </a>
+                      )}
                     </div>
                   </div>
                   <div className="flex gap-2">

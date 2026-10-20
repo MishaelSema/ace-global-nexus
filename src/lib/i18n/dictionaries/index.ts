@@ -3,16 +3,19 @@
  * Unknown keys pass through unchanged (safe fallback keeps the UI whole).
  *
  * Split by area so translators can work on one section at a time:
- *   ./site   → public chrome, pages, forms, data strings
- *   ./legal  → legal pages (Terms / Privacy / Cookies)
- *   ./admin  → private admin dashboard
+ *   ./site    → public chrome, pages, forms, data strings
+ *   ./careers → careers pages and the application form/emails
+ *   ./legal   → legal pages (Terms / Privacy / Cookies)
+ *   ./admin   → private admin dashboard
  */
 import { siteFr } from "./site";
+import { careersFr } from "./careers";
 import { legalFr } from "./legal";
 import { adminFr } from "./admin";
 
 export const fr: Record<string, string> = {
   ...siteFr,
+  ...careersFr,
   ...legalFr,
   ...adminFr,
 };

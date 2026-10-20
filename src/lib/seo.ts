@@ -37,9 +37,26 @@ export function canonical(path: string, locale: Locale = "en") {
   };
 }
 
+interface OpenGraphOptions {
+  /**
+   * Social card override. Omit for the shared brand card; pass `null` to emit no
+   * `images` at all so Next falls back to the route's file-based
+   * `opengraph-image.tsx` generator. (Setting `images` — on either `openGraph`
+   * or `twitter` — suppresses that file convention, so a route that ships its
+   * own card must leave both unset.)
+   */
+  image?: string | null;
+}
+
 /** Page-level Open Graph meta (locale-aware URL + og:locale). */
-export function openGraphMeta(path: string, title: string, description: string, locale: Locale = "en") {
-  const image = `${SITE_URL}${OG_IMAGE_DEFAULT}`;
+export function openGraphMeta(
+  path: string,
+  title: string,
+  description: string,
+  locale: Locale = "en",
+  { image }: OpenGraphOptions = {}
+) {
+  const card = image === undefined ? `${SITE_URL}${OG_IMAGE_DEFAULT}` : image;
   return {
     openGraph: {
       title,
@@ -49,13 +66,13 @@ export function openGraphMeta(path: string, title: string, description: string, 
       locale: ogLocale(locale),
       locales: ["en_US", "fr_FR"],
       siteName: SITE_NAME,
-      images: [{ url: image, width: 1200, height: 630, alt: title }],
+      ...(card ? { images: [{ url: card, width: 1200, height: 630, alt: title }] } : {}),
     },
     twitter: {
       card: "summary_large_image" as const,
       title,
       description,
-      images: [image],
+      ...(card ? { images: [card] } : {}),
     },
   };
 }
@@ -66,11 +83,13 @@ export function localizedPageMeta({
   locale,
   en,
   fr,
+  image,
 }: {
   path: string;
   locale: Locale;
   en: { title: string; description: string };
   fr: { title: string; description: string };
+  image?: string | null;
 }) {
   const copy = locale === "fr" ? fr : en;
   return {
@@ -79,7 +98,7 @@ export function localizedPageMeta({
     title: { absolute: copy.title },
     description: copy.description,
     ...canonical(path, locale),
-    ...openGraphMeta(path, copy.title, copy.description, locale),
+    ...openGraphMeta(path, copy.title, copy.description, locale, { image }),
   };
 }
 
@@ -258,6 +277,56 @@ export function faqSchema(items: Array<{ question: string; answer: string }>) {
         text: item.answer,
       },
     })),
+  };
+}
+
+/**
+ * JobPosting — careers pages.
+ *
+ * `jobLocation` is required by Google (or `jobLocationType: "TELECOMMUTE"` for
+ * a fully remote role); this opening is "Yaoundé / Remote", so the physical
+ * address carries the schema and the remote side stays in the description —
+ * claiming TELECOMMUTE would advertise the role as remote-only.
+ *
+ * No `validThrough`: the position stays open until it is filled, and a date in
+ * the past would expire the listing in search results.
+ */
+export function jobPostingSchema(
+  job: {
+    title: string;
+    summary: string;
+    datePosted: string;
+    employmentType: string;
+    path: string;
+  },
+  locale: Locale = "en"
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "JobPosting",
+    title: translate(locale, job.title),
+    description: translate(locale, job.summary),
+    url: `${SITE_URL}${localizedPath(job.path, locale)}`,
+    datePosted: job.datePosted,
+    employmentType: job.employmentType,
+    // The application form on this page is the application channel — no
+    // "apply on an external site" hop.
+    directApply: true,
+    hiringOrganization: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      url: SITE_URL,
+      logo: `${SITE_URL}/ACEGLOBALNEXUS_ICON_with_name.png`,
+    },
+    jobLocation: {
+      "@type": "Place",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Yaoundé",
+        addressCountry: "CM",
+      },
+    },
+    inLanguage: ["en", "fr"],
   };
 }
 

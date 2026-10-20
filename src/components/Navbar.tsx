@@ -14,6 +14,7 @@ const NAV = [
   { href: "/sectors", label: "Sectors" },
   { href: "/about", label: "About & Founder" },
   { href: "/insights", label: "Insights" },
+  { href: "/careers/business-development-associate", label: "Careers" },
   { href: "/contact", label: "Contact" },
 ];
 

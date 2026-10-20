@@ -195,3 +195,81 @@ export function getContactConfirmationTemplate(d: ContactSubmission) {
     locale,
   });
 }
+
+export interface ApplicationSubmission {
+  name: string;
+  email: string;
+  phone?: string;
+  location?: string;
+  /** Role applied for — carried through so one template serves every opening. */
+  role: string;
+  statement: string;
+  cvUrl?: string;
+  cvLink?: string;
+  /** Language the candidate was browsing in — drives the confirmation email. */
+  locale?: string;
+}
+
+function cvLinks(d: ApplicationSubmission): string {
+  const links: string[] = [];
+  if (d.cvUrl) links.push(`<a href="${escapeHtml(d.cvUrl)}" style="color:#a07f18;text-decoration:none;">${escapeHtml("Download CV")}</a>`);
+  if (d.cvLink) links.push(`<a href="${escapeHtml(d.cvLink)}" style="color:#a07f18;text-decoration:none;">${escapeHtml(d.cvLink)}</a>`);
+  return links.join(" &nbsp;·&nbsp; ");
+}
+
+// Internal staff mail: always English, regardless of the candidate's language.
+export function getApplicationReceivedTemplate(d: ApplicationSubmission) {
+  const rows: [string, string][] = [
+    ["Candidate", escapeHtml(d.name)],
+    ["Email", `<a href="mailto:${escapeHtml(d.email)}" style="color:#a07f18;text-decoration:none;">${escapeHtml(d.email)}</a>`],
+    ["Phone", d.phone ? escapeHtml(d.phone) : ""],
+    ["Based in", d.location ? escapeHtml(d.location) : ""],
+    ["Role applied for", escapeHtml(d.role)],
+    ["CV", cvLinks(d)],
+    ["Submitted language", d.locale === "fr" ? "Français" : "English"],
+  ];
+
+  const body = `
+    <p>A new application has just been submitted through the ACE Global Nexus careers page.</p>
+    ${infoTable(rows)}
+    <p style="margin:14px 0 4px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#a07f18;">Candidate statement</p>
+    ${quoteBlock(d.statement)}
+    <p style="font-size:12px;color:#8a8a8a;">Reply to the candidate directly using the email above.</p>`;
+
+  return wrap({
+    title: "New Job Application",
+    subtitle: `Action needed — ${d.role}`,
+    body,
+  });
+}
+
+// Confirmation sent back to the candidate, in the language they were browsing
+// in (falls back to English).
+export function getApplicationConfirmationTemplate(d: ApplicationSubmission) {
+  const locale: Locale = isLocale(d.locale) ? d.locale : "en";
+  const t = (text: string) => translate(locale, text);
+
+  const body = `
+    <p>${escapeHtml(t("Dear"))} <strong>${escapeHtml(d.name)}</strong>,</p>
+    <p>${escapeHtml(t("Thank you for applying for"))} <strong>${escapeHtml(t(d.role))}</strong> ${escapeHtml(
+      t("at ACE Global Nexus. We have received your application and our team will review it.")
+    )}</p>
+    <p>${escapeHtml(t("Shortlisted candidates will be contacted directly by email or WhatsApp."))}</p>
+    <p style="margin-top:6px;">${escapeHtml(t("A copy of your statement is included below for your records."))}</p>
+    ${quoteBlock(d.statement)}
+    <div style="margin:22px 0 0;padding:16px 18px;background:#f4f1ea;border-radius:10px;font-size:13px;color:#444;">
+      <strong style="color:#0b1e38;display:block;margin-bottom:6px;">${escapeHtml(t("Questions about the role?"))}</strong>
+      ${escapeHtml(t("Phone / WhatsApp"))}: <a href="tel:+237675033792" style="color:#a07f18;text-decoration:none;">+237 675 033 792</a><br/>
+      ${escapeHtml(t("Email"))}: <a href="mailto:${escapeHtml(CONTACT_EMAIL || "chris.ekom@aceglobalnexus.com")}" style="color:#a07f18;text-decoration:none;">${escapeHtml(CONTACT_EMAIL || "chris.ekom@aceglobalnexus.com")}</a>
+    </div>
+    <p>${escapeHtml(t("Best regards,"))}<br/><strong style="color:#0b1e38;">Christopher A. Ekom</strong><br/>${escapeHtml(
+      t("Founder & Principal Consultant, ACE Global Nexus")
+    )}</p>`;
+
+  return wrap({
+    title: t("We received your application"),
+    subtitle: t("Thank you for applying to ACE Global Nexus"),
+    body,
+    locale,
+  });
+}

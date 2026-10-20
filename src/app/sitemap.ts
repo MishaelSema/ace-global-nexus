@@ -16,6 +16,7 @@ const LOCALIZED_ROUTES = [
   "/sectors",
   "/about",
   "/insights",
+  "/careers/business-development-associate",
   "/contact",
   "/start-a-conversation",
 ];
