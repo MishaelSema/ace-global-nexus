@@ -131,8 +131,6 @@ export const careersFr: Record<string, string> = {
   "Or a link to your CV / LinkedIn profile":
     "Ou un lien vers votre CV / profil LinkedIn",
   "Short statement *": "Court exposé *",
-  "Your business network, relevant experience, and how you would generate clients…":
-    "Votre réseau professionnel, votre expérience pertinente et la manière dont vous générerez des clients…",
   "Submitting...": "Envoi en cours...",
   "Submit Application": "Envoyer ma candidature",
   "Your details and documents are used only to assess your application and are handled under our":

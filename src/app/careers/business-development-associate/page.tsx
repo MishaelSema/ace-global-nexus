@@ -285,7 +285,14 @@ export default function BusinessDevelopmentAssociatePage() {
 
       {/* APPLICATION FORM */}
       <section id="apply" className="scroll-mt-24 bg-white pb-24 sm:pb-32">
-        <div className="container-site grid gap-14 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16">
+        {/*
+          Splits at md (768px), not lg (1024px). The breakpoint is evaluated
+          against the viewport while the container is capped by `container-site`,
+          so at lg the form and the apply-details sidebar stayed stacked on any
+          window narrower than 1024px — including a laptop at 150% display
+          scaling. There is room for two columns from md up.
+        */}
+        <div className="container-site grid gap-14 md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] md:gap-10 lg:gap-16">
           <ApplicationForm />
           <aside className="space-y-8">
             <div className="rounded-3xl bg-primary p-8 text-white sm:p-10">

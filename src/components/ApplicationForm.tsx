@@ -204,6 +204,9 @@ export default function ApplicationForm() {
             <label htmlFor="app-statement" className={labelCls}>
               {t("Short statement *")}
             </label>
+            {/* No placeholder: it paraphrased the instruction directly above it
+                and started with the same words, so the two lines read as one
+                duplicated sentence. The prompt is the instruction. */}
             <p className="mb-2 -mt-1 text-xs leading-relaxed text-gray-500">{t(JOB.statementPrompt)}</p>
             <textarea
               id="app-statement"
@@ -211,7 +214,6 @@ export default function ApplicationForm() {
               className={inputCls}
               value={form.statement}
               onChange={set("statement")}
-              placeholder={t("Your business network, relevant experience, and how you would generate clients…")}
             />
           </div>
         </div>
