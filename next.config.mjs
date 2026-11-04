@@ -11,6 +11,11 @@ const securityHeaders = [
 ];
 
 const nextConfig = {
+  images: {
+    // Vercel Hobby includes only 5,000 image transformations per month.
+    // Serve images as-is so this site never consumes that quota.
+    unoptimized: true,
+  },
   async headers() {
     return [
       {
