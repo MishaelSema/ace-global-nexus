@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { FaArrowRight, FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 import { cloudImageUrl } from "@/lib/utils";
-import { BRAND_IMAGE } from "@/lib/content";
+import { insightCover } from "@/lib/content";
 import { useLocale } from "@/components/LocaleProvider";
 import { Skeleton, SkeletonRegion, SkeletonText } from "@/components/Skeleton";
 import { localizedField } from "@/lib/i18n/core";
@@ -111,7 +111,7 @@ export default function Showcase() {
             className={`absolute inset-0 transition-opacity duration-1000 ${i === index ? "opacity-100" : "opacity-0"}`}
           >
             <img
-              src={slide.coverUrl ? cloudImageUrl(slide.coverUrl, 1600) : BRAND_IMAGE}
+              src={slide.coverUrl ? cloudImageUrl(slide.coverUrl, 1600) : insightCover(slide.slug)}
               alt={localizedField(slide, locale, "title")}
               className="h-full w-full scale-105 object-cover"
               loading="lazy"

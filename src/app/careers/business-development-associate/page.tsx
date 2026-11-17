@@ -11,6 +11,7 @@ import {
   FaCheck,
 } from "react-icons/fa6";
 import { JOB } from "@/lib/jobs";
+import { IMAGES } from "@/lib/content";
 import Reveal from "@/components/Reveal";
 import PageHero from "@/components/PageHero";
 import Statement from "@/components/Statement";
@@ -81,6 +82,7 @@ export default function BusinessDevelopmentAssociatePage() {
 
       <PageHero
         compact
+        image={IMAGES.youthWorking}
         title={
           <>
             {t("Recruitment opportunity —")}{" "}
@@ -360,7 +362,7 @@ export default function BusinessDevelopmentAssociatePage() {
         </div>
       </section>
 
-      <Statement word="JOIN" sub="Independent. Performance-based. Renewable." />
+      <Statement word="JOIN" sub="Independent. Performance-based. Renewable." image={IMAGES.awardGroup} />
     </>
   );
 }

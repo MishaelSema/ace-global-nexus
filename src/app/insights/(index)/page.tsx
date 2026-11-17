@@ -3,7 +3,7 @@ import Link from "next/link";
 import { connectDB } from "@/lib/mongodb";
 import Insight from "@/models/Insight";
 import InsightCard from "@/components/InsightCard";
-import { INSIGHT_CATEGORIES } from "@/lib/content";
+import { INSIGHT_CATEGORIES, IMAGES } from "@/lib/content";
 import PageHero from "@/components/PageHero";
 import Statement from "@/components/Statement";
 import JsonLd from "@/components/JsonLd";
@@ -88,6 +88,7 @@ export default async function InsightsPage({
         ]}
       />
       <PageHero
+        image={IMAGES.expoSelfie}
         title={
           <>
             {t("Practical market intelligence,")}
@@ -146,7 +147,7 @@ export default async function InsightsPage({
         </div>
       </section>
 
-      <Statement word="INSIGHT" sub="Practical market intelligence — read it, act on it, share it." />
+      <Statement word="INSIGHT" sub="Practical market intelligence — read it, act on it, share it." image={IMAGES.eventGroup} />
     </>
   );
 }

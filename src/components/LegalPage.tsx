@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
-import { BRAND_IMAGE } from "@/lib/content";
+import { IMAGES } from "@/lib/content";
 import Parallax from "@/components/Parallax";
 import { tForLocale, pathForLocale } from "@/lib/i18n/server";
 
@@ -26,7 +26,7 @@ export default async function LegalPage({ title, updated, children }: LegalPageP
       {/* Slim navy band */}
       <section className="relative overflow-hidden bg-primary">
         <Parallax speed={0.08} className="absolute inset-0">
-          <img src={BRAND_IMAGE} alt="" className="h-full w-full scale-110 object-cover opacity-40" draggable={false} />
+          <img src={IMAGES.yaoundeCity} alt="" className="h-full w-full scale-110 object-cover opacity-40" draggable={false} />
         </Parallax>
         <div className="absolute inset-0 bg-gradient-to-b from-primary/85 via-primary/75 to-primary" />
         <div className="container-site relative pb-14 pt-36 sm:pb-16">

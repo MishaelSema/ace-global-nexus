@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { FaArrowRight } from "react-icons/fa6";
-import { SERVICES } from "@/lib/content";
+import { SERVICES, IMAGES } from "@/lib/content";
 import Reveal from "@/components/Reveal";
 import PageHero from "@/components/PageHero";
 import ServiceRows from "@/components/ServiceRows";
@@ -89,6 +89,7 @@ export default function ServicesPage() {
         ]}
       />
       <PageHero
+        image={IMAGES.meeting}
         title={
           <>
             {t("Expertise that turns cross-border ambition into")}{" "}
@@ -189,7 +190,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <Statement word="STRATEGY" sub="From first assessment to a deal that closes." />
+      <Statement word="STRATEGY" sub="From first assessment to a deal that closes." image={IMAGES.businessPlan} />
     </>
   );
 }

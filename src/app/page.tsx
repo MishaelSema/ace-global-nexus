@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { FaArrowRight } from "react-icons/fa6";
-import { SECTORS, FOUNDER, BRAND_IMAGE } from "@/lib/content";
+import { SECTORS, FOUNDER, IMAGES } from "@/lib/content";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import Parallax from "@/components/Parallax";
@@ -56,7 +56,7 @@ export default function HomePage() {
       <section className="relative flex min-h-[100svh] flex-col overflow-hidden bg-primary">
         <Parallax speed={0.16} className="absolute inset-0">
           <img
-            src={BRAND_IMAGE}
+            src={IMAGES.yaoundeCity}
             alt=""
             className="h-full w-full scale-110 object-cover"
             draggable={false}
@@ -169,7 +169,7 @@ export default function HomePage() {
       <section className="relative overflow-hidden bg-primary">
         <Parallax speed={0.1} className="absolute inset-0">
           <img
-            src={BRAND_IMAGE}
+            src={IMAGES.founderLanyard}
             alt=""
             className="h-full w-full scale-110 object-cover opacity-35"
             draggable={false}
@@ -181,9 +181,9 @@ export default function HomePage() {
             {/* Compact identity row — keeps the portrait grounded on small screens */}
             <div className="mb-9 flex items-center gap-4 lg:hidden">
               <img
-                src="/ACEGLOBALNEXUS_ICON.png"
-                alt=""
-                className="h-14 w-14 rounded-2xl bg-cream p-2.5 object-contain"
+                src={IMAGES.founderPortrait}
+                alt="Christopher A. Ekom"
+                className="h-14 w-14 rounded-2xl bg-cream object-cover object-top"
               />
               <div>
                 <p className="font-serif text-xl font-bold text-white">{FOUNDER.name}</p>
@@ -206,7 +206,7 @@ export default function HomePage() {
           <Reveal delay={120} className="hidden lg:block">
             <div className="relative aspect-[4/5] w-full overflow-hidden rounded-3xl bg-primary">
               <Parallax speed={0.08} className="absolute inset-0">
-                <img src={BRAND_IMAGE} alt="" className="h-full w-full scale-110 object-cover opacity-70" draggable={false} />
+                <img src={IMAGES.founderPortrait} alt="" className="h-full w-full scale-110 object-cover object-top opacity-90" draggable={false} />
               </Parallax>
               <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/30 to-primary/10" />
               <div className="absolute inset-x-0 bottom-0 p-10 text-center">
@@ -249,7 +249,7 @@ export default function HomePage() {
       {/* ============ CTA ============ */}
       <section className="relative overflow-hidden bg-primary">
         <Parallax speed={0.12} className="absolute inset-0">
-          <img src={BRAND_IMAGE} alt="" className="h-full w-full scale-110 object-cover" draggable={false} />
+          <img src={IMAGES.yaoundeNight} alt="" className="h-full w-full scale-110 object-cover" draggable={false} />
         </Parallax>
         <div className="absolute inset-0 bg-gradient-to-b from-primary via-primary/80 to-primary" />
         <div className="container-site relative py-28 text-center sm:py-36">

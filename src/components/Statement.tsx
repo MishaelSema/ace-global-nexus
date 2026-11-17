@@ -1,5 +1,5 @@
 import Parallax from "@/components/Parallax";
-import { BRAND_IMAGE } from "@/lib/content";
+import { IMAGES } from "@/lib/content";
 import { tForLocale } from "@/lib/i18n/server";
 
 interface StatementProps {
@@ -7,6 +7,8 @@ interface StatementProps {
   word: string;
   /** Small gold caption under the word. */
   sub?: string;
+  /** Parallax photograph behind the word. */
+  image?: string;
 }
 
 /**
@@ -14,12 +16,12 @@ interface StatementProps {
  * everything else around it, in a completely different font family,
  * sitting over a parallax photograph background.
  */
-export default function Statement({ word, sub }: StatementProps) {
+export default function Statement({ word, sub, image = IMAGES.yaoundeCity }: StatementProps) {
   const t = tForLocale();
   return (
     <section className="relative overflow-hidden bg-primary">
       <Parallax speed={0.14} className="absolute inset-0">
-        <img src={BRAND_IMAGE} alt="" className="h-full w-full scale-110 object-cover opacity-45" draggable={false} />
+        <img src={image} alt="" className="h-full w-full scale-110 object-cover opacity-45" draggable={false} />
       </Parallax>
       <div className="absolute inset-0 bg-gradient-to-b from-primary via-primary/85 to-primary" />
 

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { IMAGES } from "@/lib/content";
 import PageHero from "@/components/PageHero";
 import Statement from "@/components/Statement";
 import JsonLd from "@/components/JsonLd";
@@ -41,6 +42,7 @@ export default function ContactPage() {
         ]}
       />
       <PageHero
+        image={IMAGES.communityTable}
         title={
           <>
             {t("Let's start")} <span className="italic text-gold">{t("the conversation")}</span>
@@ -51,7 +53,7 @@ export default function ContactPage() {
         )}
       />
       <ContactForm />
-      <Statement word="CONNECT" sub="You and the right markets, partners and opportunities." />
+      <Statement word="CONNECT" sub="You and the right markets, partners and opportunities." image={IMAGES.networking} />
     </>
   );
 }

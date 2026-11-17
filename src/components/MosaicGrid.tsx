@@ -1,10 +1,11 @@
 import Link from "next/link";
-import { BRAND_IMAGE } from "@/lib/content";
+import { IMAGES } from "@/lib/content";
 import { tForLocale, pathForLocale } from "@/lib/i18n/server";
 
 interface Tile {
   title: string;
   note: string;
+  image: string;
   /** Corner-curve treatment — only some sides, never all four for every tile. */
   corners: string;
   position: "bottom-left" | "bottom-right" | "top-left" | "center-left";
@@ -16,6 +17,7 @@ const TILES: Tile[] = [
   {
     title: "Agribusiness",
     note: "Value chains & export",
+    image: IMAGES.agribusiness,
     corners: "rounded-3xl",
     position: "bottom-left",
     objectPos: "object-center",
@@ -24,30 +26,34 @@ const TILES: Tile[] = [
   {
     title: "Energy",
     note: "Power & renewables",
+    image: IMAGES.energy,
     corners: "rounded-t-3xl",
     position: "top-left",
-    objectPos: "object-top",
+    objectPos: "object-center",
     span: "h-56 sm:h-64 lg:h-[218px]",
   },
   {
     title: "Infrastructure",
     note: "Transport corridors",
+    image: IMAGES.infrastructure,
     corners: "rounded-b-3xl",
     position: "bottom-left",
-    objectPos: "object-bottom",
+    objectPos: "object-center",
     span: "h-56 sm:h-64 lg:h-[218px]",
   },
   {
     title: "ICT",
     note: "Digital & fintech",
+    image: IMAGES.ict,
     corners: "rounded-3xl",
     position: "center-left",
-    objectPos: "object-left",
+    objectPos: "object-center",
     span: "h-48 sm:h-56 lg:col-span-3 lg:h-60",
   },
   {
     title: "Healthcare",
     note: "Health-sector investment",
+    image: IMAGES.healthcare,
     corners: "rounded-3xl",
     position: "bottom-left",
     objectPos: "object-center",
@@ -56,17 +62,19 @@ const TILES: Tile[] = [
   {
     title: "Logistics",
     note: "Freight & supply chains",
+    image: IMAGES.logistics,
     corners: "rounded-3xl",
     position: "bottom-right",
-    objectPos: "object-right",
+    objectPos: "object-center",
     span: "h-48 sm:h-56 lg:col-span-3 lg:h-60",
   },
   {
     title: "Manufacturing",
     note: "Local value addition",
+    image: IMAGES.manufacturing,
     corners: "rounded-3xl",
     position: "bottom-left",
-    objectPos: "object-bottom",
+    objectPos: "object-center",
     span: "h-48 sm:h-56 lg:col-span-3 lg:h-60",
   },
 ];
@@ -97,7 +105,7 @@ export default function MosaicGrid() {
       className={`group relative block overflow-hidden bg-primary ring-1 ring-transparent transition-all duration-300 hover:ring-gold/50 ${tile.corners} ${tile.span}`}
     >
       <img
-        src={BRAND_IMAGE}
+        src={tile.image}
         alt={tile.title}
         loading="lazy"
         draggable={false}

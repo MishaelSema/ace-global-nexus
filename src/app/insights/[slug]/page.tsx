@@ -6,7 +6,7 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 import { connectDB } from "@/lib/mongodb";
 import Insight from "@/models/Insight";
 import { cloudImageUrl, formatDate } from "@/lib/utils";
-import { BRAND_IMAGE } from "@/lib/content";
+import { IMAGES, insightCover } from "@/lib/content";
 import JsonLd from "@/components/JsonLd";
 import { SITE_URL, SITE_NAME, canonical, breadcrumbSchema, articleSchema } from "@/lib/seo";
 import { tForLocale, pathForLocale, getLocale } from "@/lib/i18n/server";
@@ -171,7 +171,7 @@ export default async function InsightDetailPage({ params }: PageProps) {
       {/* Full-bleed cover header */}
       <section className="relative flex min-h-[72vh] items-end overflow-hidden bg-primary">
         <img
-          src={insight.coverUrl ? cloudImageUrl(insight.coverUrl, 1920) : BRAND_IMAGE}
+          src={insight.coverUrl ? cloudImageUrl(insight.coverUrl, 1920) : insightCover(insight.slug)}
           alt=""
           className="absolute inset-0 h-full w-full object-cover opacity-70"
         />
@@ -224,7 +224,7 @@ export default async function InsightDetailPage({ params }: PageProps) {
 
           <div className="relative mt-16 overflow-hidden rounded-3xl bg-primary px-8 py-14 text-center sm:px-14">
             <img
-              src={BRAND_IMAGE}
+              src={IMAGES.yaoundeNight}
               alt=""
               className="absolute inset-0 h-full w-full object-cover opacity-40"
             />

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { FaArrowRight } from "react-icons/fa6";
-import { FOUNDER, BRAND_IMAGE } from "@/lib/content";
+import { FOUNDER, IMAGES } from "@/lib/content";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import PageHero from "@/components/PageHero";
@@ -66,6 +66,7 @@ export default function AboutPage() {
         ]}
       />
       <PageHero
+        image={IMAGES.yaoundeCity}
         title={
           <>
             {t("Africa's next economic transformation will be built by entrepreneurs, companies, investors")}
@@ -111,7 +112,7 @@ export default function AboutPage() {
       {/* FOUNDER */}
       <section className="relative overflow-hidden bg-primary py-24 text-white sm:py-32">
         <Parallax speed={0.1} className="absolute inset-0">
-          <img src={BRAND_IMAGE} alt="" className="h-full w-full scale-110 object-cover opacity-40" draggable={false} />
+          <img src={IMAGES.founderCane} alt="" className="h-full w-full scale-110 object-cover opacity-40" draggable={false} />
         </Parallax>
         <div className="absolute inset-0 bg-gradient-to-b from-primary/90 via-primary/80 to-primary" />
 
@@ -119,7 +120,7 @@ export default function AboutPage() {
           <Reveal>
             <div className="lg:sticky lg:top-28">
               <div className="relative mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden rounded-3xl bg-primary-light">
-                <img src={BRAND_IMAGE} alt="" className="h-full w-full object-cover opacity-50" draggable={false} />
+                <img src={IMAGES.founderPortrait} alt="Christopher A. Ekom" className="h-full w-full object-cover object-top opacity-90" draggable={false} />
                 <div className="absolute inset-0 bg-gradient-to-t from-primary via-transparent to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 p-8 text-center">
                   <img
@@ -224,7 +225,7 @@ export default function AboutPage() {
       {/* CLOSING CTA */}
       <section className="relative overflow-hidden bg-primary">
         <Parallax speed={0.12} className="absolute inset-0">
-          <img src={BRAND_IMAGE} alt="" className="h-full w-full scale-110 object-cover" draggable={false} />
+          <img src={IMAGES.yaoundeNight} alt="" className="h-full w-full scale-110 object-cover" draggable={false} />
         </Parallax>
         <div className="absolute inset-0 bg-gradient-to-b from-primary/85 via-primary/75 to-primary" />
         <div className="container-site relative py-24 text-center sm:py-28">
@@ -240,7 +241,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <Statement word="TRUST" sub="Integrity. Professionalism. Innovation. Impact." />
+      <Statement word="TRUST" sub="Integrity. Professionalism. Innovation. Impact." image={IMAGES.applause} />
     </>
   );
 }

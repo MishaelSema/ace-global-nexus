@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { FaArrowRight } from "react-icons/fa6";
 import { cloudImageUrl, formatDate } from "@/lib/utils";
-import { BRAND_IMAGE } from "@/lib/content";
+import { insightCover } from "@/lib/content";
 import { tForLocale, pathForLocale, getLocale } from "@/lib/i18n/server";
 import { localizedField } from "@/lib/i18n/core";
 
@@ -31,7 +31,7 @@ export default function InsightCard({ insight }: { insight: InsightPreview }) {
     >
       <div className="relative h-48 overflow-hidden bg-primary sm:h-52">
         <img
-          src={insight.coverUrl ? cloudImageUrl(insight.coverUrl, 900) : BRAND_IMAGE}
+          src={insight.coverUrl ? cloudImageUrl(insight.coverUrl, 900) : insightCover(insight.slug)}
           alt={title}
           className="h-full w-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-105"
           loading="lazy"

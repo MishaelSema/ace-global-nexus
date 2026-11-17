@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { FaArrowRight } from "react-icons/fa6";
-import { SECTORS, BRAND_IMAGE } from "@/lib/content";
+import { SECTORS, IMAGES } from "@/lib/content";
 import Reveal from "@/components/Reveal";
 import PageHero from "@/components/PageHero";
 import Parallax from "@/components/Parallax";
@@ -47,6 +47,7 @@ export default function SectorsPage() {
         ]}
       />
       <PageHero
+        image={IMAGES.bridgeSanaga}
         title={
           <>
             {t("Where African opportunity meets")}
@@ -92,7 +93,7 @@ export default function SectorsPage() {
       {/* CTA band with imagery */}
       <section className="relative overflow-hidden bg-primary">
         <Parallax speed={0.12} className="absolute inset-0">
-          <img src={BRAND_IMAGE} alt="" className="h-full w-full scale-110 object-cover" draggable={false} />
+          <img src={IMAGES.yaoundeCity} alt="" className="h-full w-full scale-110 object-cover" draggable={false} />
         </Parallax>
         <div className="absolute inset-0 bg-gradient-to-b from-primary/85 via-primary/75 to-primary" />
         <div className="container-site relative py-24 text-center sm:py-28">
@@ -108,7 +109,7 @@ export default function SectorsPage() {
         </div>
       </section>
 
-      <Statement word="AFRICA" sub="Ten sectors. One mission — connect opportunity with capital." />
+      <Statement word="AFRICA" sub="Ten sectors. One mission — connect opportunity with capital." image={IMAGES.yaoundeNight} />
     </>
   );
 }

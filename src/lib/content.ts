@@ -5,8 +5,63 @@ import {
   FaIndustry, FaGraduationCap, FaBriefcase,
 } from "react-icons/fa6";
 
-/** Single placeholder image used across all image slots — swap with real photography later. */
-export const BRAND_IMAGE = "/images/brand-bg.svg";
+/**
+ * Photographic registry. Every image used on the public site is declared here
+ * so a single swap updates every slot that references it.
+ */
+export const IMAGES = {
+  // Founder — Christopher A. Ekom
+  founderPortrait: "/images/founder-portrait.webp",
+  founderCane: "/images/founder-cane.webp",
+  founderLanyard: "/images/founder-lanyard.webp",
+
+  // Place & context
+  yaoundeCity: "/images/yaounde-city.webp",
+  yaoundeNight: "/images/yaounde-night.webp",
+  bridgeSanaga: "/images/bridge-sanaga.webp",
+
+  // Sectors
+  agribusiness: "/images/farm-rain.webp",
+  agroforest: "/images/agroforest.webp",
+  energy: "/images/sector-energy-solar.jpg",
+  infrastructure: "/images/bridge-sanaga.webp",
+  ict: "/images/sector-ict-mobile-money.jpg",
+  healthcare: "/images/sector-healthcare-clinic.jpg",
+  logistics: "/images/sector-logistics-port.jpg",
+  manufacturing: "/images/carpentry.webp",
+
+  // Business, events & advisory
+  businessPlan: "/images/business-plan.webp",
+  meeting: "/images/meeting-speaking.webp",
+  networking: "/images/event-networking.webp",
+  eventGroup: "/images/event-group.webp",
+  communityTable: "/images/community-table.webp",
+  applause: "/images/applause.webp",
+  handshake: "/images/advocacy-handshake.webp",
+  handover: "/images/advocacy-handover.webp",
+  marketWomen: "/images/market-women.webp",
+  marketBafia: "/images/market-bafia.webp",
+  youthWorking: "/images/youth-working.webp",
+  expoSelfie: "/images/expo-selfie.webp",
+  awardGroup: "/images/award-group.webp",
+} as const;
+
+/**
+ * Cover fallbacks for the launch batch of insights. The admin/CMS `coverUrl`
+ * takes precedence; these are used when an article has no uploaded cover.
+ */
+export const INSIGHT_COVERS: Record<string, string> = {
+  "market-entry-africa": IMAGES.businessPlan,
+  "afcfta-explained": IMAGES.handshake,
+  "afcfta-rules-of-origin": IMAGES.handover,
+  "agribusiness-investment-africa-2026": IMAGES.agroforest,
+  "critical-minerals-cameroon": "/images/insight-mining-quarry.jpg",
+  "exporting-from-cameroon": IMAGES.marketWomen,
+};
+
+export function insightCover(slug?: string): string {
+  return (slug && INSIGHT_COVERS[slug]) || IMAGES.businessPlan;
+}
 
 export const CONTACT_INFO = {
   address: "Yaoundé, Cameroon",

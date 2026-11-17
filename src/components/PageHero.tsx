@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
-import { BRAND_IMAGE } from "@/lib/content";
+import { IMAGES } from "@/lib/content";
 import Parallax from "@/components/Parallax";
 
 interface PageHeroProps {
@@ -8,7 +8,7 @@ interface PageHeroProps {
   description?: ReactNode;
   children?: ReactNode;
   align?: "left" | "center";
-  /** Content image override — falls back to the single placeholder. */
+  /** Content image override — falls back to the Yaoundé cityscape. */
   image?: string;
   /** Slim variant for pages with a form below (mobile stays compact). */
   compact?: boolean;
@@ -28,7 +28,7 @@ export default function PageHero({
     <section className={cn("relative overflow-hidden bg-primary", className)}>
       <Parallax speed={0.12} className="absolute inset-0">
         <img
-          src={image || BRAND_IMAGE}
+          src={image || IMAGES.yaoundeCity}
           alt=""
           className="h-full w-full scale-110 object-cover"
           draggable={false}

@@ -4,18 +4,18 @@ import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { FaArrowRight } from "react-icons/fa6";
-import { BRAND_IMAGE } from "@/lib/content";
+import { IMAGES } from "@/lib/content";
 import Reveal from "@/components/Reveal";
 import { useLocale } from "@/components/LocaleProvider";
 
 const ITEMS = [
-  { title: "Agribusiness", note: "Value chains & export", pos: "object-center" },
-  { title: "Energy", note: "Power & renewables", pos: "object-top" },
-  { title: "Infrastructure", note: "Transport corridors", pos: "object-bottom" },
-  { title: "ICT", note: "Digital & fintech", pos: "object-left" },
-  { title: "Healthcare", note: "Health-sector investment", pos: "object-center" },
-  { title: "Logistics", note: "Freight & supply chains", pos: "object-right" },
-  { title: "Manufacturing", note: "Local value addition", pos: "object-bottom" },
+  { title: "Agribusiness", note: "Value chains & export", pos: "object-center", image: IMAGES.agribusiness },
+  { title: "Energy", note: "Power & renewables", pos: "object-center", image: IMAGES.energy },
+  { title: "Infrastructure", note: "Transport corridors", pos: "object-center", image: IMAGES.infrastructure },
+  { title: "ICT", note: "Digital & fintech", pos: "object-center", image: IMAGES.ict },
+  { title: "Healthcare", note: "Health-sector investment", pos: "object-center", image: IMAGES.healthcare },
+  { title: "Logistics", note: "Freight & supply chains", pos: "object-center", image: IMAGES.logistics },
+  { title: "Manufacturing", note: "Local value addition", pos: "object-center", image: IMAGES.manufacturing },
 ];
 
 /** Each sector gets this share of viewport height worth of scroll while pinned. */
@@ -92,7 +92,7 @@ export default function SectorShowcase({ children }: { children: ReactNode }) {
             {ITEMS.map((item, i) => (
               <img
                 key={item.title}
-                src={BRAND_IMAGE}
+                src={item.image}
                 alt=""
                 draggable={false}
                 className={`absolute inset-0 h-full w-full object-cover transition-all duration-1000 ${item.pos}`}

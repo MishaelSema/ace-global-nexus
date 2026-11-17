@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { IMAGES } from "@/lib/content";
 import PageHero from "@/components/PageHero";
 import Statement from "@/components/Statement";
 import ConversationWizard from "@/components/ConversationWizard";
@@ -42,6 +43,7 @@ export default function StartAConversationPage() {
       />
       <PageHero
         compact
+        image={IMAGES.networking}
         title={
           <>
             {t("Start")} <span className="italic text-gold">{t("the conversation")}</span>
@@ -52,7 +54,7 @@ export default function StartAConversationPage() {
         )}
       />
       <ConversationWizard />
-      <Statement word="START" sub="Every opportunity begins with a conversation." />
+      <Statement word="START" sub="Every opportunity begins with a conversation." image={IMAGES.communityTable} />
     </>
   );
 }
